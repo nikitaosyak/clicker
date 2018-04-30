@@ -3,5 +3,6 @@
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{pixi}" />
     <includedPredefinedLibrary name="Node.js Core" />
+    <excludedPredefinedLibrary name="clicker/node_modules" />
   </component>
 </project>
