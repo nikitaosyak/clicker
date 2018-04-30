@@ -34,8 +34,10 @@ window.onload = () => {
     }
 
     resources
+        .add('pixel', 'assets/pixel.png')
         .add('background', 'assets/background.jpg')
         .add('egg', 'assets/egg.png')
+        .add('chest', 'assets/chest.png')
         .load(() => {
             startGame()
         })
