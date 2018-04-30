@@ -1,5 +1,6 @@
 node_modules
 build
+inter
 .idea/workspace.xml
 .env
 ENV.js
