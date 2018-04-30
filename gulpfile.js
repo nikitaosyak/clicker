@@ -1,4 +1,4 @@
-require('dotenv').config()
+const env = require('dotenv').config()
 const gulp = require('gulp')
 const connect = require('gulp-connect')
 
@@ -11,10 +11,29 @@ gulp.task('connect', () => {
     })
 })
 
-gulp.task('clean', () => gulp.src('build/', {read: false})
-    .pipe(require('gulp-clean')()))
+gulp.task('clean', () => {
+    return gulp.src([
+        'build/', 'src/js/ENV.js'
+    ], {read: false})
+        .pipe(require('gulp-clean')())
+})
 
-gulp.task('pack', ['clean'], () => {
+gulp.task('gen-env', ['clean'], () => {
+    let buff = 'export const ENV = {\n'
+        // '  init: () => {' +
+        // (process.env.MODE === 'production' ? '\n    console.log = () => {}\n' : '') +
+        // '  },\n'
+    Object.keys(env.parsed).forEach(k => {
+        if (/\D/.test(env.parsed[k])) {
+            buff += `  ${k} : '${env.parsed[k]}',\n`
+        } else {
+            buff += `  ${k} : ${env.parsed[k]},\n`
+        }
+    })
+    return require('fs').writeFileSync('./src/js/ENV.js', buff + '}')
+})
+
+gulp.task('pack', ['clean', 'gen-env'], () => {
     const stream = require('webpack-stream')
     const webpack2 = require('webpack')
 
@@ -23,7 +42,6 @@ gulp.task('pack', ['clean'], () => {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules|.*\.lib.*js$)/,
                     loader: 'babel-loader',
                     query: { presets: ['env']}
                 }
@@ -34,6 +52,9 @@ gulp.task('pack', ['clean'], () => {
     }
     if (process.env.MODE === 'development') {
         config.devtool = 'source-map'
+    }
+    if (process.env.MODE === 'production') {
+        config.module.rules[0].exclude = /.*\.debug\.js$/
     }
 
     return gulp.src('src/js/**/*.js')
@@ -61,9 +82,9 @@ gulp.task('deploy-static', ['clean'], () => {
     }
 })
 
-gulp.task('deploy', ['clean', 'pack', 'deploy-static'], () => {
+gulp.task('reload', ['clean', 'pack', 'deploy-static'], () => {
     return gulp.src(['src/**/*']).pipe(connect.reload())
 })
 
-gulp.task('watch', () => gulp.watch(['src/**/*'], ['deploy']))
-gulp.task('default', ['connect', 'deploy', 'watch'])
+gulp.task('watch', () => gulp.watch(['src/**/*.js'], ['reload']))
+gulp.task('default', ['connect', 'reload', 'watch'])
