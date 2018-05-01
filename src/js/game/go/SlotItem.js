@@ -21,7 +21,9 @@ export const SlotItem = (type, slot, stage, health, egg = undefined) => {
         },
         destroy() {
             self.healthbarVisual.destroy()
-            self.stageRepVisual.destroy()
+            if (window.ENV.MODE === 'development') {
+                self.stageRepVisual.destroy()
+            }
             self.visual.destroy()
         },
         dropEgg() {
