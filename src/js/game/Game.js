@@ -1,9 +1,15 @@
 import {StaticImage} from "./go/StaticImage";
 import {SlotItemGenerator} from "./SlotItemGenerator";
+import {FullScreenButton} from "./ui/FullScreenButton";
+import {ENV} from "../ENV"
 
 export const Game = (renderer) => {
 
     renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
+    if (typeof document.fullscreenEnabled !== undefined &&
+        ENV.PLATFORM === 'standalone') {
+        renderer.addObject(FullScreenButton(renderer.dom))
+    }
 
     const generator = SlotItemGenerator(renderer)
     const currentItems = [null, null, null]
