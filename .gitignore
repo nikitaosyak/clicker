@@ -4,3 +4,4 @@ inter
 .idea/workspace.xml
 .env
 ENV.js
+tweenlite-gen.lib*

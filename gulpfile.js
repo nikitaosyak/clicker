@@ -14,12 +14,20 @@ gulp.task('connect', () => {
 gulp.task('step1-prepare-files', () => {
     // clean build
     const fs = require('fs')
+    const rimraf = require('rimraf')
     if (fs.existsSync('build/')) {
-        require('rimraf').sync('build')
+        rimraf.sync('build')
     }
 
     if (fs.existsSync('inter/')) {
-        require('rimraf').sync('inter')
+        rimraf.sync('inter')
+    }
+
+    if (fs.existsSync('src/lib/tweenlite-gen.lib.js')) {
+        rimraf.sync('src/lib/tweenlite-gen.lib.js')
+    }
+    if (fs.existsSync('src/lib/tweenlite-gen.lib.min.js')) {
+        rimraf.sync('src/lib/tweenlite-gen.lib.min.js')
     }
 
     // generate ENV
@@ -99,7 +107,24 @@ gulp.task('step3-process-images', ['step2-webpack'], () => {
     return gulp.src('assets/**/*').pipe(gulp.dest('build/assets'))
 })
 
-gulp.task('finish-deploy', ['step3-process-images'], () => {
+gulp.task('step4-process-tweenlite', ['step3-process-images'], () => {
+
+    const stream = gulp.src(['src/lib/tween/TweenLite.js', 'src/lib/tween/plugins/*.js'])
+    const concat = require('gulp-concat')
+
+    if (process.env.MODE === 'development') {
+        return stream
+            .pipe(concat('tweenlite-gen.lib.js'))
+            .pipe(gulp.dest('src/lib'))
+    } else {
+        return stream
+            .pipe(concat('tweenlite-gen.lib.min.js'))
+            .pipe(require('gulp-uglify')())
+            .pipe(gulp.dest('src/lib'))
+    }
+})
+
+gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
 
     require('fs').copyFileSync('src/index.html', 'build/index.html')
 
