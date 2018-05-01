@@ -37,7 +37,6 @@ export class BaseScreen {
     update(dt) { /*virtual method*/ }
 
     show() {
-        console.log(this._content)
         this._active = true
         this._content.forEach(c => {
             this._owner.renderer.addObject(c)
