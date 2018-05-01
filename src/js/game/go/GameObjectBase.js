@@ -1,4 +1,5 @@
 import {SLOTS} from "../SLOTS";
+import {RENDER_LAYER} from "../../Renderer";
 
 export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'gragon', GOLD: 'gold' }
 
@@ -19,12 +20,13 @@ export const IVisual = (t, x, y, w, h) => {
     s.anchor.x = s.anchor.y = 0.5
 
     return {
+        get layer() { return RENDER_LAYER.GAME },
         get hasVisual() { return true },
         get visual() { return s }
     }
 }
 
-export const IVisualHealthBar = self => {
+export const IHealthBarOwner = self => {
     const parent = self.visual
     const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
 

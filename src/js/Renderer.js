@@ -1,5 +1,7 @@
 import {debugManager} from "./debugManager";
 
+export const RENDER_LAYER = {GAME: 'GAME', UI: 'UI'}
+
 export const Renderer = () => {
     let dMenuVisible = false
 
@@ -8,12 +10,18 @@ export const Renderer = () => {
     let canvasW = 0, canvasH = 0
 
     const stage = new PIXI.Container()
+    const layers = {}
+    Object.keys(RENDER_LAYER).forEach(layer => {
+        layers[layer] = new PIXI.Container()
+        stage.addChild(layers[layer])
+    })
 
+    const canvas = document.getElementById('gameCanvas')
     const renderer = PIXI.autoDetectRenderer({
         roundPixels: false,
         width: vSize.x,
         height: vSize.y,
-        view: document.getElementById('gameCanvas'),
+        view: canvas,
         backgroundColor: 0xCCCCCC,
         antialias: false,
         resolution: 1,
@@ -54,13 +62,27 @@ export const Renderer = () => {
     // debug.on('visibility', _ => resizeCanvas())
 
     return {
+        get dom() { return canvas },
         get size() { return adjustedVSize },
         get stage() { return stage },
         addObject: (go) => {
-            go.hasVisual && stage.addChild(go.visual)
+            if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
+            console.log(layers, go.layer)
+            const parent = layers[go.layer]
+            if (parent) {
+                parent.addChild(go.visual)
+            } else {
+                stage.addChild(go.visual)
+            }
         },
         removeObject: (go) => {
-            go.hasVisual && stage.removeChild(go.visual)
+            if (!go.hasVisual) return console.error(`object ${go} cannot be removed from render`)
+            const parent = layers[go.layer]
+            if (parent) {
+                parent.removeChild(go.visual)
+            } else {
+                stage.removeChild(go.visual)
+            }
         },
         update: () => {
             const newCanvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth)

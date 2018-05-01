@@ -5,7 +5,7 @@ import {
     ISlotVisualItem,
     ITieredObject,
     ITypedObject,
-    IVisualHealthBar
+    IHealthBarOwner
 } from "./GameObjectBase";
 
 export const SlotItem = (type, tier, slot) => {
@@ -30,7 +30,7 @@ export const SlotItem = (type, tier, slot) => {
 
     Object.assign(self, ISlotItem(slot))
     Object.assign(self, ISlotVisualItem(self, type))
-    Object.assign(self, IVisualHealthBar(self))
+    Object.assign(self, IHealthBarOwner(self))
     Object.assign(self, IClickable(self))
 
     return self
