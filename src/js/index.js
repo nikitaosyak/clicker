@@ -1,8 +1,9 @@
 import {debugManager} from "./debugManager";
 import {Renderer} from "./Renderer";
 import {Resources} from "./Resrouces";
-import {Game} from "./game/Game";
 import {ENV} from "./ENV"
+import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
+import {StaticImage} from "./game/go/StaticImage";
 
 window.onload = () => {
 
@@ -14,7 +15,9 @@ window.onload = () => {
 
     const startGame = () => {
         const renderer = Renderer()
-        const game = Game(renderer)
+        renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
+        const screens = ScreenMan(renderer)
+        screens.instantTransit(SCREEN_TYPE.GAME)
 
         let time = Date.now()
         const gameLoop = () => {
@@ -23,7 +26,7 @@ window.onload = () => {
             let dt = Date.now() - time
             time = Date.now()
 
-            game.update(dt)
+            screens.update(dt)
             renderer.update()
 
             requestAnimationFrame(gameLoop)

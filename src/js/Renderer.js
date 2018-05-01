@@ -1,6 +1,6 @@
 import {debugManager} from "./debugManager";
 
-export const RENDER_LAYER = {GAME: 'GAME', UI: 'UI'}
+export const RENDER_LAYER = {BACKGROUND: 'BACKGROUND', GAME: 'GAME', UI: 'UI'}
 
 export const Renderer = () => {
     let dMenuVisible = false

@@ -25,9 +25,9 @@ gulp.task('step1-prepare-files', () => {
     // generate ENV
     let buff = 'export const ENV = {\n'
     if (process.env.MODE === 'production') {
-        buff += '  init: () => { console.log = () => {} },\n'
+        buff += '  init: () => { window.ENV = ENV; console.log = () => {} },\n'
     } else {
-        buff += '  init: () => {},\n'
+        buff += '  init: () => { window.ENV = ENV },\n'
     }
     Object.keys(env.parsed).forEach(k => {
         if (/\D/.test(env.parsed[k])) {
