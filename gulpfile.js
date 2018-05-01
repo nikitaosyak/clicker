@@ -79,7 +79,7 @@ gulp.task('step2-webpack', ['step1-prepare-files'], () => {
         config.devtool = 'source-map'
     }
 
-    return gulp.src(process.env.mode === 'development' ? 'src/js/**/*' : 'inter/**/*')
+    return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
         .pipe(stream(config, webpack2))
         .pipe(gulp.dest('build/'))
 })
@@ -102,6 +102,7 @@ gulp.task('step3-process-images', ['step2-webpack'], () => {
     }
     iterateFolder(process.cwd())
     process.chdir('..')
+    if (!fs.existsSync('build/')) fs.mkdirSync('build/')
     fs.mkdirSync('build/assets')
     fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: digest}, null, 2))
 
