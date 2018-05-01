@@ -33,7 +33,6 @@ export const IHealthBarOwner = self => {
     sprite.width = parent.width/parent.scale.x * 0.9;
     sprite.height = 10/parent.scale.y
 
-    console.log(parent.height, parent.scale.y)
     sprite.x = -(parent.width/parent.scale.x)/2 + (parent.width/parent.scale.x)*0.05;
     sprite.y = -(parent.height/parent.scale.y)/2
 
