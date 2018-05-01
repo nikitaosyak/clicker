@@ -1,5 +1,6 @@
 let env = require('dotenv').config()
 const gulp = require('gulp')
+const sequence = require('gulp-sequence')
 const connect = require('gulp-connect')
 
 gulp.task('connect', () => {
@@ -158,11 +159,19 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
     }
 })
 
-gulp.task('reload', ['finish-deploy'], () => {
+gulp.task('reload', () => {
     return gulp.src(['src/**/*']).pipe(connect.reload())
 })
 
-gulp.task('watch', ['finish-deploy'], () => {
-    gulp.watch(['src/**/*'], ['reload'])
+gulp.task('watch', () => {
+    gulp.watch(['src/js/**/*', 'assets/**/*'], e => {
+        sequence('finish-deploy', 'reload')(e => {
+            if (e) console.error(e)
+        })
+    })
 })
-gulp.task('default', ['connect', 'watch'])
+gulp.task('default', () => {
+    sequence('connect', 'finish-deploy', 'watch')(e => {
+        if (e) console.error(e)
+    })
+})
