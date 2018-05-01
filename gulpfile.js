@@ -77,16 +77,33 @@ gulp.task('step2-webpack', ['step1-prepare-files'], () => {
         .pipe(gulp.dest('build/'))
 })
 
-gulp.task('finish-deploy', ['step2-webpack'], () => {
-
-    //
-    // copy static assets
+gulp.task('step3-process-images', ['step2-webpack'], () => {
+    process.chdir('./assets')
     const fs = require('fs')
-    fs.copyFileSync('src/index.html', 'build/index.html')
+    let digest = []
+    const iterateFolder = path => {
+        fs.readdirSync(path).forEach(f => {
+            if (fs.lstatSync(`${path}/${f}`).isDirectory()) {
+                iterateFolder(`${path}/${f}`)
+            } else {
+                const relativePath = `${path}/${f}`.replace(process.cwd(), '').slice(1)
+                const loadPath = `assets/${relativePath}`
+                const alias = relativePath.replace('/', '_').replace(/(\.jpg$|\.png$)/, '')
+                digest.push({alias: alias, path: loadPath})
+            }
+        })
+    }
+    iterateFolder(process.cwd())
+    process.chdir('..')
     fs.mkdirSync('build/assets')
-    fs.readdirSync('assets/').forEach(f => {
-        fs.copyFileSync(`assets/${f}`, `build/assets/${f}`)
-    })
+    fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: digest}, null, 2))
+
+    return gulp.src('assets/**/*').pipe(gulp.dest('build/assets'))
+})
+
+gulp.task('finish-deploy', ['step3-process-images'], () => {
+
+    require('fs').copyFileSync('src/index.html', 'build/index.html')
 
     //
     // concat and put libraries

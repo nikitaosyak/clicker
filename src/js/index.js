@@ -34,11 +34,12 @@ window.onload = () => {
     }
 
     resources
-        .add('pixel', 'assets/pixel.png')
-        .add('background', 'assets/background.jpg')
-        .add('egg', 'assets/egg.png')
-        .add('chest', 'assets/chest.png')
+        .add('digest', 'assets/digest.json')
         .load(() => {
-            startGame()
+            const digest = resources.getJSON('digest')
+            digest.images.forEach(i => {
+                resources.add(i.alias, i.path)
+            })
+            resources.load(startGame)
         })
 }
