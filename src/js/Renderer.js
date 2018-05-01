@@ -34,28 +34,30 @@ export const Renderer = () => {
         canvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth)
         canvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight)
 
+        console.log(`real ar: ${canvasW / canvasH}, supposed ar: ${vSize.x / vSize.y}`)
         if (canvasW / canvasH > vSize.x / vSize.y) {
             const adjustedW = Math.round(vSize.x * (canvasH / vSize.y))
             const marginH = dMenuVisible ? 0 : (canvasW - adjustedW) / 2
             renderer.resize(canvasW, canvasH)
-            //
+
             stage.scale.x = adjustedW / vSize.x
             stage.scale.y = renderer.height / vSize.y
             stage.x = marginH
+            stage.y = 0
             adjustedVSize.x = vSize.x
             adjustedVSize.y = vSize.y
         } else {
             const adjustedH = Math.round(vSize.y * (canvasW / vSize.x))
             const marginV = dMenuVisible ? 0 : (canvasH - adjustedH) / 2
             renderer.resize(canvasW, canvasH)
-            //
+
             stage.scale.x = renderer.width / vSize.x
             stage.scale.y = adjustedH / vSize.y
-            stage.y = marginV*2
+            stage.x = 0
+            stage.y = marginV
             adjustedVSize.x = vSize.x
             adjustedVSize.y = vSize.y * (canvasH / adjustedH)
         }
-        console.log(vSize.x, stage.width)
     }
     resizeCanvas()
 
@@ -67,7 +69,6 @@ export const Renderer = () => {
         get stage() { return stage },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
-            console.log(layers, go.layer)
             const parent = layers[go.layer]
             if (parent) {
                 parent.addChild(go.visual)
