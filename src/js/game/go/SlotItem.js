@@ -20,6 +20,8 @@ export const SlotItem = (type, slot, stage, health, egg = undefined) => {
             self.setHealthBarValue(currentHealth/maxHealth)
         },
         destroy() {
+            self.healthbarVisual.destroy()
+            self.stageRepVisual.destroy()
             self.visual.destroy()
         },
         dropEgg() {
@@ -36,7 +38,9 @@ export const SlotItem = (type, slot, stage, health, egg = undefined) => {
     Object.assign(self, ISlotItem(slot))
     Object.assign(self, ISlotVisualItem(self, type))
     Object.assign(self, IHealthBarOwner(self))
-    Object.assign(self, IVisualStageRepresentationOwner(self))
+    if (window.ENV.MODE === 'development') {
+        Object.assign(self, IVisualStageRepresentationOwner(self))
+    }
     Object.assign(self, IClickable(self))
 
     return self

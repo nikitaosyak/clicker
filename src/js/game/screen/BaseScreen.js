@@ -71,7 +71,6 @@ export class BaseScreen {
 
     add(obj) {
         this._content.push(obj)
-        console.log('adding ', obj.name, this._content)
         this._originalLocationData[obj.name] = {
             x: obj.visual.x,
             y: obj.visual.y
@@ -83,7 +82,6 @@ export class BaseScreen {
 
     remove(obj) {
         this._content.splice(this._content.indexOf(obj), 1)
-        console.log('removing ', obj.name, this._content)
         delete this._originalLocationData[obj.name]
         if (this._active) {
             this._owner.renderer.removeObject(obj)

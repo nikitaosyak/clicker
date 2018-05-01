@@ -45,6 +45,7 @@ export const IHealthBarOwner = self => {
     const maxWidth = sprite.width
 
     return {
+        get healthbarVisual() { return sprite },
         setHealthBarValue(v) {
             sprite.width = Math.max(0, maxWidth * v)
         }
@@ -52,7 +53,25 @@ export const IHealthBarOwner = self => {
 }
 
 export const IVisualStageRepresentationOwner = self => {
+    const parent = self.visual
+    const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
 
+    sprite.width = parent.width/parent.scale.x * 0.3;
+    sprite.height = parent.width/parent.scale.x * 0.3;
+
+    sprite.x = -(parent.width/parent.scale.x)/2;
+    sprite.y = (parent.height/parent.scale.y)/2
+
+    sprite.anchor.x = 0; sprite.anchor.y = 1
+    // sprite.tint = 0x00CC00
+    // sprite.alpha = 0.7
+    parent.addChild(sprite)
+
+    sprite.addChild(new PIXI.Text('OCHKO'))
+
+    return {
+        get stageRepVisual() { return sprite },
+    }
 }
 
 export const ISlotItem = slot => {
