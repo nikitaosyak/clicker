@@ -38,16 +38,14 @@ gulp.task('step1-prepare-files', () => {
     })
     fs.writeFileSync('./src/js/ENV.js', buff + '}')
 
-    const srcList = ['src/js/**/*.js']
-    return gulp.src(srcList)
-        .pipe(require('gulp-modify-file')((content, path) => {
-            if (process.env.MODE !== 'development') {
+    if (env.parsed.MODE !== 'development') {
+        return gulp.src('src/js/**/*.js')
+            .pipe(require('gulp-modify-file')((content, path) => {
                 if (/.*debugManager\.js$/.test(path)) return '/*nothing to see here*/'
                 return content.replace(/^.*debug.*$/gmi, '')
-            }
-            return content
-        }))
-        .pipe(gulp.dest('inter/'))
+            }))
+            .pipe(gulp.dest('inter/'))
+    }
 })
 
 gulp.task('step2-webpack', ['step1-prepare-files'], () => {
@@ -139,7 +137,7 @@ gulp.task('reload', ['finish-deploy'], () => {
     return gulp.src(['src/**/*']).pipe(connect.reload())
 })
 
-gulp.task('watch', () => {
+gulp.task('watch', ['finish-deploy'], () => {
     gulp.watch(['src/**/*'], ['reload'])
 })
-gulp.task('default', ['connect', 'finish-deploy', 'watch'])
+gulp.task('default', ['connect', 'watch'])
