@@ -3,34 +3,40 @@ import {
     INamedObject,
     ISlotItem,
     ISlotVisualItem,
-    ITieredObject,
+    IStageObject,
     ITypedObject,
-    IHealthBarOwner
+    IHealthBarOwner, IVisualStageRepresentationOwner, ObjectType as OBJECT_TYPE
 } from "./GameObjectBase";
 
-export const SlotItem = (type, tier, slot) => {
+export const SlotItem = (type, slot, stage, health, egg = undefined) => {
 
-    let maxHealth = 100 * tier // TODO: here should be correct calculation
+    let maxHealth = health
     let currentHealth = maxHealth
 
     const self = {
         get health() { return currentHealth },
-        applyClicks: damage => {
-            currentHealth = Math.max(0, currentHealth-damage)
+        applyDamage: value => {
+            currentHealth = Math.max(0, currentHealth-value)
             self.setHealthBarValue(currentHealth/maxHealth)
         },
         destroy() {
             self.visual.destroy()
+        },
+        dropEgg() {
+            if (self.type === OBJECT_TYPE.EGG) return null
+            if (typeof egg === "undefined") return null
+            return SlotItem(OBJECT_TYPE.EGG, slot, egg, health)
         }
     }
 
     Object.assign(self, ITypedObject(type))
-    Object.assign(self, ITieredObject(tier))
+    Object.assign(self, IStageObject(stage))
     Object.assign(self, INamedObject(self))
 
     Object.assign(self, ISlotItem(slot))
     Object.assign(self, ISlotVisualItem(self, type))
     Object.assign(self, IHealthBarOwner(self))
+    Object.assign(self, IVisualStageRepresentationOwner(self))
     Object.assign(self, IClickable(self))
 
     return self

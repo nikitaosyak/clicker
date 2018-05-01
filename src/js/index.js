@@ -4,6 +4,7 @@ import {Resources} from "./Resrouces";
 import {ENV} from "./ENV"
 import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
 import {StaticImage} from "./game/go/StaticImage";
+import {GameModel} from "./GameModel";
 
 window.onload = () => {
 
@@ -14,26 +15,30 @@ window.onload = () => {
     const resources = window.resources = Resources()
 
     const startGame = () => {
-        const renderer = Renderer()
-        renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
-        const screens = ScreenMan(renderer)
-        screens.instantTransit(SCREEN_TYPE.GAME)
+        const model = GameModel()
+        model.connect().then(() => {
+            const renderer = Renderer()
+            renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
 
-        let time = Date.now()
-        const gameLoop = () => {
-            debugManager.frameStarted()
+            const screens = ScreenMan(renderer, model)
+            screens.instantTransit(SCREEN_TYPE.GAME)
 
-            let dt = Date.now() - time
-            time = Date.now()
+            let time = Date.now()
+            const gameLoop = () => {
+                debugManager.frameStarted()
 
-            screens.update(dt)
-            renderer.update()
+                let dt = Date.now() - time
+                time = Date.now()
 
+                screens.update(dt)
+                renderer.update()
+
+                requestAnimationFrame(gameLoop)
+
+                debugManager.frameEnded()
+            }
             requestAnimationFrame(gameLoop)
-
-            debugManager.frameEnded()
-        }
-        requestAnimationFrame(gameLoop)
+        })
     }
 
     resources

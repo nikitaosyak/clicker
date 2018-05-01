@@ -1,6 +1,6 @@
 import {SCREEN_TYPE} from "./screen/ScreenMan";
 import {UIFactory} from "./ui/UIFactory";
-import {SlotItemGenerator} from "./SlotItemGenerator";
+import {SlotItemGenerator} from "./screen/game/SlotItemGenerator";
 import {BaseScreen} from "./screen/BaseScreen";
 
 export class GameScreen extends BaseScreen {
@@ -13,7 +13,7 @@ export class GameScreen extends BaseScreen {
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80, 90, 90))
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180, 90, 90))
 
-        this._generator = SlotItemGenerator(this)
+        this._generator = SlotItemGenerator(this, owner.model)
         this._slotItems = [null, null, null]
         this._generator.populate(this._slotItems)
     }
@@ -22,12 +22,19 @@ export class GameScreen extends BaseScreen {
         this._slotItems.forEach((c, i) => {
             const clicks = c.extractClicks()
             if (clicks > 0) {
-                console.log(`extracted ${clicks} clicks from ${c.name}`)
-                c.applyClicks(clicks * 10)
+                console.log('will damage for ', (20 * Math.pow(2, this._owner.model.stage)))
+                c.applyDamage(clicks * (20 * Math.pow(2, this._owner.model.stage)))
                 if (c.health <= 0) {
                     this.remove(this._slotItems[i])
+                    const egg = this._slotItems[i].dropEgg()
                     this._slotItems[i].destroy()
-                    this._generator.populate(this._slotItems)
+                    if (egg) {
+                        this._slotItems[i] = egg
+                        this.add(egg)
+                    } else {
+                        this._slotItems[i] = null
+                        this._generator.populate(this._slotItems)
+                    }
                 }
             }
         })

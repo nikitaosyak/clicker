@@ -1,4 +1,4 @@
-import {SLOTS} from "../SLOTS";
+import {SLOTS} from "../screen/game/SLOTS";
 import {RENDER_LAYER} from "../../Renderer";
 
 export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'gragon', GOLD: 'gold' }
@@ -6,9 +6,9 @@ export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'gragon', GOLD: 
 let INSTANCE_COUNTER = 0
 
 export const ITypedObject = v => { return {get type() {return v}} }
-export const ITieredObject = t => { return {get tier() {return t}}}
+export const IStageObject = t => { return {get stage() {return t}}}
 export const INamedObject = self => {
-    if (self.type && self.tier) return {get name() {return `${self.type}_${self.tier}_${INSTANCE_COUNTER++}`}}
+    if (self.type && self.stage) return {get name() {return `${self.type}_${self.stage}_${INSTANCE_COUNTER++}`}}
     if (self.type) return {get name() {return `${self.type}_${INSTANCE_COUNTER++}`}}
     return {get name() {return `unknown_entity_${INSTANCE_COUNTER++}`}}
 }
@@ -49,6 +49,10 @@ export const IHealthBarOwner = self => {
             sprite.width = Math.max(0, maxWidth * v)
         }
     }
+}
+
+export const IVisualStageRepresentationOwner = self => {
+
 }
 
 export const ISlotItem = slot => {

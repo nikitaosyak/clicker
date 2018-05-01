@@ -26,6 +26,7 @@ export class BaseScreen {
     }
 
     animateHide(to, onComplete) {
+        console.log(this._content)
         this._content.forEach((c, i) => {
             TweenLite.to(c.visual, ANIMATION_LENGTH, {
                 pixi: {x: c.visual.x + to.x},
@@ -70,6 +71,7 @@ export class BaseScreen {
 
     add(obj) {
         this._content.push(obj)
+        console.log('adding ', obj.name, this._content)
         this._originalLocationData[obj.name] = {
             x: obj.visual.x,
             y: obj.visual.y
@@ -80,7 +82,8 @@ export class BaseScreen {
     }
 
     remove(obj) {
-        this._content.splice(this._content.indexOf(obj))
+        this._content.splice(this._content.indexOf(obj), 1)
+        console.log('removing ', obj.name, this._content)
         delete this._originalLocationData[obj.name]
         if (this._active) {
             this._owner.renderer.removeObject(obj)
