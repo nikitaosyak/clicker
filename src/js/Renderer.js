@@ -44,7 +44,7 @@ export const Renderer = () => {
             stage.scale.y = renderer.height / vSize.y
             stage.x = marginH
             stage.y = 0
-            adjustedVSize.x = vSize.x
+            adjustedVSize.x = Math.round(vSize.x * (canvasW / adjustedW))
             adjustedVSize.y = vSize.y
         } else {
             const adjustedH = Math.round(vSize.y * (canvasW / vSize.x))
@@ -56,7 +56,7 @@ export const Renderer = () => {
             stage.x = 0
             stage.y = marginV
             adjustedVSize.x = vSize.x
-            adjustedVSize.y = vSize.y * (canvasH / adjustedH)
+            adjustedVSize.y = Math.round(vSize.y * (canvasH / adjustedH))
         }
     }
     resizeCanvas()

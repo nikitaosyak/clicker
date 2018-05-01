@@ -9,9 +9,9 @@ export class GameScreen extends BaseScreen {
         super(owner, SCREEN_TYPE.GAME)
 
         const uiCreator = UIFactory.forScreen(this.type)
-        const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.add(fs)
-        this.add(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80, 90, 90))
-        this.add(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180, 90, 90))
+        const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
+        this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80, 90, 90))
+        this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180, 90, 90))
 
         this._generator = SlotItemGenerator(this)
         this._slotItems = [null, null, null]

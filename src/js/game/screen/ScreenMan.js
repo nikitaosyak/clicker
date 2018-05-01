@@ -39,23 +39,34 @@ export const ScreenMan = (renderer) => {
         [SCREEN_TYPE.LEADERBOARD] : new LeaderboardScreen(self)
     }
 
+    const makeTransition = (current, currentToOffset, next, nextFromOffset) => {
+        screens[current].disableControls()
+        screens[current].animateHide({x: currentToOffset}, () => {
+            screens[current].hide()
+        })
+        screens[next].animateShow({x: nextFromOffset}, () => {
+            screens[next].enableControls()
+            currentScreen = next
+        })
+    }
+
     const transitions = {
         [SCREEN_TYPE.GAME] : {
             [SCREEN_TYPE.UPGRADE]: () => {
-                self.instantTransit(SCREEN_TYPE.UPGRADE)
+                makeTransition(SCREEN_TYPE.GAME, 800, SCREEN_TYPE.UPGRADE, -800)
             },
             [SCREEN_TYPE.LEADERBOARD]: () => {
-                self.instantTransit(SCREEN_TYPE.LEADERBOARD)
+                makeTransition(SCREEN_TYPE.GAME, -800, SCREEN_TYPE.LEADERBOARD, 800)
             }
         },
         [SCREEN_TYPE.UPGRADE]: {
             [SCREEN_TYPE.GAME]: () => {
-                self.instantTransit(SCREEN_TYPE.GAME)
+                makeTransition(SCREEN_TYPE.UPGRADE, -800, SCREEN_TYPE.GAME, 800)
             }
         },
         [SCREEN_TYPE.LEADERBOARD]: {
             [SCREEN_TYPE.GAME]: () => {
-                self.instantTransit(SCREEN_TYPE.GAME)
+                makeTransition(SCREEN_TYPE.LEADERBOARD, 800, SCREEN_TYPE.GAME, -800)
             }
         }
     }
