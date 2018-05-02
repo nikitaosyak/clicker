@@ -54,20 +54,21 @@ export const IHealthBarOwner = self => {
 
 export const IVisualStageRepresentationOwner = self => {
     const parent = self.visual
-    const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
+    const container = new PIXI.Container()
+    container.x = -(parent.width/parent.scale.x) * 0.25
+    container.y = (parent.height/parent.scale.y) * 0.25
 
+    const sprite = new PIXI.Sprite(window.resources.getTexture('ui_yellow_circle'))
     sprite.width = parent.width/parent.scale.x * 0.3;
     sprite.height = parent.width/parent.scale.x * 0.3;
-
-    sprite.x = -(parent.width/parent.scale.x)/2;
-    sprite.y = (parent.height/parent.scale.y)/2
-
-    sprite.anchor.x = 0; sprite.anchor.y = 1
-    // sprite.tint = 0x00CC00
-    // sprite.alpha = 0.7
-    parent.addChild(sprite)
-
-    sprite.addChild(new PIXI.Text('OCHKO'))
+    sprite.anchor.x = 0.5; sprite.anchor.y = 0.5
+    container.addChild(sprite)
+    const text = new PIXI.Text(self.stage, new PIXI.TextStyle({
+        fontSize: 80, fontWeight: 'bold', fill: '#EEffff'
+    }))
+    text.anchor.x = text.anchor.y = 0.5
+    container.addChild(text)
+    parent.addChild(container)
 
     return {
         get stageRepVisual() { return sprite },
