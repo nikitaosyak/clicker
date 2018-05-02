@@ -94,8 +94,9 @@ gulp.task('step3-process-images', ['step2-webpack'], () => {
                 iterateFolder(`${path}/${f}`)
             } else {
                 const relativePath = `${path}/${f}`.replace(process.cwd(), '').slice(1)
+                if (/.*anim.*\.png/.test(relativePath)) return
                 const loadPath = `assets/${relativePath}`
-                const alias = relativePath.replace('/', '_').replace(/(\.jpg$|\.png$)/, '')
+                const alias = relativePath.replace('/', '_').replace(/(\.jpg$|\.png$|\.json$)/, '')
                 digest.push({alias: alias, path: loadPath})
             }
         })

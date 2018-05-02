@@ -26,6 +26,10 @@ export const Resources = () => {
         getText: (alias) => {
             if (alias in res) return res[alias].data
             throw '   Cannot find TEXT with alias ' + alias
+        },
+        getAnimation: (alias) => {
+            if (alias in res) return res[alias].data.frames
+            throw '   Cannot find ANIMATION DESCRIPTOR with alias ' + alias
         }
     }
     return self

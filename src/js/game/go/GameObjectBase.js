@@ -13,6 +13,24 @@ export const INamedObject = self => {
     return {get name() {return `unknown_entity_${INSTANCE_COUNTER++}`}}
 }
 
+export const IContainer = (x, y, layer) => {
+    const c = new PIXI.Container()
+    c.x = x; c.y = y;
+
+    return {
+        destroy: () => {
+            c.children.forEach(ch => ch.destroy())
+            c.destroy()
+        },
+        add: (obj) => {
+            c.addChild(obj.visual)
+        },
+        get layer() { return layer },
+        get hasVisual() { return true },
+        get visual() { return c }
+    }
+}
+
 export const IVisual = (t, x, y, w, h) => {
     const s = new PIXI.Sprite(window.resources.getTexture(t))
     s.width = w; s.height = h
@@ -21,6 +39,38 @@ export const IVisual = (t, x, y, w, h) => {
 
     return {
         get layer() { return RENDER_LAYER.GAME },
+        get hasVisual() { return true },
+        get visual() { return s }
+    }
+}
+
+export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefined, layer = undefined) => {
+    console.log(text)
+    const t = new PIXI.Text(text, new PIXI.TextStyle(style))
+    t.x = x; t.y = y;
+    t.anchor.x = anchorX || 0.5; t.anchor.y = anchorY || 0.5
+
+    return {
+        get layer() { return RENDER_LAYER.UI },
+        get hasVisual() { return true },
+        get visual() { return t }
+    }
+}
+
+export const IAnimated = (texture, x, y, w, h, layer = undefined) => {
+    const textures = []
+    Object.keys(window.resources.getAnimation(texture)).forEach(f => {
+        textures.push(PIXI.Texture.fromFrame(f))
+    })
+    const s = new PIXI.extras.AnimatedSprite(textures)
+    s.x = x; s.y = y; s.width = w; s.height = h
+    s.anchor.set(0.5)
+    s.loop = true
+    s.animationSpeed = 0.7
+    s.play()
+
+    return {
+        get layer() { return layer || RENDER_LAYER.UI },
         get hasVisual() { return true },
         get visual() { return s }
     }

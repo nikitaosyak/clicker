@@ -4,8 +4,8 @@ export const TOGGLE_STATE = {NORMAL: 'NORMAL', TOGGLED: 'TOGGLED'}
 
 let INSTANCE_COUNTER = 0
 
-export const INamedUIElement = (screen, type) => {
-    return {get name() {return `${type}_${screen}_${INSTANCE_COUNTER++}`}}
+export const INamedUIElement = (parent, type) => {
+    return {get name() {return `${type}_${parent}_${INSTANCE_COUNTER++}`}}
 }
 
 export const IToggleButton = (onToggle, normalState, toggledState, x, y, w, h) => {
