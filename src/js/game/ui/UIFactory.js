@@ -1,5 +1,8 @@
 import {INamedUIElement, ISimpleButton, IToggleButton, TOGGLE_STATE} from "./UIElementBase";
 
+const BUTTON_WIDTH = 90
+const BUTTON_HEIGHT = 90
+
 export const UIFactory = {
     forScreen: screen => {
         return {
@@ -14,19 +17,19 @@ export const UIFactory = {
                         } else {
                             document.exitFullscreen()
                         }
-                    }, 'ui_fullscreen_to', 'ui_fullscreen_from', 720, 80, 90, 90))
+                    }, 'ui_fullscreen_to', 'ui_fullscreen_from', 720, 80, BUTTON_WIDTH, BUTTON_HEIGHT))
 
                     return button
                 }
                 return null
             },
 
-            getNavButton: (screenManager, destination, texture, x, y, w, h) => {
+            getNavButton: (screenManager, destination, texture, x, y) => {
                 const button = {}
                 Object.assign(button, INamedUIElement(screen, `navigate_to_${destination}`))
                 Object.assign(button, ISimpleButton(() => {
                     screenManager.transit(destination)
-                }, texture, x, y, w, h))
+                }, texture, x, y, BUTTON_WIDTH, BUTTON_HEIGHT))
                 return button
             }
         }

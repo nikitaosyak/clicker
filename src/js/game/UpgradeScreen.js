@@ -9,6 +9,6 @@ export class UpgradeScreen extends BaseScreen {
 
         const uiCreator = UIFactory.forScreen(this.type)
         const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
-        this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.GAME, 'ui_right_arrow', 720, 180, 90, 90))
+        this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.GAME, 'ui_right_arrow', 720, 180))
     }
 }
