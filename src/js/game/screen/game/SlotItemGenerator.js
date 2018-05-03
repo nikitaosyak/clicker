@@ -98,14 +98,14 @@ export const SlotItemGenerator = (owner, model) => {
                     singleChest.drops[ObjectType.EGG] = {
                         stage: stage,
                         health: singleChest.health,
-                        drops: {[ObjectType.DRAGON]: {tier: currentTier}}
+                        drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 0}}
                     }
                 } else if (currentTier > 1) {        // drops egg from prev stage
                     if (lastTierEggNumInPack-- > 0) {
                         singleChest.drops[ObjectType.EGG] = {
                             stage: stage,
                             health: singleChest.health,
-                            drops: {[ObjectType.DRAGON]: {tier: currentTier-1}}
+                            drops: {[ObjectType.DRAGON]: {tier: currentTier-1, level: 0}}
                         }
                     }
                 }
