@@ -1,7 +1,7 @@
 import {SLOTS} from "../screen/game/SLOTS";
 import {RENDER_LAYER} from "../../Renderer";
 
-export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'gragon', GOLD: 'gold' }
+export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold' }
 
 let INSTANCE_COUNTER = 0
 

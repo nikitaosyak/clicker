@@ -5,10 +5,10 @@ import {
     ISlotVisualItem,
     IStageObject,
     ITypedObject,
-    IHealthBarOwner, IVisualStageRepresentationOwner, ObjectType as OBJECT_TYPE
+    IHealthBarOwner, IVisualStageRepresentationOwner
 } from "./GameObjectBase";
 
-export const SlotItem = (type, slot, stage, health, egg = undefined) => {
+export const SlotItem = (type, slot, stage, health, drop) => {
 
     let maxHealth = health
     let currentHealth = maxHealth
@@ -19,17 +19,16 @@ export const SlotItem = (type, slot, stage, health, egg = undefined) => {
             currentHealth = Math.max(0, currentHealth-value)
             self.setHealthBarValue(currentHealth/maxHealth)
         },
-        destroy() {
-            self.healthbarVisual.destroy()
-            if (window.ENV.MODE === 'development') {
-                self.stageRepVisual.destroy()
-            }
-            self.visual.destroy()
-        },
-        dropEgg() {
-            if (self.type === OBJECT_TYPE.EGG) return null
-            if (typeof egg === "undefined") return null
-            return SlotItem(OBJECT_TYPE.EGG, slot, egg, health)
+        getDrop: () => { return drop },
+        clear() { // TODO: this here should be an animation
+            return new Promise((resolve, reject) => {
+                self.healthbarVisual.destroy()
+                if (window.ENV.MODE === 'development') {
+                    self.stageRepVisual.destroy()
+                }
+                self.visual.destroy()
+                resolve()
+            })
         }
     }
 

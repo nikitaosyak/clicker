@@ -83,23 +83,33 @@ export const SlotItemGenerator = (owner, model) => {
 
         minGoldDrop = Math.max(minGoldDrop, sumMoney)
 
-        const boxData = []
+        const chestData = []
         for (let p = 0; p < packConfig.length; p+=2) {
             for (let pn = 0; pn < packConfig[p]; pn++) {
-                const singleBox = {
+                const singleChest = {
                     stage: stage,
                     health: Math.round(packConfig[p+1] * packHP),
-                    gold: Math.round(packConfig[p+1] * minGoldDrop)
+                    drops: {
+                        [ObjectType.GOLD]: Math.round(packConfig[p+1] * minGoldDrop)
+                    }
                 }
 
                 if (currentTierEggNumInPack-- > 0) { // drops egg
-                    singleBox.egg = currentTier
+                    singleChest.drops[ObjectType.EGG] = {
+                        stage: stage,
+                        health: singleChest.health,
+                        drops: {[ObjectType.DRAGON]: {tier: currentTier}}
+                    }
                 } else if (currentTier > 1) {        // drops egg from prev stage
                     if (lastTierEggNumInPack-- > 0) {
-                        singleBox.egg = currentTier - 1
+                        singleChest.drops[ObjectType.EGG] = {
+                            stage: stage,
+                            health: singleChest.health,
+                            drops: {[ObjectType.DRAGON]: {tier: currentTier-1}}
+                        }
                     }
                 }
-                boxData.push(singleBox)
+                chestData.push(singleChest)
                 // //жто для дебга
                 // if (boxDropEgg) {
                 //     droplist[currentTier-1][stage] = 1;
@@ -110,12 +120,19 @@ export const SlotItemGenerator = (owner, model) => {
             }
         }
 
-        return boxData
+        console.log(chestData)
+        return chestData
     }
 
     let currentStageItems = generateStageItems(model.stage)
 
-    return {
+    const self = {
+        populateConcrete: (slots, slotIdx, type, data) => {
+            console.log(`populating slot ${slotIdx} with ${type}:`, data)
+            const item = SlotItem(type, slotIdx, data.stage, data.health, data.drops)
+            owner.add(item)
+            slots[slotIdx] = item
+        },
         populate: slots => {
             for (let i = 0; i < slots.length; i++) {
                 if (slots[i] === null) {
@@ -123,13 +140,13 @@ export const SlotItemGenerator = (owner, model) => {
                         model.increaseStage()
                         currentStageItems = generateStageItems(model.stage)
                     }
-                    const boxData = currentStageItems.splice(0, 1)[0]
-                    console.log(`populating slot ${i} with data`, boxData)
-                    const box = SlotItem(ObjectType.CHEST, i, boxData.stage, boxData.health, boxData.egg)
-                    owner.add(box)
-                    slots[i] = box
+                    self.populateConcrete(
+                        slots, i, ObjectType.CHEST,
+                        currentStageItems.splice(0, 1)[0]
+                    )
                 }
             }
         }
     }
+    return self
 }

@@ -3,6 +3,8 @@ import {UIFactory} from "./ui/UIFactory";
 import {SlotItemGenerator} from "./screen/game/SlotItemGenerator";
 import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
+import {ObjectType} from "./go/GameObjectBase";
+import {SlotItem} from "./go/SlotItem";
 
 export class GameScreen extends BaseScreen {
 
@@ -28,17 +30,27 @@ export class GameScreen extends BaseScreen {
             const clicks = c.extractClicks()
             if (clicks > 0) {
                 console.log('will damage for ', (20 * Math.pow(2, this._owner.model.stage)))
-                c.applyDamage(clicks * (20 * Math.pow(2, this._owner.model.stage)))
+                c.applyDamage(clicks * (20 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
+
                 if (c.health <= 0) {
                     this.remove(this._slotItems[i])
-                    const egg = this._slotItems[i].dropEgg()
-                    this._slotItems[i].destroy()
-                    if (egg) {
-                        this._slotItems[i] = egg
-                        this.add(egg)
-                    } else {
+                    const drop = this._slotItems[i].getDrop()
+                    this._slotItems[i].clear().then(() => {
                         this._slotItems[i] = null
-                        this._generator.populate(this._slotItems)
+                        if (typeof drop[ObjectType.EGG] !== "undefined") {
+                            this._generator.populateConcrete(
+                                this._slotItems, i,
+                                ObjectType.EGG, drop[ObjectType.EGG]
+                            )
+                        } else {
+                            this._generator.populate(this._slotItems)
+                        }
+                    })
+                    if (typeof drop[ObjectType.GOLD] !== "undefined") {
+                        console.log('DROPPED', drop[ObjectType.GOLD], 'gold')
+                    }
+                    if (typeof drop[ObjectType.DRAGON] !== "undefined") {
+                        console.log('DROPPED DRAGON: ', drop[ObjectType.DRAGON])
                     }
                 }
             }
