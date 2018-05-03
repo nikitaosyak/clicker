@@ -2,6 +2,7 @@ import {StaticImage} from "../go/StaticImage";
 import {RENDER_LAYER} from "../../Renderer";
 import {IContainer} from "../go/GameObjectBase";
 import {UIFactory} from "./UIFactory";
+import {INamedUIElement} from "./UIElementBase";
 
 export const GoldCounter = (x, y, initialValue) => {
 
@@ -26,6 +27,7 @@ export const GoldCounter = (x, y, initialValue) => {
             animation.restart()
         }
     }
+    Object.assign(self, INamedUIElement('game', 'gold_counter'))
     Object.assign(self, IContainer(x, y, RENDER_LAYER.UI))
     self.add(counter)
     self.add(StaticImage('ui_coin', 0, 0, 80, 80, RENDER_LAYER.UI))

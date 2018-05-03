@@ -37,7 +37,6 @@ export class GameScreen extends BaseScreen {
 
     update(dt) {
         this._particles.update(dt)
-        const self = this
         this._slotItems.forEach((c, i) => {
             const clicks = c.extractClicks()
             if (clicks > 0) {
