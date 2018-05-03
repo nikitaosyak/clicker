@@ -60,7 +60,7 @@ export const CoinParticlesManager = (targetLocation) => {
 
     const self = {
         update: dt => {
-            const particles = emitter.update(dt/1000)
+            const particles = emitter.update(dt)
             if (particles > 0) {
                 currentParticleToSpawn = Math.max(0, currentParticleToSpawn - particles)
                 if (currentParticleToSpawn === 0) {

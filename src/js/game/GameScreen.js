@@ -5,6 +5,8 @@ import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
 import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
+import {SLOTS} from "./screen/game/SLOTS";
+import {Dragon} from "./go/Dragon";
 
 export class GameScreen extends BaseScreen {
 
@@ -41,7 +43,7 @@ export class GameScreen extends BaseScreen {
             const clicks = c.extractClicks()
             if (clicks > 0) {
                 console.log('will damage for ', (20 * Math.pow(2, this._owner.model.stage)))
-                const rewardingClick = c.processDamage(clicks * (20 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
+                const rewardingClick = c.processDamage(clicks * (40 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
 
                 const drop = this._slotItems[i].drop
                 const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
@@ -64,7 +66,9 @@ export class GameScreen extends BaseScreen {
                         this._dropGold(i, drop, drop[ObjectType.GOLD])
                     }
                     if (dropsDragon) {
-                        console.log('DROPPED DRAGON: ', drop[ObjectType.DRAGON])
+                        console.log('DROP DRAGON', drop)
+                        const slotPosition = SLOTS.getRect(i)
+                        this._renderer.addShared(Dragon(this._renderer, drop[ObjectType.DRAGON].tier, drop[ObjectType.DRAGON].level, slotPosition.x, slotPosition.y))
                     }
                 } else if (rewardingClick && dropsGold) {
                     const intermediateGold = Math.max(1, Math.floor(drop[ObjectType.GOLD] * 0.002))

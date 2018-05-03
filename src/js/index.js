@@ -27,11 +27,11 @@ window.onload = () => {
             const gameLoop = () => {
                 debugManager.frameStarted()
 
-                let dt = Date.now() - time
+                let dt = (Date.now() - time)/1000
                 time = Date.now()
 
                 screens.update(dt)
-                renderer.update()
+                renderer.update(dt)
 
                 requestAnimationFrame(gameLoop)
 

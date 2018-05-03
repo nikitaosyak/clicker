@@ -12,18 +12,10 @@ export class BaseScreen {
         this._content = []
         this._controls = []
         this._originalLocationData = {}
-        this._shared = []
     }
 
     get type() { return this._type }
-
-    extractShared() {
-        return this._shared.splice(0)
-    }
-
-    injectShared(shared) {
-        this._shared = shared
-    }
+    get _renderer() { return this._owner.renderer }
 
     animateHide(to, onComplete) {
         console.log(this._content)
@@ -76,7 +68,7 @@ export class BaseScreen {
             y: obj.visual.y
         }
         if (this._active) {
-            this._owner.renderer.addObject(obj)
+            this._renderer.addObject(obj)
         }
     }
 
@@ -84,7 +76,7 @@ export class BaseScreen {
         this._content.splice(this._content.indexOf(obj), 1)
         delete this._originalLocationData[obj.name]
         if (this._active) {
-            this._owner.renderer.removeObject(obj)
+            this._renderer.removeObject(obj)
         }
     }
 
@@ -93,14 +85,14 @@ export class BaseScreen {
     show() {
         this._active = true
         this._content.forEach(c => {
-            this._owner.renderer.addObject(c)
+            this._renderer.addObject(c)
         })
     }
 
     hide() {
         this._active = false
         this._content.forEach(c => {
-            this._owner.renderer.removeObject(c)
+            this._renderer.removeObject(c)
         })
     }
 }

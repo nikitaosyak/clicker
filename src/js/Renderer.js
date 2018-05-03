@@ -63,10 +63,19 @@ export const Renderer = () => {
 
     // debug.on('visibility', _ => resizeCanvas())
 
-    return {
+    const _shared = []
+
+    const self =  {
         get dom() { return canvas },
         get size() { return adjustedVSize },
+        get vSize() { return vSize },
         get stage() { return stage },
+        get shared() { return _shared },
+        addShared: go => {
+            console.log('adding shared object', go)
+            _shared.push(go)
+            self.addObject(go)
+        },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
             const parent = layers[go.layer]
@@ -76,7 +85,7 @@ export const Renderer = () => {
                 stage.addChild(go.visual)
             }
         },
-        removeObject: (go) => {
+        removeObject: go => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be removed from render`)
             const parent = layers[go.layer]
             if (parent) {
@@ -85,13 +94,16 @@ export const Renderer = () => {
                 stage.removeChild(go.visual)
             }
         },
-        update: () => {
+        update: dt => {
             const newCanvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth)
             const newCanvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight)
             if (newCanvasW !== canvasW || newCanvasH !== canvasH) {
                 resizeCanvas()
             }
+            _shared.forEach(sh => sh.update(dt))
             renderer.render(stage)
         }
     }
+
+    return self
 }

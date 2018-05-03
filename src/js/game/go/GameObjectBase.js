@@ -31,14 +31,14 @@ export const IContainer = (x, y, layer) => {
     }
 }
 
-export const IVisual = (t, x, y, w, h) => {
+export const IVisual = (t, x, y, w, h, layer = undefined) => {
     const s = new PIXI.Sprite(window.resources.getTexture(t))
     s.width = w; s.height = h
     s.x = x; s.y = y
     s.anchor.x = s.anchor.y = 0.5
 
     return {
-        get layer() { return RENDER_LAYER.GAME },
+        get layer() { return layer || RENDER_LAYER.GAME },
         get hasVisual() { return true },
         get visual() { return s }
     }
@@ -112,6 +112,29 @@ export const IHealthBarOwner = self => {
 }
 
 export const IVisualStageRepresentationOwner = self => {
+    const parent = self.visual
+    const container = new PIXI.Container()
+    container.x = -(parent.width/parent.scale.x) * 0.25
+    container.y = (parent.height/parent.scale.y) * 0.25
+
+    const sprite = new PIXI.Sprite(window.resources.getTexture('ui_yellow_circle'))
+    sprite.width = parent.width/parent.scale.x * 0.3;
+    sprite.height = parent.width/parent.scale.x * 0.3;
+    sprite.anchor.x = 0.5; sprite.anchor.y = 0.5
+    container.addChild(sprite)
+    const text = new PIXI.Text(self.stage, new PIXI.TextStyle({
+        fontSize: 80, fontWeight: 'bold', fill: '#EEffff'
+    }))
+    text.anchor.x = text.anchor.y = 0.5
+    container.addChild(text)
+    parent.addChild(container)
+
+    return {
+        get stageRepVisual() { return sprite },
+    }
+}
+
+export const IVisualStageRepresentationOwner2 = self => {
     const parent = self.visual
     const container = new PIXI.Container()
     container.x = -(parent.width/parent.scale.x) * 0.25
