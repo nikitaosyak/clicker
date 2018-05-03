@@ -18,7 +18,6 @@ export const Dragon = (renderer, tier, level, x, y) => {
             invalidateVisual()
         },
         update: dt => {
-            console.log(self)
             self.visual.x += dir.x * speed * dt
             self.visual.y += dir.y * speed * dt
 
