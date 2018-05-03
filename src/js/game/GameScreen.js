@@ -4,7 +4,6 @@ import {SlotItemGenerator} from "./screen/game/SlotItemGenerator";
 import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
-import {SlotItem} from "./go/SlotItem";
 
 export class GameScreen extends BaseScreen {
 
