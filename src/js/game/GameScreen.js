@@ -32,12 +32,11 @@ export class GameScreen extends BaseScreen {
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
         self._particles.dropCoin(i, value)
-            .then(() => {
-                self._goldCounter.setValue(this._owner.model.gold)
-            })
+        self._goldCounter.setValue(this._owner.model.gold)
     }
 
     update(dt) {
+        this._particles.update(dt)
         const self = this
         this._slotItems.forEach((c, i) => {
             const clicks = c.extractClicks()

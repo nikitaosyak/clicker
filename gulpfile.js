@@ -137,12 +137,11 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
     if (process.env.MODE === 'development') {
         const sourcemaps = require('gulp-sourcemaps')
         return gulp.src([
-            'src/lib/*.lib.js'
-            // 'src/lib/fullscreen-api-polyfill.lib.js',
-            // 'src/lib/stats.lib.js',
-            // 'src/lib/tweenjs.lib.js',
-            // 'src/lib/pixi.lib.js',
-            // 'src/lib/fairygui.lib.js',
+            'src/lib/fullscreen-api-polyfill.lib.js',
+            'src/lib/stats.lib.js',
+            'src/lib/pixi.lib.js',
+            'src/lib/pixi-particles.lib.js',
+            'src/lib/tweenlite-gen.lib.js'
         ])
             .pipe(sourcemaps.init())
             .pipe(concat('libraries.js'))
@@ -150,11 +149,11 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
             .pipe(gulp.dest('build'))
     } else {
         return gulp.src([
-            'src/lib/*.lib.min.js'
-            // 'src/lib/fullscreen-api-polyfill.lib.min.js',
-            // 'src/lib/tweenjs.lib.min.js',
-            // 'src/lib/pixi.lib.min.js',
-            // 'src/lib/fairygui.lib.min.js'
+            'src/lib/*.lib.min.js',
+            'src/lib/fullscreen-api-polyfill.lib.min.js',
+            'src/lib/pixi.lib.min.js',
+            'src/lib/pixi-particles.lib.min.js',
+            'src/lib/tweenlite-gen.lib.min.js'
         ])
             .pipe(concat('libraries.js'))
             .pipe(gulp.dest('build'))
