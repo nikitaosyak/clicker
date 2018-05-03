@@ -15,19 +15,25 @@ export const SlotItem = (type, slot, stage, health, drop) => {
 
     let animIdx = 0
     let shakeAnimation = []
+    let currentClick = 0
 
     const self = {
+        get drop() { return drop },
         get health() { return currentHealth },
-        applyDamage: value => {
+        processDamage: value => {
             currentHealth = Math.max(0, currentHealth-value)
             self.setHealthBarValue(currentHealth/maxHealth)
 
             shakeAnimation[animIdx].restart()
             animIdx = animIdx === 0 ? 1 : 0
+
+            currentClick += 1
+            return currentClick % 3 === 0 // reward with intermediate gold
         },
-        getDrop: () => { return drop },
         clear() { // TODO: this here should be an animation
             return new Promise((resolve, reject) => {
+                drop = null
+
                 shakeAnimation[0].kill()
                 shakeAnimation[1].kill()
 

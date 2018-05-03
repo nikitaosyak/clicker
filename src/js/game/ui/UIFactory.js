@@ -1,5 +1,5 @@
 import {INamedUIElement, ISimpleButton, IToggleButton, TOGGLE_STATE} from "./UIElementBase";
-import {IAnimated, IText} from "../go/GameObjectBase";
+import {IAnimated, IParticleContainer, IText} from "../go/GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 
 const BUTTON_WIDTH = 90
@@ -42,12 +42,19 @@ export const UIFactory = {
                 return t
             },
 
-            getCoinSpec: (x, y) => {
+            getParticleContainer: () => {
+                const pc = {}
+                Object.assign(pc, INamedUIElement(parent, 'particleContainer'))
+                Object.assign(pc, IParticleContainer(RENDER_LAYER.UI))
+                return pc
+            },
+
+            getCoinParticle: (x, y) => {
                 const c = {}
-                Object.assign(c, INamedUIElement(parent, 'coin'))
+                Object.assign(c, INamedUIElement(parent, 'coinParticle'))
                 Object.assign(c, IAnimated('anim_coin', x, y, 60, 60))
                 return c
-            }
+            },
         }
     }
 }

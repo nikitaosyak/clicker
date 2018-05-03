@@ -4,6 +4,7 @@ import {SlotItemGenerator} from "./screen/game/SlotItemGenerator";
 import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
+import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
 
 export class GameScreen extends BaseScreen {
 
@@ -15,28 +16,44 @@ export class GameScreen extends BaseScreen {
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180))
 
-        this.add(GoldCounter(740, 800))
+        this._goldCounter = GoldCounter(740, 800, this._owner.model.gold)
+        this.add(this._goldCounter)
 
-        this.add(uiCreator.getCoinSpec(400, 400))
+        this._particles = CoinParticlesManager(this._goldCounter.visual)
+        this.add(this._particles)
 
         this._generator = SlotItemGenerator(this, owner.model)
         this._slotItems = [null, null, null]
         this._generator.populate(this._slotItems)
     }
 
+    _dropGold(i, dropData, value) {
+        const self = this
+        dropData[ObjectType.GOLD] -= value
+        self._owner.model.addGold(value)
+        self._particles.dropCoin(i, value)
+            .then(() => {
+                self._goldCounter.setValue(this._owner.model.gold)
+            })
+    }
+
     update(dt) {
+        const self = this
         this._slotItems.forEach((c, i) => {
             const clicks = c.extractClicks()
             if (clicks > 0) {
                 console.log('will damage for ', (20 * Math.pow(2, this._owner.model.stage)))
-                c.applyDamage(clicks * (20 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
+                const rewardingClick = c.processDamage(clicks * (20 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
 
+                const drop = this._slotItems[i].drop
+                const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
+                const dropsDragon = typeof drop[ObjectType.DRAGON] !== "undefined"
+                const dropsEgg = typeof drop[ObjectType.EGG] !== "undefined"
                 if (c.health <= 0) {
                     this.remove(this._slotItems[i])
-                    const drop = this._slotItems[i].getDrop()
                     this._slotItems[i].clear().then(() => {
                         this._slotItems[i] = null
-                        if (typeof drop[ObjectType.EGG] !== "undefined") {
+                        if (dropsEgg) {
                             this._generator.populateConcrete(
                                 this._slotItems, i,
                                 ObjectType.EGG, drop[ObjectType.EGG]
@@ -45,12 +62,15 @@ export class GameScreen extends BaseScreen {
                             this._generator.populate(this._slotItems)
                         }
                     })
-                    if (typeof drop[ObjectType.GOLD] !== "undefined") {
-                        console.log('DROPPED', drop[ObjectType.GOLD], 'gold')
+                    if (dropsGold) {
+                        this._dropGold(i, drop, drop[ObjectType.GOLD])
                     }
-                    if (typeof drop[ObjectType.DRAGON] !== "undefined") {
+                    if (dropsDragon) {
                         console.log('DROPPED DRAGON: ', drop[ObjectType.DRAGON])
                     }
+                } else if (rewardingClick && dropsGold) {
+                    const intermediateGold = Math.max(1, Math.floor(drop[ObjectType.GOLD] * 0.002))
+                    this._dropGold(i, drop, intermediateGold)
                 }
             }
         })
