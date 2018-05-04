@@ -63,20 +63,20 @@ export const Renderer = () => {
 
     // debug.on('visibility', _ => resizeCanvas())
 
-    const _shared = []
+    const _dragons = []
 
     const self =  {
         get dom() { return canvas },
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
-        get shared() { return _shared },
+        get dragons() { return _dragons },
         addDragon: go => {
-            _shared.push(go)
+            _dragons.push(go)
             self.addObject(go)
         },
         getDragons: (tier, level) => {
-            return _shared.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
+            return _dragons.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
@@ -102,7 +102,7 @@ export const Renderer = () => {
             if (newCanvasW !== canvasW || newCanvasH !== canvasH) {
                 resizeCanvas()
             }
-            _shared.forEach(sh => sh.update(dt))
+            _dragons.forEach(sh => sh.update(dt))
             renderer.render(stage)
         }
     }

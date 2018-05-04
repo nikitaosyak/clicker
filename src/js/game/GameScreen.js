@@ -69,7 +69,7 @@ export class GameScreen extends BaseScreen {
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-        this._owner.renderer.shared.forEach(sh => this._setBoundsForDragon(sh))
+        this._owner.renderer.dragons.forEach(sh => this._setBoundsForDragon(sh))
     }
 
     update(dt) {

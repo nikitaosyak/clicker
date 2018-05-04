@@ -11,4 +11,9 @@ export class LeaderboardScreen extends BaseScreen {
         const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.GAME, 'ui_left_arrow', 80, 80))
     }
+
+    show() {
+        super.show()
+        this._owner.renderer.dragons.forEach(sh => sh.setBounds(50, 750, 50, 1230))
+    }
 }
