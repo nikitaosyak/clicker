@@ -45,6 +45,8 @@ export const GameData = (model) => {
         get slots() { return slots },
         getSlotRect(at) { return slots[at]},
 
+        getUpgradePrice: (tier, level) => getUpgradePrice(tier, level),
+        getSingleDragonDamage: (tier, level) => getTierDamage(tier, level),
         getClickDamage: dragons => {
             let damage = 0
             Object.keys(dragons).forEach(tier => {
@@ -52,7 +54,7 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            return (baseDamage + damage)// * 5
+            return (baseDamage + damage)// * 4
         },
 
         generateStageItems: (stage, shallow = false) => {

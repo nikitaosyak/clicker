@@ -47,10 +47,16 @@ export class GameScreen extends BaseScreen {
                     this._renderer,
                     dragonData.tier,
                     dragonData.level,
-                    500, 500))
+                    100 + Math.round(Math.random()*500), 100 + Math.round(Math.random()*500)))
             })
         })
 
+        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+    }
+
+    show() {
+        super.show()
+        this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
     }
 

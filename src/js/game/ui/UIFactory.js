@@ -1,6 +1,7 @@
 import {INamedUIElement, ISimpleButton, IToggleButton, TOGGLE_STATE} from "./UIElementBase";
-import {IAnimated, IParticleContainer, IText} from "../go/GameObjectBase";
+import {IAnimated, IContainer, IParticleContainer, IText} from "../go/GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
+import {StaticImage} from "../go/StaticImage";
 
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
@@ -26,10 +27,12 @@ export const UIFactory = {
                 return null
             },
 
-            getButton: (texture, x, y, onClick) => {
+            getButton: (texture, x, y, onClick, sizeX = undefined, sizeY = undefined) => {
                 const button = {}
                 Object.assign(button, INamedUIElement(parent, `button`))
-                Object.assign(button, ISimpleButton(onClick, texture, x, y, BUTTON_WIDTH, BUTTON_HEIGHT))
+                Object.assign(button, ISimpleButton(onClick, texture, x, y,
+                    sizeX || BUTTON_WIDTH,
+                    sizeY || BUTTON_HEIGHT))
                 return button
             },
 
@@ -49,10 +52,10 @@ export const UIFactory = {
                 return t
             },
 
-            getParticleContainer: () => {
+            getContainer: (x, y) => {
                 const pc = {}
                 Object.assign(pc, INamedUIElement(parent, 'particleContainer'))
-                Object.assign(pc, IParticleContainer(RENDER_LAYER.UI))
+                Object.assign(pc, IContainer(x, y, RENDER_LAYER.UI))
                 return pc
             },
 
@@ -62,6 +65,35 @@ export const UIFactory = {
                 Object.assign(c, IAnimated('anim_coin', x, y, 60, 60))
                 return c
             },
+
+            getUpgradeInfoWidget: (x, y) => {
+
+                const bg = StaticImage('pixel', 0, 0, 100, 100)
+                const tier = UIFactory.forParent('info_widget').getText('', -30, -30, {
+                    fontSize: 30, fill: '#000000'
+                }, {x: 0.5, y: 0.5})
+                const level = UIFactory.forParent('info_widget').getText('', 30, -30, {
+                    fontSize: 30, fill: '#000000'
+                }, {x: 0.5, y: 0.5})
+                const price = UIFactory.forParent('info_widget').getText('', 0, 30, {
+                    fontSize: 30, fill: '#ffd700'
+                }, {x: 0.5, y: 0.5})
+
+                const w = {
+                    set tier(v) {tier.visual.text = `t${v}`},
+                    set level(v) {level.visual.text = `l${v}`},
+                    set damage(v) {},
+                    set price(v) {price.visual.text = v},
+                }
+
+                Object.assign(w, IContainer(x, y))
+                w.visual.addChild(bg.visual)
+                w.visual.addChild(tier.visual)
+                w.visual.addChild(level.visual)
+                w.visual.addChild(price.visual)
+
+                return w
+            }
         }
     }
 }

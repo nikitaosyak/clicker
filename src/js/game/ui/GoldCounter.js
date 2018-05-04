@@ -9,7 +9,7 @@ export const GoldCounter = (x, y, initialValue) => {
     const counter = UIFactory.forParent('gold_counter')
         .getText('0', -50, 0, {fontSize: 60, fill: '#ffd700'}, {x: 1, y: 0.5})
 
-    const animationTarget = {value: 0}
+    const animationTarget = {value: initialValue}
     let animation = TweenLite.to(animationTarget, 1, {
         value: initialValue,
         roundProps: 'value',
@@ -20,11 +20,16 @@ export const GoldCounter = (x, y, initialValue) => {
     })
 
     const self = {
-        setValue(newValue) {
+        setValue: (newValue) => {
             animation.target = animationTarget
             animation.vars.value = newValue
             animation.invalidate()
             animation.restart()
+        },
+        setValueInstantly: (newValue) => {
+            counter.visual.text = newValue
+            animationTarget.value = newValue
+            animation.vars.value = newValue
         }
     }
     Object.assign(self, INamedUIElement('game', 'gold_counter'))

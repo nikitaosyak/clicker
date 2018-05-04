@@ -1,9 +1,11 @@
 
+export const MIN_STAGE = 0
+export const MIN_GOLD = 0
+export const MAX_DRAGON_LEVEL = 5
+
 export const GameModel = () => {
 
-    const MIN_STAGE = 0
-    const MIN_GOLD = 0
-    const MAX_DRAGON_LEVEL = 5
+
 
     let connected = false
     let currentStage = -1

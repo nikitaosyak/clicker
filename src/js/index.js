@@ -22,6 +22,7 @@ window.onload = () => {
 
             const screens = ScreenMan(renderer, model)
             screens.instantTransit(SCREEN_TYPE.GAME)
+            // screens.instantTransit(SCREEN_TYPE.UPGRADE)
 
             let time = Date.now()
             const gameLoop = () => {

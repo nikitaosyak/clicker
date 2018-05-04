@@ -72,7 +72,6 @@ export const Renderer = () => {
         get stage() { return stage },
         get shared() { return _shared },
         addShared: go => {
-            console.log('adding shared object', go)
             _shared.push(go)
             self.addObject(go)
         },
