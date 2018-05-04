@@ -43,7 +43,7 @@ export class GameScreen extends BaseScreen {
         const dragons = this._owner.model.dragons
         Object.keys(dragons).forEach(tier => {
             dragons[tier].forEach(dragonData => {
-                self._renderer.addShared(Dragon(
+                self._renderer.addDragon(Dragon(
                     this._renderer,
                     dragonData.tier,
                     dragonData.level,
@@ -54,15 +54,7 @@ export class GameScreen extends BaseScreen {
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
     }
 
-    show() {
-        super.show()
-        this._goldCounter.setValueInstantly(this._owner.model.gold)
-        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
-
-        this._owner.renderer.shared.forEach(sh => {
-            sh.setBounds(50, 750, 50, 750)
-        })
-    }
+    _setBoundsForDragon(dragonVisual) {dragonVisual.setBounds(50, 750, 50, 750)}
 
     _dropGold(i, dropData, value) {
         const self = this
@@ -70,6 +62,14 @@ export class GameScreen extends BaseScreen {
         self._owner.model.addGold(value)
         self._particles.dropCoin(i, value)
         self._goldCounter.setValue(this._owner.model.gold)
+    }
+
+    show() {
+        super.show()
+        this._goldCounter.setValueInstantly(this._owner.model.gold)
+        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+
+        this._owner.renderer.shared.forEach(sh => this._setBoundsForDragon(sh))
     }
 
     update(dt) {
@@ -111,11 +111,14 @@ export class GameScreen extends BaseScreen {
                         const slot = window.GD.getSlotRect(i)
                         this._owner.model.addDragon(dragonData.tier, dragonData.level)
                         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
-                        this._renderer.addShared(Dragon(
+
+                        const dragon = Dragon(
                             this._renderer,
                             dragonData.tier,
                             dragonData.level,
-                            slot.x, slot.y))
+                            slot.x, slot.y)
+                        this._setBoundsForDragon(dragon)
+                        this._renderer.addDragon(dragon)
                     }
                 } else if (rewardingClick && dropsGold) {
 

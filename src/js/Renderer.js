@@ -71,9 +71,12 @@ export const Renderer = () => {
         get vSize() { return vSize },
         get stage() { return stage },
         get shared() { return _shared },
-        addShared: go => {
+        addDragon: go => {
             _shared.push(go)
             self.addObject(go)
+        },
+        getDragons: (tier, level) => {
+            return _shared.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
@@ -101,9 +104,6 @@ export const Renderer = () => {
             }
             _shared.forEach(sh => sh.update(dt))
             renderer.render(stage)
-        },
-        getAll: (tier, level) => {
-            return _shared.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         }
     }
 
