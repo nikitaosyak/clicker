@@ -29,9 +29,6 @@ export const Dragon = (renderer, tier, level, x, y) => {
             bounds.top = top; bounds.bottom = bottom;
         },
         update: dt => {
-            self.visual.x += dir.x * speed * dt
-            self.visual.y += dir.y * speed * dt
-
             if (self.visual.x >= /*renderer.vSize.x*/bounds.right) {
                 dir.x = -1
             }
@@ -45,6 +42,9 @@ export const Dragon = (renderer, tier, level, x, y) => {
             if (self.visual.y <= /*0*/bounds.top) {
                 dir.y = 1
             }
+
+            self.visual.x += dir.x * speed * dt
+            self.visual.y += dir.y * speed * dt
         }
     }
 

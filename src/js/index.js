@@ -29,6 +29,7 @@ window.onload = () => {
                 debugManager.frameStarted()
 
                 let dt = (Date.now() - time)/1000
+                dt = Math.min(dt, 0.02) // cap delta time for inactivity period
                 time = Date.now()
 
                 screens.update(dt)
