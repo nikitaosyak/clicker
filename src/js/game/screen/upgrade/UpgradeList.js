@@ -45,6 +45,7 @@ export const UpgradeList = (model, x, y) => {
             listItem.visual.x = 0
             listItem.visual.y = vOffset * -120
             vOffset += 1
+
             self.visual.addChild(listItem.visual)
             return listItem
         })
@@ -52,6 +53,8 @@ export const UpgradeList = (model, x, y) => {
         current.forEach(el => {
             self.visual.addChild(el.visual)
         })
+
+        return flatList
     }
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))

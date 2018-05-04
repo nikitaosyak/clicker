@@ -23,8 +23,20 @@ export class UpgradeScreen extends BaseScreen {
             owner.model.subtractGold(window.GD.getUpgradePrice(dragon.tier, dragon.level))
             this._goldCounter.setValue(owner.model.gold)
 
+
+            // console.log(this._owner.renderer.getAll(dragon.tier, dragon.level))
+            const allDragons = this._owner.renderer.getAll(dragon.tier, dragon.level)
+            allDragons[0].level += 1
             owner.model.upgradeDragon(dragon.tier, dragon.level)
-            this._list.invalidate(this._owner.model.dragons)
+
+            const flatList =  this._list.invalidate(this._owner.model.dragons)
+            flatList.forEach((fl, i) => {
+                const dragons = this._owner.renderer.getAll(fl[0].tier, fl[0].level)
+                dragons.forEach(d => {
+                    const middle = 1100 - i * 120
+                    d.setBounds(150, 650, middle-40, middle+40)
+                })
+            })
         })
     }
 
@@ -32,6 +44,13 @@ export class UpgradeScreen extends BaseScreen {
         super.show()
         this._goldCounter.setValueInstantly(this._owner.model.gold)
 
-        this._list.invalidate(this._owner.model.dragons)
+        const flatList = this._list.invalidate(this._owner.model.dragons)
+        flatList.forEach((fl, i) => {
+            const dragons = this._owner.renderer.getAll(fl[0].tier, fl[0].level)
+            dragons.forEach(d => {
+                const middle = 1100 - i * 120
+                d.setBounds(150, 650, middle-40, middle+40)
+            })
+        })
     }
 }

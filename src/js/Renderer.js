@@ -101,6 +101,9 @@ export const Renderer = () => {
             }
             _shared.forEach(sh => sh.update(dt))
             renderer.render(stage)
+        },
+        getAll: (tier, level) => {
+            return _shared.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         }
     }
 

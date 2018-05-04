@@ -15,8 +15,9 @@ export const GameData = (model) => {
     const basePrice = 100       //базовая цена
     const tierDamageMult = 50   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
-    const packClicksNum = 120   //расчётое количество кликов по паку сундуков
+    const packClicksNum = 80   //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
+    const tierSwitchThresholdMultiplier = 60
     let minGoldDrop = 200     //минимальный дроп золота
 
     let currentTier = 1         //вид дракона
@@ -64,7 +65,7 @@ export const GameData = (model) => {
 
             //определяется порог и переключается тиер
             const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
-            if (packHP / nextTierBaseDamage * shiftKoef * shiftKoef > 290 * currentTier) {
+            if (packHP / nextTierBaseDamage * shiftKoef * shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
                 currentTier++
                 currentTierDropStage = 0
                 dragonsCountByTier.push(0)

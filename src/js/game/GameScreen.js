@@ -58,6 +58,10 @@ export class GameScreen extends BaseScreen {
         super.show()
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+
+        this._owner.renderer.shared.forEach(sh => {
+            sh.setBounds(50, 750, 50, 750)
+        })
     }
 
     _dropGold(i, dropData, value) {
