@@ -28,7 +28,7 @@ export const GameData = (model) => {
     const dragonsUpgradeByTier = [1,1]
 
     const getUpgradePrice = (tier, level) => {
-        if (tier > 1) return basePrice * Math.pow(tierPriceMult, tier - 1)
+        if (tier > 1) return basePrice * level * Math.pow(tierPriceMult, tier - 1)
         return basePrice * level
     };
 
