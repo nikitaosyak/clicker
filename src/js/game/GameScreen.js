@@ -19,7 +19,11 @@ export class GameScreen extends BaseScreen {
         }
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180))
         if (window.GD.config.MODE !== 'production') {
-            this.addControl(uiCreator.getButton('ui_restart', 80, 180, this._owner.model.restart))
+            this.addControl(uiCreator.getButton('ui_restart', 80, 180, () => {
+                if (window.confirm('прогресс будет сброшен. продолжить?')) {
+                    this._owner.model.restart()
+                }
+            }))
         }
 
         this._goldCounter = GoldCounter(520, 800, this._owner.model.gold)
