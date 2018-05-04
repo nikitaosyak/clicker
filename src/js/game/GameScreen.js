@@ -22,7 +22,7 @@ export class GameScreen extends BaseScreen {
             this.addControl(uiCreator.getButton('ui_restart', 80, 180, this._owner.model.restart))
         }
 
-        this._goldCounter = GoldCounter(740, 800, this._owner.model.gold)
+        this._goldCounter = GoldCounter(520, 800, this._owner.model.gold)
         this.add(this._goldCounter)
 
         this._particles = CoinParticlesManager(this._goldCounter.visual)
