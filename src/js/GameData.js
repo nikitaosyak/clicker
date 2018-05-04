@@ -15,7 +15,7 @@ export const GameData = (model) => {
     const basePrice = 100       //базовая цена
     const tierDamageMult = 50   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
-    const packClicksNum = 80   //расчётое количество кликов по паку сундуков
+    const packClicksNum = 60   //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
     const tierSwitchThresholdMultiplier = 60
     let minGoldDrop = 200     //минимальный дроп золота
@@ -122,7 +122,7 @@ export const GameData = (model) => {
                         singleChest.drops[ObjectType.EGG] = {
                             type: ObjectType.EGG,
                             stage: stage,
-                            health: singleChest.health,
+                            health: singleChest.health/2,
                             drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
                         }
                     } else if (currentTier > 1) {        // drops egg from prev stage
@@ -130,7 +130,7 @@ export const GameData = (model) => {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.EGG,
                                 stage: stage,
-                                health: singleChest.health,
+                                health: singleChest.health/2,
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier-1, level: 1}}
                             }
                         }
