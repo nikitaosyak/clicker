@@ -1,14 +1,13 @@
 import {debugManager} from "./debugManager";
 import {Renderer} from "./Renderer";
 import {Resources} from "./Resrouces";
-import {ENV} from "./ENV"
 import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
 import {StaticImage} from "./game/go/StaticImage";
 import {GameModel} from "./GameModel";
+import {GameData} from "./GameData";
 
 window.onload = () => {
 
-    ENV.init()
     debugManager.init()
 
     PIXI.settings.MIPMAP_TEXTURES = false
@@ -17,6 +16,7 @@ window.onload = () => {
     const startGame = () => {
         const model = GameModel()
         model.connect().then(() => {
+            window.GD = GameData(model)
             const renderer = Renderer()
             renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
 

@@ -1,4 +1,3 @@
-import {SLOTS} from "../screen/game/SLOTS";
 import {RENDER_LAYER} from "../../Renderer";
 
 export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold' }
@@ -45,7 +44,6 @@ export const IVisual = (t, x, y, w, h, layer = undefined) => {
 }
 
 export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefined, layer = undefined) => {
-    console.log(text)
     const t = new PIXI.Text(text, new PIXI.TextStyle(style))
     t.x = x; t.y = y;
     t.anchor.x = anchorX || 0.5; t.anchor.y = anchorY || 0.5
@@ -159,7 +157,7 @@ export const IVisualStageRepresentationOwner2 = self => {
 
 export const ISlotItem = slot => {
     return {
-        get slotRect() { return SLOTS.getRect(slot) }
+        get slotRect() { return window.GD.getSlotRect(slot) }
     }
 }
 export const ISlotVisualItem = (self, t) => {

@@ -32,20 +32,20 @@ gulp.task('step1-prepare-files', () => {
     }
 
     // generate ENV
-    let buff = 'export const ENV = {\n'
+    let buff = 'export const Config = () => {\n  return {\n'
     if (process.env.MODE === 'production') {
-        buff += '  init: () => { window.ENV = ENV; console.log = () => {} },\n'
+        buff += '    init: () => { console.log = () => {} },\n'
     } else {
-        buff += '  init: () => { window.ENV = ENV },\n'
+        buff += '    init: () => {},\n'
     }
     Object.keys(env.parsed).forEach(k => {
         if (/\D/.test(env.parsed[k])) {
-            buff += `  ${k} : '${env.parsed[k]}',\n`
+            buff += `    ${k} : '${env.parsed[k]}',\n`
         } else {
-            buff += `  ${k} : ${env.parsed[k]},\n`
+            buff += `    ${k} : ${env.parsed[k]},\n`
         }
     })
-    fs.writeFileSync('./src/js/ENV.js', buff + '}')
+    fs.writeFileSync('./src/js/Config.js', buff + '  }\n}')
 
     if (env.parsed.MODE !== 'development') {
         return gulp.src('src/js/**/*.js')

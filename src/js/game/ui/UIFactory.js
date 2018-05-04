@@ -10,7 +10,7 @@ export const UIFactory = {
         return {
             getFullScreenButton: fsElement => {
                 if (typeof document.fullscreenEnabled !== undefined &&
-                    window.ENV.PLATFORM === 'standalone') {
+                    window.GD.config.PLATFORM === 'standalone') {
                     const button = {}
                     Object.assign(button, INamedUIElement(parent, 'full_screen'))
                     Object.assign(button, IToggleButton(state => {
@@ -24,6 +24,13 @@ export const UIFactory = {
                     return button
                 }
                 return null
+            },
+
+            getButton: (texture, x, y, onClick) => {
+                const button = {}
+                Object.assign(button, INamedUIElement(parent, `button`))
+                Object.assign(button, ISimpleButton(onClick, texture, x, y, BUTTON_WIDTH, BUTTON_HEIGHT))
+                return button
             },
 
             getNavButton: (screenManager, destination, texture, x, y) => {

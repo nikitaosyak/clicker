@@ -5,7 +5,6 @@ import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
 import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
-import {SLOTS} from "./screen/game/SLOTS";
 import {Dragon} from "./go/Dragon";
 
 export class GameScreen extends BaseScreen {
@@ -17,6 +16,9 @@ export class GameScreen extends BaseScreen {
         const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
         this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180))
+        if (window.GD.config.MODE !== 'production') {
+            this.addControl(uiCreator.getButton('ui_restart', 80, 180, this._owner.model.restart))
+        }
 
         this._goldCounter = GoldCounter(740, 800, this._owner.model.gold)
         this.add(this._goldCounter)
@@ -24,9 +26,29 @@ export class GameScreen extends BaseScreen {
         this._particles = CoinParticlesManager(this._goldCounter.visual)
         this.add(this._particles)
 
-        this._generator = SlotItemGenerator(this, owner.model)
+        this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems)
         this._slotItems = [null, null, null]
-        this._generator.populate(this._slotItems)
+        if (this._owner.model.slotItems.length > 0) {
+            this._owner.model.slotItems.forEach((dataItem, i) => {
+                this._generator.populateConcrete(this._slotItems, i, dataItem)
+            })
+        } else {
+            this._generator.populate(this._slotItems)
+        }
+
+        const self = this
+        const dragons = this._owner.model.dragons
+        Object.keys(dragons).forEach(tier => {
+            dragons[tier].forEach(dragonData => {
+                self._renderer.addShared(Dragon(
+                    this._renderer,
+                    dragonData.tier,
+                    dragonData.level,
+                    500, 500))
+            })
+        })
+
+        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
     }
 
     _dropGold(i, dropData, value) {
@@ -42,8 +64,8 @@ export class GameScreen extends BaseScreen {
         this._slotItems.forEach((c, i) => {
             const clicks = c.extractClicks()
             if (clicks > 0) {
-                console.log('will damage for ', (20 * Math.pow(2, this._owner.model.stage)))
-                const rewardingClick = c.processDamage(clicks * (40 * Math.pow(2, this._owner.model.stage))) // TODO: fix damage
+                console.log('will damage for ', this._clickDamage)
+                const rewardingClick = c.processDamage(clicks * this._clickDamage)
 
                 const drop = this._slotItems[i].drop
                 const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
@@ -55,8 +77,7 @@ export class GameScreen extends BaseScreen {
                         this._slotItems[i] = null
                         if (dropsEgg) {
                             this._generator.populateConcrete(
-                                this._slotItems, i,
-                                ObjectType.EGG, drop[ObjectType.EGG]
+                                this._slotItems, i, drop[ObjectType.EGG]
                             )
                         } else {
                             this._generator.populate(this._slotItems)
@@ -66,11 +87,18 @@ export class GameScreen extends BaseScreen {
                         this._dropGold(i, drop, drop[ObjectType.GOLD])
                     }
                     if (dropsDragon) {
-                        console.log('DROP DRAGON', drop)
-                        const slotPosition = SLOTS.getRect(i)
-                        this._renderer.addShared(Dragon(this._renderer, drop[ObjectType.DRAGON].tier, drop[ObjectType.DRAGON].level, slotPosition.x, slotPosition.y))
+                        const dragonData = drop[ObjectType.DRAGON]
+                        const slot = window.GD.getSlotRect(i)
+                        this._owner.model.addDragon(dragonData.tier, dragonData.level)
+                        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+                        this._renderer.addShared(Dragon(
+                            this._renderer,
+                            dragonData.tier,
+                            dragonData.level,
+                            slot.x, slot.y))
                     }
                 } else if (rewardingClick && dropsGold) {
+
                     const intermediateGold = Math.max(1, Math.floor(drop[ObjectType.GOLD] * 0.002))
                     this._dropGold(i, drop, intermediateGold)
                 }

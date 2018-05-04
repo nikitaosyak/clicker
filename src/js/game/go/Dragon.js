@@ -1,4 +1,4 @@
-import {ITypedObject, IVisual, IVisualStageRepresentationOwner, ObjectType} from "./GameObjectBase";
+import {ITypedObject, IVisual, ObjectType} from "./GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 
 export const Dragon = (renderer, tier, level, x, y) => {
@@ -39,7 +39,7 @@ export const Dragon = (renderer, tier, level, x, y) => {
 
     Object.assign(self, ITypedObject(ObjectType.DRAGON))
     Object.assign(self, IVisual(`dragon_t${tier}`, x, y, 100, 100, RENDER_LAYER.BACKGROUND))
-    // if (window.ENV.MODE === 'development') {
+    // if (window.GD.config === 'development') {
     //     Object.assign(self, IVisualStageRepresentationOwner(self))
     // }
 

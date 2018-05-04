@@ -38,7 +38,7 @@ export const SlotItem = (type, slot, stage, health, drop) => {
                 shakeAnimation[1].kill()
 
                 self.healthbarVisual.destroy()
-                if (window.ENV.MODE === 'development') {
+                if (window.GD.config.MODE === 'development') {
                     self.stageRepVisual.destroy()
                 }
                 self.visual.destroy()
@@ -54,7 +54,7 @@ export const SlotItem = (type, slot, stage, health, drop) => {
     Object.assign(self, ISlotItem(slot))
     Object.assign(self, ISlotVisualItem(self, type))
     Object.assign(self, IHealthBarOwner(self))
-    if (window.ENV.MODE === 'development') {
+    if (window.GD.config.MODE === 'development') {
         Object.assign(self, IVisualStageRepresentationOwner(self))
     }
     Object.assign(self, IClickable(self))

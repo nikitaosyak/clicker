@@ -1,6 +1,5 @@
-import {IContainer, IParticleContainer} from "../../go/GameObjectBase";
+import {IContainer} from "../../go/GameObjectBase";
 import {RENDER_LAYER} from "../../../Renderer";
-import {SLOTS} from "./SLOTS";
 
 export const CoinParticlesManager = (targetLocation) => {
 
@@ -71,7 +70,7 @@ export const CoinParticlesManager = (targetLocation) => {
         dropCoin: (fromSlot, value) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
 
-            const spawnPos = SLOTS.getRect(fromSlot)
+            const spawnPos = window.GD.getSlotRect(fromSlot)
             currentParticleToSpawn += value
             emitter.maxParticles = currentParticleToSpawn
             emitter.updateSpawnPos(spawnPos.x, spawnPos.y)
@@ -79,9 +78,6 @@ export const CoinParticlesManager = (targetLocation) => {
         }
     }
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
-
-    console.log(Object.keys(window.resources.getAnimation('anim_coin'))
-        .map(k => PIXI.Texture.fromFrame(k)))
 
     emitter = new PIXI.particles.Emitter(
         self.visual,
