@@ -144,6 +144,11 @@ export const GameData = (model) => {
     for (let i = 0; i < model.stage; i++) {
         self.generateStageItems(i, true)
     }
+    // const result = {}
+    // for (let i = 0; i < 40; i++) {
+    //     result[`stage${i}`] = self.generateStageItems(i).map(chest => `[${chest.stage}:${chest.health}, {g:${chest.drops.gold}${chest.drops.egg?'; d' + chest.drops.egg.drops.dragon.tier : ''}}]`)
+    // }
+    // console.log(JSON.stringify(result, null, '  '))
 
     return self
 }
