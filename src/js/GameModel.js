@@ -48,7 +48,7 @@ export const GameModel = () => {
             currentSlotItems = []
             currentStageItems = []
             self.synchronize()
-            // window.location.reload(true);
+            window.location.reload(true);
         },
 
         get stage() { return currentStage },
