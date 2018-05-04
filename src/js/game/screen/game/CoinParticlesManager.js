@@ -43,7 +43,7 @@ export const CoinParticlesManager = (targetLocation) => {
         "blendMode": "normal",
         "frequency": 0.01,
         "emitterLifetime": 0,
-        "maxParticles": 50,
+        "maxParticles": 500,
         "pos": {
             "x": 500,
             "y": 500
@@ -71,8 +71,8 @@ export const CoinParticlesManager = (targetLocation) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
 
             const spawnPos = window.GD.getSlotRect(fromSlot)
-            currentParticleToSpawn += value
-            emitter.maxParticles = currentParticleToSpawn
+            currentParticleToSpawn = value
+            emitter.emitterLifetime = 2
             emitter.updateSpawnPos(spawnPos.x, spawnPos.y)
             emitter.emit = true
         }
