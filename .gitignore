@@ -3,5 +3,5 @@ build
 inter
 .idea/workspace.xml
 .env
-ENV.js
+Config.js
 tweenlite-gen.lib*

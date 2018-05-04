@@ -4,6 +4,6 @@ export const Config = () => {
     MODE : 'development',
     PLATFORM : 'standalone',
     HOST : '0.0.0.0',
-    PORT : 9090,
+    PORT : 8080,
   }
 }
