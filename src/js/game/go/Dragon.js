@@ -4,16 +4,20 @@ import {RENDER_LAYER} from "../../Renderer";
 export const Dragon = (renderer, tier, level, x, y) => {
 
     const invalidateVisual = () => {
+        self.visual.scale.x = dir.x > 0 ? Math.abs(self.visual.scale.x) : -Math.abs(self.visual.scale.x)
     }
 
     const speed = 200
-    const dir = {x: Math.random() > 0.5 ? 1 : -1, y: -1}
+    const dir = {x: Math.random() > 0.5 ? 1 : -1, y: Math.random() > 0.5 ? 1 : -1}
+
     const bounds = {
         left: 0,
         right: 0,
         top: 0,
         bottom: 0
     }
+    let nextDecisionIn = 3 + Math.random() * 3
+    let speedMult = 1
 
     const self = {
         get tier() { return tier },
@@ -29,11 +33,24 @@ export const Dragon = (renderer, tier, level, x, y) => {
             bounds.top = top; bounds.bottom = bottom;
         },
         update: dt => {
+            let dirChange = false
+
+            nextDecisionIn -= dt
+            if (nextDecisionIn <= 0) {
+                dir.x *= -1
+                dir.y *= Math.random() > 0.5 ? 1 : -1
+                speedMult = 0.9 + Math.random() * 0.2
+
+                nextDecisionIn = 3 + Math.random() * 3
+                dirChange = true
+            }
             if (self.visual.x >= /*renderer.vSize.x*/bounds.right) {
                 dir.x = -1
+                dirChange = true
             }
             if (self.visual.x <= /*0*/bounds.left) {
                 dir.x = 1
+                dirChange = true
             }
 
             if (self.visual.y >= /*renderer.vSize.y*0.6*/bounds.bottom) {
@@ -43,13 +60,18 @@ export const Dragon = (renderer, tier, level, x, y) => {
                 dir.y = 1
             }
 
-            self.visual.x += dir.x * speed * dt
-            self.visual.y += dir.y * speed * dt
+            if (dirChange) {
+                invalidateVisual()
+            }
+
+            self.visual.x += dir.x * speed * speedMult * dt
+            self.visual.y += dir.y * speed * speedMult * dt
         }
     }
 
     Object.assign(self, ITypedObject(ObjectType.DRAGON))
     Object.assign(self, IVisual(`dragon_t${tier}`, x, y, 100, 100, RENDER_LAYER.BACKGROUND))
+    invalidateVisual()
     // if (window.GD.config === 'development') {
     //     Object.assign(self, IVisualStageRepresentationOwner(self))
     // }
