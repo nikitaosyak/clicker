@@ -52,7 +52,7 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            return baseDamage + damage
+            return (baseDamage + damage)// * 5
         },
 
         generateStageItems: (stage, shallow = false) => {

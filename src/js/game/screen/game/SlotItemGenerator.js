@@ -13,6 +13,9 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
             owner.add(item)
             slots[slotIdx] = item
         },
+        populateAtGameStart: slots => {
+            self.populateConcrete(slots, 1, currentStageItems.splice(0, 1)[0])
+        },
         populate: slots => {
             for (let i = 0; i < slots.length; i++) {
                 if (slots[i] === null) {

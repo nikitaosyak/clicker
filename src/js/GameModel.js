@@ -68,6 +68,13 @@ export const GameModel = () => {
             self.synchronize()
         },
 
+        get dragonsCount () {
+            let sum = 0
+            Object.keys(currentDragons).forEach(tier => {
+                currentDragons[tier].forEach(d => sum+=1)
+            })
+            return sum
+        },
         get dragons() { return currentDragons },
         addDragon: (tier, level) => {
             if (currentDragons[tier]) {
