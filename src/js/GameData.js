@@ -94,16 +94,16 @@ export const GameData = (model) => {
             for (let dt = currentTier; dt > 0; dt--) {
                 const dragonsCount = dragonsCountByTier[dt]
                 let dragonsUpdrage = dragonsUpgradeByTier[dt]
-                const dmg = getTierDamage(dt, dragonsUpdrage) * dragonsCount;
+                const dmg = getTierBaseDamage(dt) * dragonsCount;
                 while (damageDiff > dmg) {
                     damageDiff -= dmg
-                    sumMoney += getUpgradePrice(dt, dragonsUpdrage)
+                    sumMoney += getUpgradePrice(dt, dragonsUpdrage) * dragonsCount;
                     dragonsUpdrage++
                 }
                 dragonsUpgradeByTier[dt] = dragonsUpdrage
             }
 
-            minGoldDrop = Math.max(minGoldDrop, sumMoney)
+            minGoldDrop = Math.max(Math.round(minGoldDrop * 0.9), sumMoney)
             if (shallow) return
 
             const chestData = []
