@@ -15,17 +15,14 @@ export const GameData = (model) => {
     const basePrice = 100       //базовая цена
     const tierDamageMult = 50   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
-    const packClicksNum = 60   //расчётое количество кликов по паку сундуков
+    const packClicksNum = 120   //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
     const tierSwitchThresholdMultiplier = 60
-    let minGoldDrop = 200     //минимальный дроп золота
+    const minGoldDrop = 300     //минимальный дроп золота
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 0, 1, 0 , 1 , 1 , 1, 2, 1, 2, 2, 2, 2] //доп яиц в каждом паке сундуков
     let currentTierDropStage = 0//позиция в паттерне
-
-    const dragonsCountByTier = [0,0]
-    const dragonsUpgradeByTier = [1,1]
 
     const getUpgradePrice = (tier, level) => {
         if (tier > 1) return basePrice * level * Math.pow(tierPriceMult, tier - 1)
@@ -68,42 +65,19 @@ export const GameData = (model) => {
             if (packHP / nextTierBaseDamage * shiftKoef * shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
                 currentTier++
                 currentTierDropStage = 0
-                dragonsCountByTier.push(0)
-                dragonsUpgradeByTier.push(1)
             }
 
             //сколько дропать яиц и каких
             let currentTierEggNumInPack = eggDropPattern[currentTierDropStage]
             let lastTierEggNumInPack = 2 - currentTierEggNumInPack
             currentTierDropStage++
-
-            dragonsCountByTier[currentTier] += currentTierEggNumInPack
-            if (currentTier > 1) dragonsCountByTier[currentTier - 1] += lastTierEggNumInPack
-
-            //вычисляю текущий урон расчётного набора драконов и их апгрейдов
-            let sumDamage =  0
-            for (let dt = 0; dt < dragonsCountByTier.length; dt++) {
-                const dragonsCount = dragonsCountByTier[dt]
-                const dragonsUpdrage = dragonsUpgradeByTier[dt]
-                sumDamage += getTierDamage(dt, dragonsUpdrage) * dragonsCount
-            }
-
-            //делаю апгрейды неаобходимые для того чтобы покрыть недостаток урона
-            let damageDiff = targetDamage - sumDamage
-            let sumMoney = 0
-            for (let dt = currentTier; dt > 0; dt--) {
-                const dragonsCount = dragonsCountByTier[dt]
-                let dragonsUpdrage = dragonsUpgradeByTier[dt]
-                const dmg = getTierBaseDamage(dt) * dragonsCount;
-                while (damageDiff > dmg) {
-                    damageDiff -= dmg
-                    sumMoney += getUpgradePrice(dt, dragonsUpdrage) * dragonsCount;
-                    dragonsUpdrage++
-                }
-                dragonsUpgradeByTier[dt] = dragonsUpdrage
-            }
-
-            minGoldDrop = Math.max(Math.round(minGoldDrop * 0.9), sumMoney)
+			
+			let moneyDrop = minGoldDrop
+			let moneyDropStage = 0
+			while (moneyDropStage++ < stage) {
+				moneyDrop *= 1.5
+			}
+			
             if (shallow) return
 
             const chestData = []
@@ -114,7 +88,7 @@ export const GameData = (model) => {
                         stage: stage,
                         health: Math.round(packConfig[p+1] * packHP),
                         drops: {
-                            [ObjectType.GOLD]: Math.round(packConfig[p+1] * minGoldDrop)
+                            [ObjectType.GOLD]: Math.round(packConfig[p+1] * moneyDrop)
                         }
                     }
 
@@ -138,6 +112,7 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
+			console.log("generateStageItems: targetDamage " + targetDamage + ", moneyDrop " + moneyDrop)
 
             return chestData
         }
