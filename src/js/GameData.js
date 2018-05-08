@@ -17,11 +17,11 @@ export const GameData = (model) => {
     const tierPriceMult = 10    //множитель след тира
     const packClicksNum = 120   //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
-    const tierSwitchThresholdMultiplier = 60
-    const minGoldDrop = 300     //минимальный дроп золота
+    const tierSwitchThresholdMultiplier = 1.3
+    const minGoldDrop = 500     //стартовый дроп золота
 
     let currentTier = 1         //вид дракона
-    const eggDropPattern = [1, 0, 0, 1, 0 , 1 , 1 , 1, 2, 1, 2, 2, 2, 2] //доп яиц в каждом паке сундуков
+    const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 2, 2, 2] //доп яиц в каждом паке сундуков
     let currentTierDropStage = 0//позиция в паттерне
 
     const getUpgradePrice = (tier, level) => {
@@ -35,7 +35,7 @@ export const GameData = (model) => {
     };
 
     const getTierDamage = (tier, level) => {
-        return getTierBaseDamage(tier) * level
+        return Math.round(getTierBaseDamage(tier) * (Math.pow(1.26, 1.1 * level) + level) / 1.5)
     };
 
     const self =  {
@@ -58,11 +58,12 @@ export const GameData = (model) => {
         generateStageItems: (stage, shallow = false) => {
             const shiftKoef = Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
             const targetDamage = Math.round(baseDamage * Math.pow(stageMult, stage * shiftKoef))
+			const clearTargetDamage = Math.round(baseDamage * Math.pow(stageMult, stage))
             const packHP = packClicksNum * targetDamage
 
             //определяется порог и переключается тиер
             const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
-            if (packHP / nextTierBaseDamage * shiftKoef * shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
+            if (clearTargetDamage / nextTierBaseDamage / shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
                 currentTier++
                 currentTierDropStage = 0
             }
@@ -75,8 +76,9 @@ export const GameData = (model) => {
 			let moneyDrop = minGoldDrop
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				moneyDrop *= 1.5
+				moneyDrop *= 1.54
 			}
+			moneyDrop *= shiftKoef * shiftKoef
 			
             if (shallow) return
 
@@ -112,7 +114,7 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
-			console.log("generateStageItems: targetDamage " + targetDamage + ", moneyDrop " + moneyDrop)
+			console.log("generateStageItems: targetDamage " + targetDamage + ", moneyDrop " + Math.round(moneyDrop) + ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
 
             return chestData
         }
