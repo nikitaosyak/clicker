@@ -176,3 +176,17 @@ gulp.task('default', () => {
         if (e) console.error(e)
     })
 })
+gulp.task('buildbot-run', () => {
+    const fs = require('fs')
+    if (fs.existsSync('./bbprocess')) {
+        const prevProcess = fs.readFileSync('./bbprocess', {encoding: 'utf-8'})
+        try { 
+            process.kill(parseInt(prevProcess))
+            console.log(`process ${prevProcess} terminated`)
+        } catch (e) {
+            console.log(`process ${prevProcess} does not exist`)
+        }
+    }
+    fs.writeFileSync('./bbprocess', process.pid.toString())
+    gulp.start('default')
+})
