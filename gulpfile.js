@@ -187,6 +187,8 @@ gulp.task('buildbot-run', () => {
             console.log(`process ${prevProcess} does not exist`)
         }
     }
+
+    fs.writeFileSync('./.env', 'MODE=testing\nPLATFORM=standalong\nHOST=0.0.0.0\nPORT=9090')
     fs.writeFileSync('./bbprocess', process.pid.toString())
     gulp.start('default')
 })
