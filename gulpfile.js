@@ -149,7 +149,7 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
             .pipe(gulp.dest('build'))
     } else {
         return gulp.src([
-            'src/lib/*.lib.min.js',
+            //'src/lib/*.lib.min.js',
             'src/lib/fullscreen-api-polyfill.lib.min.js',
             'src/lib/pixi.lib.min.js',
             'src/lib/pixi-particles.lib.min.js',
@@ -188,7 +188,7 @@ gulp.task('buildbot-run', () => {
         }
     }
 
-    fs.writeFileSync('./.env', 'MODE=testing\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=9090')
+    fs.writeFileSync('./.env', 'MODE=testing\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=8082')
     fs.writeFileSync('./bbprocess', process.pid.toString())
     gulp.start('default')
 })
