@@ -1,2 +1,2 @@
 #!/bin/sh
-gulp buildbot-run
+gulp buildbot-run &
