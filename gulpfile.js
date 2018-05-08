@@ -188,7 +188,7 @@ gulp.task('buildbot-run', () => {
         }
     }
 
-    fs.writeFileSync('./.env', 'MODE=testing\nPLATFORM=standalong\nHOST=0.0.0.0\nPORT=9090')
+    fs.writeFileSync('./.env', 'MODE=testing\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=9090')
     fs.writeFileSync('./bbprocess', process.pid.toString())
     gulp.start('default')
 })
