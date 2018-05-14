@@ -25,8 +25,8 @@ export class UpgradeScreen extends BaseScreen {
 
 
             // console.log(this._owner.renderer.getDragons(dragon.tier, dragon.level))
-            const allDragons = this._owner.renderer.getDragons(dragon.tier, dragon.level)
-            allDragons[0].level += 1
+            const visualDragons = this._owner.renderer.getDragons(dragon.tier, dragon.level)
+            visualDragons[0].levelUp()
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
             const flatList =  this._list.invalidate(this._owner.model.dragons)

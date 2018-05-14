@@ -1,4 +1,4 @@
-import {ITypedObject, IVisual, ObjectType} from "./GameObjectBase";
+import {ITypedObject, IVisual, IVisualNumericRep, ObjectType} from "./GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 
 export const Dragon = (renderer, tier, level, x, y) => {
@@ -21,12 +21,14 @@ export const Dragon = (renderer, tier, level, x, y) => {
 
     const self = {
         get tier() { return tier },
-        set level(v) { level = v },
         get level() { return level },
         get name() { return `dragon_t${self.tier}_l${self.level}` },
         levelUp: () => {
             level += 1
-            invalidateVisual()
+            if (window.GD.config.MODE === 'development') {
+                self.tierVisualRefresh()
+                self.levelVisualRefresh()
+            }
         },
         setBounds: (left, right, top, bottom) => {
             bounds.left = left; bounds.right = right;
@@ -71,10 +73,11 @@ export const Dragon = (renderer, tier, level, x, y) => {
 
     Object.assign(self, ITypedObject(ObjectType.DRAGON))
     Object.assign(self, IVisual(`dragon_t${tier}`, x, y, 100, 100, RENDER_LAYER.BACKGROUND))
+    if (window.GD.config.MODE === 'development') {
+        Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.4))
+        Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.4))
+    }
     invalidateVisual()
-    // if (window.GD.config === 'development') {
-    //     Object.assign(self, IVisualStageRepresentationOwner(self))
-    // }
 
     return self
 }

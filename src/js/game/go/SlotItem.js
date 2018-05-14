@@ -5,7 +5,7 @@ import {
     ISlotVisualItem,
     IStageObject,
     ITypedObject,
-    IHealthBarOwner, IVisualStageRepresentationOwner, IVisualSlotRepresentationOwner
+    IHealthBarOwner, IVisualStageRepresentationOwner, IVisualSlotRepresentationOwner, IVisualNumericRep
 } from "./GameObjectBase";
 
 export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
@@ -41,7 +41,7 @@ export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
                 self.healthbarVisual.destroy()
                 if (window.GD.config.MODE === 'development') {
                     self.stageRepVisual.destroy()
-                    self.slotRepVisual.destroy()
+                    self.targetSlotRepVisual.destroy()
                 }
                 self.visual.destroy()
                 resolve()
@@ -57,8 +57,8 @@ export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
     Object.assign(self, ISlotVisualItem(self, type))
     Object.assign(self, IHealthBarOwner(self))
     if (window.GD.config.MODE === 'development') {
-        Object.assign(self, IVisualStageRepresentationOwner(self))
-        Object.assign(self, IVisualSlotRepresentationOwner(self))
+        Object.assign(self, IVisualNumericRep(self, 'stage', -0.3, 0.25, 0xCCCC00))
+        Object.assign(self, IVisualNumericRep(self, 'targetSlot', 0.3, 0.25, 0xAA0000))
     }
     Object.assign(self, IClickable(self))
 
