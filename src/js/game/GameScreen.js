@@ -60,7 +60,10 @@ export class GameScreen extends BaseScreen {
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
         if (window.GD.config.MODE === 'development') {
-            this._clickDamageVisPool = ObjectPool(DamagePercent, [], 10)
+            this._clickDamageVisPool = ObjectPool(DamagePercent, [_self => {
+                self.remove(_self)
+                this._clickDamageVisPool.putOne(_self)
+            }], 10)
         }
     }
 
