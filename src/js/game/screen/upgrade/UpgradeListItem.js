@@ -11,8 +11,11 @@ export const UpgradeListItem = (owner) => {
     const upgradeButton = uiCreator.getButton('ui_upgrade_dragon', 720, 0, () => {
         owner.emit('upgrade', currentDragon)
     }, 100, 100)
+    const upgradeAllButton = uiCreator.getButton('ui_upgrade_all_dragons', 600, 0, () => {
+        owner.emit('upgrade-all', currentDragon)
+    }, 100, 100)
 
-    self.setup = referenceDragon => {
+    self.setup = (referenceDragon, dragonsOnLevel) => {
         currentDragon = referenceDragon
         infoWidget.tier = referenceDragon.tier
         infoWidget.level = referenceDragon.level
@@ -22,19 +25,34 @@ export const UpgradeListItem = (owner) => {
         if (referenceDragon.level >= MAX_DRAGON_LEVEL) {
             infoWidget.price = ''
 
-            upgradeButton.visual.alpha = 0
+            upgradeButton.visual.visible = false
+            upgradeAllButton.visual.visible = false
         } else {
-            const price = window.GD.getUpgradePrice(referenceDragon.tier, referenceDragon.level)
+            let price = window.GD.getUpgradePrice(referenceDragon.tier, referenceDragon.level)
             infoWidget.price = price
 
-            upgradeButton.visual.alpha = 1
+            upgradeButton.visual.visible = true
 
             if (owner.model.gold >= price) {
                 upgradeButton.visual.tint = 0xFFFFFF
                 upgradeButton.visual.interactive = true
             } else {
-                upgradeButton.visual.tint = 0xCCCCCC
+                upgradeButton.visual.tint = 0xAAAAAA
                 upgradeButton.visual.interactive = false
+            }
+
+            if (dragonsOnLevel > 1) {
+                upgradeAllButton.visual.visible = true
+                price = price * dragonsOnLevel
+
+                if (owner.model.gold >= price) {
+                    upgradeAllButton.visual.tint = 0xFFFFFF
+                    upgradeAllButton.visual.interactive = true
+                } else {
+                    upgradeAllButton.visual.visible = false
+                }
+            } else {
+                upgradeAllButton.visual.visible = false
             }
         }
 
@@ -42,6 +60,7 @@ export const UpgradeListItem = (owner) => {
     Object.assign(self, IContainer(0, 0))
     self.visual.addChild(infoWidget.visual)
     self.visual.addChild(upgradeButton.visual)
+    self.visual.addChild(upgradeAllButton.visual)
 
     return self
 }

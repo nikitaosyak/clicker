@@ -19,6 +19,17 @@ export class UpgradeScreen extends BaseScreen {
         this._list = UpgradeList(owner.model, 0, 1100)
         this.add(this._list)
 
+        const invalidateUpgrade = () => {
+            const flatList =  this._list.invalidate(this._owner.model.dragons)
+            flatList.forEach((fl, i) => {
+                const dragons = this._owner.renderer.getDragons(fl[0].tier, fl[0].level)
+                dragons.forEach(d => {
+                    const middle = 1100 - i * 120
+                    d.setBounds(150, 650, middle-40, middle+40)
+                })
+            })
+        }
+
         this._list.on('upgrade', dragon => {
             owner.model.subtractGold(window.GD.getUpgradePrice(dragon.tier, dragon.level))
             this._goldCounter.setValue(owner.model.gold)
@@ -29,14 +40,21 @@ export class UpgradeScreen extends BaseScreen {
             visualDragons[0].levelUp()
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
-            const flatList =  this._list.invalidate(this._owner.model.dragons)
-            flatList.forEach((fl, i) => {
-                const dragons = this._owner.renderer.getDragons(fl[0].tier, fl[0].level)
-                dragons.forEach(d => {
-                    const middle = 1100 - i * 120
-                    d.setBounds(150, 650, middle-40, middle+40)
-                })
-            })
+            invalidateUpgrade.call(this)
+        })
+
+        this._list.on('upgrade-all', dragon => {
+            const baseTier = dragon.tier
+            const baseLevel = dragon.level
+            const dragons = owner.model.getDragons(baseTier, baseLevel)
+            const visualDragons = this._owner.renderer.getDragons(baseTier, baseLevel)
+            owner.model.subtractGold(window.GD.getUpgradePrice(baseTier, baseLevel) * dragons.length)
+            this._goldCounter.setValue(owner.model.gold)
+
+            dragons.forEach(d => owner.model.upgradeDragon(baseTier, baseLevel))
+            visualDragons.forEach(vd => vd.levelUp())
+
+            invalidateUpgrade.call(this)
         })
     }
 

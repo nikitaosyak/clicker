@@ -97,6 +97,9 @@ export const GameModel = () => {
             return sum
         },
         get dragons() { return currentDragons },
+        getDragons: (tier, level) => {
+            return currentDragons[tier].filter(sh => {if (sh.level === level) return sh})
+        },
         addDragon: (tier, level) => {
             if (currentDragons[tier]) {
                 currentDragons[tier].push({tier: tier, level: level})

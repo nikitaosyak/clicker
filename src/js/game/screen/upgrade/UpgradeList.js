@@ -41,7 +41,7 @@ export const UpgradeList = (model, x, y) => {
         let vOffset = 0
         current = flatList.map(sortedDragons => {
             const listItem = pool.getOne()
-            listItem.setup(sortedDragons[0])
+            listItem.setup(sortedDragons[0], sortedDragons.length)
             listItem.visual.x = 0
             listItem.visual.y = vOffset * -120
             vOffset += 1
