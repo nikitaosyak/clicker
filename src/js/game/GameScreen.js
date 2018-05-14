@@ -6,6 +6,8 @@ import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
 import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
 import {Dragon} from "./go/Dragon";
+import {ObjectPool} from "../utils/ObjectPool";
+import {DamagePercent} from "./ui/debugDamagePercent";
 
 export class GameScreen extends BaseScreen {
 
@@ -56,6 +58,10 @@ export class GameScreen extends BaseScreen {
         })
 
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+
+        if (window.GD.config.MODE === 'development') {
+            this._clickDamageVisPool = ObjectPool(DamagePercent, [], 10)
+        }
     }
 
     _setBoundsForDragon(dragonVisual) {dragonVisual.setBounds(50, 750, 50, 750)}
@@ -82,7 +88,13 @@ export class GameScreen extends BaseScreen {
             if (c === null) return
             const clicks = c.extractClicks()
             if (clicks > 0) {
-                console.log('will damage for ', this._clickDamage)
+                const targetDmg = window.GD.getTargetDamage(c.stage)
+                if (window.GD.config.MODE === 'development') {
+                    const dmgVis = this._clickDamageVisPool.getOne()
+                    this.add(dmgVis)
+                    dmgVis.launch(this._clickDamageVisPool,
+                        `${Math.round((this._clickDamage / targetDmg) * 100)}%`, c.visual.x, c.visual.y)
+                }
                 const rewardingClick = c.processDamage(clicks * this._clickDamage)
 
                 const drop = this._slotItems[i].drop

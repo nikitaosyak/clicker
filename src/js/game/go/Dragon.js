@@ -73,7 +73,7 @@ export const Dragon = (renderer, tier, level, x, y) => {
 
     Object.assign(self, ITypedObject(ObjectType.DRAGON))
     Object.assign(self, IVisual(`dragon_t${tier}`, x, y, 100, 100, RENDER_LAYER.BACKGROUND))
-    if (window.GD.config.MODE === 'development') {
+    if (window.GD.config.MODE !== 'development') {
         Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.4))
         Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.4))
     }

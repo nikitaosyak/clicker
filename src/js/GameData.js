@@ -42,6 +42,12 @@ export const GameData = (model) => {
     const self =  {
         get config() { return config },
         get slots() { return slots },
+        getShiftKoef: stage => {
+            return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
+        },
+        getTargetDamage: stage => {
+            return Math.round(baseDamage * Math.pow(stageMult, stage * self.getShiftKoef(stage)))
+        },
         getSlotRect(at) { return slots[at]},
 
         getUpgradePrice: (tier, level) => getUpgradePrice(tier, level),
@@ -57,10 +63,9 @@ export const GameData = (model) => {
         },
 
         generateStageItems: (stage, shallow = false) => {
-            const shiftKoef = Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
-            const targetDamage = Math.round(baseDamage * Math.pow(stageMult, stage * shiftKoef))
+            const shiftKoef = self.getShiftKoef(stage)
 			const clearTargetDamage = Math.round(baseDamage * Math.pow(stageMult, stage))
-            const packHP = packClicksNum * targetDamage
+            const packHP = packClicksNum * self.getTargetDamage(stage)
 
             //определяется порог и переключается тиер
             const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
@@ -116,7 +121,9 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
-			console.log("generateStageItems: targetDamage " + targetDamage + ", moneyDrop " + Math.round(moneyDrop) + ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
+			console.log("generateStageItems: targetDamage " + self.getTargetDamage(stage) +
+                ", moneyDrop " + Math.round(moneyDrop) +
+                ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
 
             return chestData
         }
