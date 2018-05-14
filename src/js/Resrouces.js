@@ -16,7 +16,10 @@ export const Resources = () => {
         },
         getTexture: (alias) => {
             if (alias in res) return res[alias].texture
-            // console.warn('texture', alias, 'was replaced with default texture')
+            console.warn('texture', alias, 'was replaced with default texture')
+            if (alias.indexOf('dragon') > -1) {
+                return res.dragon_fallback.texture
+            }
             return res.pixel.texture
         },
         getJSON: (alias) => {
