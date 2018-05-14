@@ -17,6 +17,9 @@ window.onload = () => {
         const model = GameModel()
         model.connect().then(() => {
             window.GD = GameData(model)
+            if (window.GD.config.MODE === 'development') {
+                window.GAMEMODEL = model
+            }
             const renderer = Renderer()
             renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
 

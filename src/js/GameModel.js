@@ -15,6 +15,25 @@ export const GameModel = () => {
     let currentStageItems = []
 
     const self = {
+        printCurrentState: () => {
+            return JSON.stringify({
+                currentStage: currentStage,
+                currentGold: currentGold,
+                currentDragons: currentDragons,
+                currentSlotItems: currentSlotItems,
+                currentStageItems: currentStageItems
+            }, null)
+        },
+        loadState: jsonData => {
+            const data = JSON.parse(jsonData)
+            currentStage = data.currentStage
+            currentGold = data.currentGold
+            currentDragons = data.currentDragons
+            currentSlotItems = data.currentSlotItems
+            currentStageItems = data.currentStageItems
+            self.synchronize()
+            window.location.reload(true)
+        },
         connect: () => { // TODO: init connection here
             return new Promise((resolve, reject) => {
                 if (connected) {
@@ -50,7 +69,7 @@ export const GameModel = () => {
             currentSlotItems = []
             currentStageItems = []
             self.synchronize()
-            window.location.reload(true);
+            window.location.reload(true)
         },
 
         get stage() { return currentStage },
