@@ -18,7 +18,6 @@ export class BaseScreen {
     get _renderer() { return this._owner.renderer }
 
     animateHide(to, onComplete) {
-        console.log(this._content)
         this._content.forEach((c, i) => {
             TweenLite.to(c.visual, ANIMATION_LENGTH, {
                 pixi: {x: c.visual.x + to.x},

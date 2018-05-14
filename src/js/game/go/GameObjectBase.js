@@ -112,7 +112,7 @@ export const IHealthBarOwner = self => {
 export const IVisualStageRepresentationOwner = self => {
     const parent = self.visual
     const container = new PIXI.Container()
-    container.x = -(parent.width/parent.scale.x) * 0.25
+    container.x = -(parent.width/parent.scale.x) * 0.3
     container.y = (parent.height/parent.scale.y) * 0.25
 
     const sprite = new PIXI.Sprite(window.resources.getTexture('ui_yellow_circle'))
@@ -129,6 +129,35 @@ export const IVisualStageRepresentationOwner = self => {
 
     return {
         get stageRepVisual() { return sprite },
+    }
+}
+
+export const IVisualSlotRepresentationOwner = self => {
+    if (typeof self.targetSlot === `undefined`) {
+        return {
+            get slotRepVisual() { return { destroy: () => {} } }
+        }
+    }
+    const parent = self.visual
+    const container = new PIXI.Container()
+    container.x = (parent.width/parent.scale.x) * 0.3
+    container.y = (parent.height/parent.scale.y) * 0.25
+
+    const sprite = new PIXI.Sprite(window.resources.getTexture('ui_yellow_circle'))
+    sprite.width = parent.width/parent.scale.x * 0.3;
+    sprite.height = parent.width/parent.scale.x * 0.3;
+    sprite.anchor.x = 0.5; sprite.anchor.y = 0.5
+    sprite.tint = 0xCC0000
+    container.addChild(sprite)
+    const text = new PIXI.Text(self.targetSlot, new PIXI.TextStyle({
+        fontSize: 80, fontWeight: 'bold', fill: '#EEffff'
+    }))
+    text.anchor.x = text.anchor.y = 0.5
+    container.addChild(text)
+    parent.addChild(container)
+
+    return {
+        get slotRepVisual() { return sprite },
     }
 }
 

@@ -5,10 +5,10 @@ import {
     ISlotVisualItem,
     IStageObject,
     ITypedObject,
-    IHealthBarOwner, IVisualStageRepresentationOwner
+    IHealthBarOwner, IVisualStageRepresentationOwner, IVisualSlotRepresentationOwner
 } from "./GameObjectBase";
 
-export const SlotItem = (type, slot, stage, health, drop) => {
+export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
 
     let maxHealth = health
     let currentHealth = maxHealth
@@ -20,6 +20,7 @@ export const SlotItem = (type, slot, stage, health, drop) => {
     const self = {
         get drop() { return drop },
         get health() { return currentHealth },
+        get targetSlot() { return targetSlot },
         processDamage: value => {
             currentHealth = Math.max(0, currentHealth-value)
             self.setHealthBarValue(currentHealth/maxHealth)
@@ -40,6 +41,7 @@ export const SlotItem = (type, slot, stage, health, drop) => {
                 self.healthbarVisual.destroy()
                 if (window.GD.config.MODE === 'development') {
                     self.stageRepVisual.destroy()
+                    self.slotRepVisual.destroy()
                 }
                 self.visual.destroy()
                 resolve()
@@ -56,6 +58,7 @@ export const SlotItem = (type, slot, stage, health, drop) => {
     Object.assign(self, IHealthBarOwner(self))
     if (window.GD.config.MODE === 'development') {
         Object.assign(self, IVisualStageRepresentationOwner(self))
+        Object.assign(self, IVisualSlotRepresentationOwner(self))
     }
     Object.assign(self, IClickable(self))
 

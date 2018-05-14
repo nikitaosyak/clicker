@@ -17,6 +17,7 @@ export const GameData = (model) => {
     const tierPriceMult = 10    //множитель след тира
     const packClicksNum = 120   //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
+    const packSlotOrder = [-1, 2, -1, 1, -1, 0]
     const tierSwitchThresholdMultiplier = 1.3
     const minGoldDrop = 500     //стартовый дроп золота
 
@@ -89,6 +90,7 @@ export const GameData = (model) => {
                         type: ObjectType.CHEST,
                         stage: stage,
                         health: Math.round(packConfig[p+1] * packHP),
+                        slot: packSlotOrder[p+1],
                         drops: {
                             [ObjectType.GOLD]: Math.round(packConfig[p+1] * moneyDrop)
                         }
