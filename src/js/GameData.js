@@ -16,10 +16,10 @@ export const GameData = (model) => {
     const tierDamageMult = 50   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
     const packClicksNum = 120   //расчётое количество кликов по паку сундуков
-    const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких)
+    const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
     const tierSwitchThresholdMultiplier = 1.3
-    const minGoldDrop = 500     //стартовый дроп золота
+    const minGoldDrop = 600     //стартовый дроп золота
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 2, 2, 2] //доп яиц в каждом паке сундуков
@@ -82,7 +82,7 @@ export const GameData = (model) => {
 			let moneyDrop = minGoldDrop
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				moneyDrop *= 1.54
+				moneyDrop *= 1.51
 			}
 			moneyDrop *= shiftKoef * shiftKoef
 			
