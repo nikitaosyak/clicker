@@ -61,6 +61,13 @@ export const GameData = (model) => {
             })
             return (baseDamage + damage)// * 20
         },
+        getClickDamage2: flatDragons => {
+            let damage = 0
+            flatDragons.forEach(d => {
+                damage += getTierDamage(d.tier, d.level)
+            })
+            return (baseDamage + damage)// * 20
+        },
 
         generateStageItems: (stage, shallow = false) => {
             const shiftKoef = self.getShiftKoef(stage)
