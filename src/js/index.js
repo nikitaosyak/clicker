@@ -6,6 +6,8 @@ import {StaticImage} from "./game/go/StaticImage";
 import {GameModel} from "./GameModel";
 import {GameData} from "./GameData";
 import {MathUtil} from "./utils/MathUtil";
+import {URLUtil} from "./utils/URLUtil";
+import {Plot} from "./Plot";
 
 window.onload = () => {
 
@@ -13,11 +15,11 @@ window.onload = () => {
 
     PIXI.settings.MIPMAP_TEXTURES = false
     const resources = window.resources = Resources()
+    const model = GameModel()
+    window.GD = GameData(model)
 
     const startGame = () => {
-        const model = GameModel()
         model.connect().then(() => {
-            window.GD = GameData(model)
             if (window.GD.config.MODE === 'development') {
                 window.GAMEMODEL = model
                 window.money = MathUtil
@@ -48,13 +50,18 @@ window.onload = () => {
         })
     }
 
-    resources
-        .add('digest', 'assets/digest.json')
-        .load(() => {
-            const digest = resources.getJSON('digest')
-            digest.images.forEach(i => {
-                resources.add(i.alias, i.path)
+    if (URLUtil.getParameterByName('plot') === 'true' &&
+        window.GD.config.MODE === 'development') {
+        Plot()
+    } else {
+        resources
+            .add('digest', 'assets/digest.json')
+            .load(() => {
+                const digest = resources.getJSON('digest')
+                digest.images.forEach(i => {
+                    resources.add(i.alias, i.path)
+                })
+                resources.load(startGame)
             })
-            resources.load(startGame)
-        })
+    }
 }

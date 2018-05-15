@@ -141,7 +141,8 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
             'src/lib/stats.lib.js',
             'src/lib/pixi.lib.js',
             'src/lib/pixi-particles.lib.js',
-            'src/lib/tweenlite-gen.lib.js'
+            'src/lib/tweenlite-gen.lib.js',
+            'src/lib/plotly.lib.js'
         ])
             .pipe(sourcemaps.init())
             .pipe(concat('libraries.js'))
@@ -149,7 +150,6 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
             .pipe(gulp.dest('build'))
     } else {
         return gulp.src([
-            //'src/lib/*.lib.min.js',
             'src/lib/fullscreen-api-polyfill.lib.min.js',
             'src/lib/pixi.lib.min.js',
             'src/lib/pixi-particles.lib.min.js',
