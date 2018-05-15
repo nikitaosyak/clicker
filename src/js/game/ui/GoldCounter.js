@@ -3,6 +3,7 @@ import {RENDER_LAYER} from "../../Renderer";
 import {IContainer} from "../go/GameObjectBase";
 import {UIFactory} from "./UIFactory";
 import {INamedUIElement} from "./UIElementBase";
+import {MathUtil} from "../../utils/MathUtil";
 
 export const GoldCounter = (x, y, initialValue) => {
 
@@ -15,7 +16,7 @@ export const GoldCounter = (x, y, initialValue) => {
         roundProps: 'value',
         ease:Linear.easeNone,
         onUpdate:() => {
-            counter.visual.text = animationTarget.value
+            counter.visual.text = MathUtil.convert(animationTarget.value)
         }
     })
 
@@ -27,7 +28,7 @@ export const GoldCounter = (x, y, initialValue) => {
             animation.restart()
         },
         setValueInstantly: (newValue) => {
-            counter.visual.text = newValue
+            counter.visual.text = MathUtil.convert(newValue)
             animationTarget.value = newValue
             animation.vars.value = newValue
         }

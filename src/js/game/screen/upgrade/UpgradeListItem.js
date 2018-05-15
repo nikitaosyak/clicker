@@ -1,6 +1,7 @@
 import {IContainer} from "../../go/GameObjectBase";
 import {UIFactory} from "../../ui/UIFactory";
 import {MAX_DRAGON_LEVEL} from "../../../GameModel";
+import {MathUtil} from "../../../utils/MathUtil";
 
 export const UpgradeListItem = (owner) => {
 
@@ -29,7 +30,7 @@ export const UpgradeListItem = (owner) => {
             upgradeAllButton.visual.visible = false
         } else {
             let price = window.GD.getUpgradePrice(referenceDragon.tier, referenceDragon.level)
-            infoWidget.price = price
+            infoWidget.price = MathUtil.convert(price)
 
             upgradeButton.visual.visible = true
 

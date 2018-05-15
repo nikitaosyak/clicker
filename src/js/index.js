@@ -5,6 +5,7 @@ import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
 import {StaticImage} from "./game/go/StaticImage";
 import {GameModel} from "./GameModel";
 import {GameData} from "./GameData";
+import {MathUtil} from "./utils/MathUtil";
 
 window.onload = () => {
 
@@ -19,6 +20,7 @@ window.onload = () => {
             window.GD = GameData(model)
             if (window.GD.config.MODE === 'development') {
                 window.GAMEMODEL = model
+                window.money = MathUtil
             }
             const renderer = Renderer()
             renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
