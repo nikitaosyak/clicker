@@ -66,6 +66,7 @@ export const Plot = () => {
             let price = window.GD.getUpgradePrice(dragonsOfTier[0].tier, dragonsOfTier[0].level)
             while(price <= gold) {
                 gold -= price
+                console.log(`upgrading dragon ${dragonsOfTier[0].tier}-${dragonsOfTier[0].level} for ${price}`)
                 let wasUpgrade = false
                 dragons.forEach(d => {
                     if (wasUpgrade) return
@@ -81,9 +82,7 @@ export const Plot = () => {
                     return 0
                 })
                 price = window.GD.getUpgradePrice(dragonsOfTier[0].tier, dragonsOfTier[0].level)
-                // console.log(gold, price)
             }
-            // console.log('----')
 
             if (tier > 1) {
                 return tryUpgradeOnTier(tier-1, dragons, gold)
@@ -93,7 +92,7 @@ export const Plot = () => {
         return tryUpgradeOnTier(getMaxTier(dragons), dragons, gold)
     }
 
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 40; i++) {
 
         //
         // plot hp and gold for each stage
@@ -116,6 +115,9 @@ export const Plot = () => {
             }
             return acc
         }, [])
+        if (dragons.length) {
+            console.log(`new dragons: ${dragons.map(d => d.tier).join(', ')}`)
+        }
         allDragons = allDragons.concat(dragons)
         const maxTier = getMaxTier(dragons)
         if (maxTier > dragonData.length) {
@@ -131,17 +133,22 @@ export const Plot = () => {
             trace.y.push(allDragons.filter(d => d.tier === tierIdx+1).length)
         })
 
-        const subStage = 3
+        const subStage = 4
         const ssHP = stageHP / subStage
-        const ssGold = savedGold / subStage
+        const ssGold = Math.floor(savedGold / subStage)
         let ss = 0
         while (ss < subStage) {
             const dmg = window.GD.getClickDamage2(allDragons)
             progressData[2].x.push(i-1 + (ss * (1/subStage)))
             progressData[2].y.push(ssHP/dmg)
+            console.log(`per stage: ${ssGold}`)
             savedGold = savedGold - ssGold + doUpgrade(allDragons, ssGold)
+            // console.log(`after: ${savedGold}`)
             ss+=1
         }
+        console.log(`finally after: ${savedGold}`)
+        savedGold = savedGold - doUpgrade(allDragons, ssGold)
+        console.log(`------end stage ${i}-----`)
     }
 
     Plotly.plot(plotDiv, progressData, {

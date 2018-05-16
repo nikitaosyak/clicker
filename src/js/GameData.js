@@ -68,7 +68,11 @@ export const GameData = (model) => {
             })
             return (baseDamage + damage)// * 20
         },
-
+        progressToStage: stage => {
+            for (let i = 0; i < stage; i++) {
+                self.generateStageItems(i, true)
+            }
+        },
         generateStageItems: (stage, shallow = false) => {
             const shiftKoef = self.getShiftKoef(stage)
 			const clearTargetDamage = Math.round(baseDamage * Math.pow(stageMult, stage))
@@ -128,18 +132,16 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
-			console.log("generateStageItems: targetDamage " + self.getTargetDamage(stage) +
-                ", moneyDrop " + Math.round(moneyDrop) +
-                ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
+			// console.log("generateStageItems: targetDamage " + self.getTargetDamage(stage) +
+             //    ", moneyDrop " + Math.round(moneyDrop) +
+             //    ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
 
             return chestData
         }
     }
 
     // integral progress to current stage
-    for (let i = 0; i < model.stage; i++) {
-        self.generateStageItems(i, true)
-    }
+    self.progressToStage(model.stage)
     // const result = {}
     // for (let i = 0; i < 40; i++) {
     //     result[`stage${i}`] = self.generateStageItems(i).map(chest => `[${chest.stage}:${chest.health}, {g:${chest.drops.gold}${chest.drops.egg?'; d' + chest.drops.egg.drops.dragon.tier : ''}}]`)
