@@ -44,8 +44,11 @@ export const Plot = () => {
         marker: { color: 'rgb(230, 230, 20)' } } ]
 
     const clicksData = [{
-            x: [], y: [], type: 'scatter',
-            yaxis: 'y2', marker: { color: 'rgb(50, 500, 200)' } } ]
+            x: [], y: [], type: 'scatter', name: 'substage clicks',
+            marker: { color: 'rgb(50, 200, 200)' } },
+        {
+            x: [], y: [], type: 'scatter', yaxis: 'y2', name: 'stage clicks',
+            marker: { color: 'rgb(200, 20, 200)' } }]
 
     const calcDamageToRealDamageData = [{
             x: [], y: [], type: 'scatter',
@@ -211,6 +214,8 @@ export const Plot = () => {
         verbose&&console.log(`%cSDACHA substage, balance: ${savedGold}`, 'background: #559999')
         savedGold = strategyExecutor[strategy](allDragons, savedGold)
         verbose&&console.log(`%c--end stage ${i}-----`, 'color: #CC0000')
+        clicksData[1].x.push(i)
+        clicksData[1].y.push(stageHP/window.GD.getClickDamage2(allDragons))
 
         calcDamageToRealDamageData[0].x.push(i)
         calcDamageToRealDamageData[0].y.push(window.GD.getTargetDamage(i))
@@ -221,7 +226,7 @@ export const Plot = () => {
 
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true } })
-    Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat` })
+    Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat`, yaxis2: { side: 'right', overlaying: 'y' } })
     Plotly.plot(calcDamageToRealDamagePlot, calcDamageToRealDamageData, { title: 'real damage to calculated damage(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(dragonsPlot, dragonData, { title: 'cumulative dragons', barmode: 'stack'})
 }
