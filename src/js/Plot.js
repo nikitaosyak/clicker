@@ -11,7 +11,7 @@ export const Plot = () => {
     document.body.removeChild(document.getElementById('gameCanvas'))
     const hpCumulativeGoldPlot = document.createElement('div')
     hpCumulativeGoldPlot.style.cssText = 'width:100%;height:500px'
-    lala.appendChild(hpCumulativeGoldPlot)
+    // lala.appendChild(hpCumulativeGoldPlot)
 
     const stageGoldPlot = document.createElement('div')
     stageGoldPlot.style.cssText = 'width:100%;height:500px'
@@ -213,10 +213,10 @@ export const Plot = () => {
         verbose&&console.log(`%c--end stage ${i}-----`, 'color: #CC0000')
 
         calcDamageToRealDamageData[0].x.push(i)
-        calcDamageToRealDamageData[0].y.push(window.GD.getClickDamage2(allDragons))
+        calcDamageToRealDamageData[0].y.push(window.GD.getTargetDamage(i))
 
         calcDamageToRealDamageData[1].x.push(i)
-        calcDamageToRealDamageData[1].y.push(window.GD.getTargetDamage(i))
+        calcDamageToRealDamageData[1].y.push(window.GD.getClickDamage2(allDragons))
     }
 
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
