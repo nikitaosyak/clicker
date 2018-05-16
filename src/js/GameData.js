@@ -18,7 +18,8 @@ export const GameData = (model) => {
 	
     const stagePow = 2.17         //на сколько увеличивается урон каждый этап
     const stageShift = 1.03
-	const stageScale = 0.6
+    const stageShiftAB2 = 0.995
+	const stageScale = 0.5
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
     const tierDamageMult = 100   //множитель след тира
@@ -29,10 +30,12 @@ export const GameData = (model) => {
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
     const tierSwitchThresholdMultiplier = 2.3
     const minGoldDrop = 400     //стартовый дроп золота
+	const maxMoneyBoost = 2 
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 1, 2, 2] //доп яиц в каждом паке сундуков
     let currentTierDropStage = 0//позиция в паттерне
+	let moneyBoostCounter = 0
 
     const getUpgradePrice = (tier, level) => {
         if (tier > 1) return basePrice * level * Math.pow(tierPriceMult, tier - 1)
@@ -56,7 +59,11 @@ export const GameData = (model) => {
             return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
         },
         getTargetDamage: stage => {
-            return Math.round(baseDamage * Math.pow(stagePow, stage * stageShift) * stageScale * self.getShiftKoef(stage)) 
+			var ss = stageShift;
+			if ((model.ab & AB.GOLDPACKS) > 0) {
+				ss = stageShiftAB2
+			}
+            return Math.round(baseDamage * Math.pow(stagePow, stage * ss) * stageScale * self.getShiftKoef(stage)) 
         },
         getSlotRect(at) { return slots[at]},
 
@@ -103,9 +110,18 @@ export const GameData = (model) => {
             currentTierDropStage++
 			
 			let moneyDrop = minGoldDrop
+			if ((model.ab & AB.GOLDPACKS) > 0) {
+				moneyDrop = 100
+			}
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				moneyDrop *= 1.52
+				if ((model.ab & AB.GOLDPACKS) > 0) {
+					moneyDrop *= 1.47
+				}
+				else 
+				{
+					moneyDrop *= 1.52
+				}
 			}
 			//moneyDrop /= shiftKoef * shiftKoef
 			
@@ -153,17 +169,20 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
-            if ((model.ab & AB.GOLDPACKS) > 0 && true) { // insert goldpack here
+            if (moneyBoostCounter < maxMoneyBoost && (model.ab & AB.GOLDPACKS) > 0 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * 0.4) {
+				moneyBoostCounter++;
                 chestData.push({
                     type: ObjectType.PAID_CHEST,
                     stage: stage,
                     health: 0,
                     slot: 1,
                     drops: {
-                        [ObjectType.GOLD]: 1000 * stage
+                        [ObjectType.GOLD]: Math.round(moneyDrop) * 10
                     }
                 })
-            }
+            } else if (moneyBoostCounter > 0) {
+				moneyBoostCounter--
+			}
 			// console.log("generateStageItems: targetDamage " + self.getTargetDamage(stage) +
              //    ", moneyDrop " + Math.round(moneyDrop) +
              //    ", shiftKoef " + shiftKoef + ' \ ' + shiftKoef * shiftKoef)
