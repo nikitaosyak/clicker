@@ -1,6 +1,9 @@
 import {RENDER_LAYER} from "../../Renderer";
 
-export const ObjectType = { CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold' }
+export const ObjectType = {
+    PAID_EGG: 'paid_egg', PAID_CHEST: 'paid_chest',
+    CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold'
+}
 
 let INSTANCE_COUNTER = 0
 

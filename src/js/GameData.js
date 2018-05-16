@@ -1,5 +1,6 @@
 import {Config} from "./Config";
 import {ObjectType} from "./game/go/GameObjectBase";
+import {AB} from "./AB";
 
 export const GameData = (model) => {
 
@@ -80,7 +81,9 @@ export const GameData = (model) => {
 
             //определяется порог и переключается тиер
             const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
+            let tierJustSwitched = false
             if (clearTargetDamage / nextTierBaseDamage / shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
+                tierJustSwitched = true
                 currentTier++
                 currentTierDropStage = 0
             }
@@ -113,11 +116,19 @@ export const GameData = (model) => {
                     }
 
                     if (currentTierEggNumInPack-- > 0) { // drops egg
-                        singleChest.drops[ObjectType.EGG] = {
-                            type: ObjectType.EGG,
-                            stage: stage,
-                            health: singleChest.health/2,
-                            drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
+                        if (tierJustSwitched && (model.ab & AB.DRAGONS) > 0) {
+                            singleChest.drops[ObjectType.EGG] = {
+                                type: ObjectType.PAID_EGG,
+                                stage: stage,
+                                drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
+                            }
+                        } else {
+                            singleChest.drops[ObjectType.EGG] = {
+                                type: ObjectType.EGG,
+                                stage: stage,
+                                health: singleChest.health/2,
+                                drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
+                            }
                         }
                     } else if (currentTier > 1) {        // drops egg from prev stage
                         if (lastTierEggNumInPack-- > 0) {
@@ -131,6 +142,16 @@ export const GameData = (model) => {
                     }
                     chestData.push(singleChest)
                 }
+            }
+            if ((model.ab & AB.GOLDPACKS) > 0 && true) { // insert goldpack here
+                chestData.push({
+                    type: ObjectType.PAID_CHEST,
+                    stage: stage,
+                    slot: 1,
+                    drops: {
+                        [ObjectType.GOLD]: 1000 * stage
+                    }
+                })
             }
 			// console.log("generateStageItems: targetDamage " + self.getTargetDamage(stage) +
              //    ", moneyDrop " + Math.round(moneyDrop) +

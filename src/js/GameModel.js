@@ -46,7 +46,8 @@ export const GameModel = () => {
                 } else {
                     data = loadData
                 }
-                console.log(self)
+                console.log('monetizing with: ', AB.strValue(data.ab))
+                console.log(data)
                 resolve()
             })
         },

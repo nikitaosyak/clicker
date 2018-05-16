@@ -1,4 +1,6 @@
 import {SlotItem} from "../../go/SlotItem";
+import {ObjectType} from "../../go/GameObjectBase";
+import {PaidSlotItem} from "../../go/PaidSlotItem";
 
 export const SlotItemGenerator = (owner, model, savedStageItems) => {
 
@@ -23,7 +25,12 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
         populateConcrete: (slots, slotIdx, data) => {
             console.log(`populating slot ${slotIdx} with ${data.type}:`, data)
             model.updateSlotItem(slotIdx, data)
-            const item = SlotItem(data.type, slotIdx, data.stage, data.health, data.drops, data.slot)
+            let item
+            if (data.type === ObjectType.PAID_CHEST || data.type === ObjectType.PAID_EGG) {
+                item = PaidSlotItem(data.type, slotIdx, data.stage, data.drops, data.slot)
+            } else {
+                item  = SlotItem(data.type, slotIdx, data.stage, data.health, data.drops, data.slot)
+            }
             owner.add(item)
             slots[slotIdx] = item
         },
