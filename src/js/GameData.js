@@ -19,7 +19,9 @@ export const GameData = (model) => {
     const stagePow = 2.17         //на сколько увеличивается урон каждый этап
     const stageShift = 1.03
     const stageShiftAB2 = 0.995
+	const stageShiftAB3 = 0.980
 	const stageScale = 0.5
+	const stageScaleAB3 = 0.7
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
     const tierDamageMult = 100   //множитель след тира
@@ -59,11 +61,15 @@ export const GameData = (model) => {
             return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
         },
         getTargetDamage: stage => {
-			var ss = stageShift;
-			if ((model.ab & AB.GOLDPACKS) > 0) {
-				ss = stageShiftAB2
+			var sShift = stageShift
+			var sScale = stageScale
+			if ((model.ab & (AB.DRAGONS | AB.GOLDPACKS)) > 0) {
+				sShift = stageShiftAB3
+				sScale = stageScaleAB3
+			} else if ((model.ab & AB.GOLDPACKS) > 0) {
+				sShift = stageShiftAB2
 			}
-            return Math.round(baseDamage * Math.pow(stagePow, stage * ss) * stageScale * self.getShiftKoef(stage)) 
+            return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale * self.getShiftKoef(stage)) 
         },
         getSlotRect(at) { return slots[at]},
 
@@ -169,8 +175,20 @@ export const GameData = (model) => {
                     chestData.push(singleChest)
                 }
             }
-            if (moneyBoostCounter < maxMoneyBoost && (model.ab & AB.GOLDPACKS) > 0 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * 0.4) {
-				moneyBoostCounter++;
+			
+			var maxBoost = maxMoneyBoost
+			var switchMult = 0.4
+			
+			if ((model.ab & (AB.DRAGONS | AB.GOLDPACKS)) > 0) {
+				maxBoost = 1
+				switchMult = 0.1
+			}
+			
+            if (moneyBoostCounter < maxBoost && (model.ab & AB.GOLDPACKS) > 0 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
+				moneyBoostCounter++
+				if (moneyBoostCounter == maxBoost && currentTier != tierMax) {
+					moneyBoostCounter += 4
+				}
                 chestData.push({
                     type: ObjectType.PAID_CHEST,
                     stage: stage,
