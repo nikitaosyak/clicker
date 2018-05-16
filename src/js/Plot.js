@@ -1,4 +1,5 @@
 import {URLUtil} from "./utils/URLUtil";
+import {ObjectType} from "./game/go/GameObjectBase";
 
 export const Plot = () => {
 
@@ -41,7 +42,10 @@ export const Plot = () => {
     const stageGoldData = [{
         x: [], y: [], type: 'bar',
         name: 'gold/stage',
-        marker: { color: 'rgb(230, 230, 20)' } } ]
+        marker: { color: 'rgb(230, 230, 20)' } }, {
+        x: [], y: [], type: 'bar',
+        name: 'adgold/stage',
+        marker: { color: 'rgb(20, 230, 230)' } }]
 
     const clicksData = [{
             x: [], y: [], type: 'scatter', name: 'substage clicks',
@@ -156,9 +160,16 @@ export const Plot = () => {
         //
         // plot hp and gold for each stage
         const stageItems = window.GD.generateStageItems(i)
-        const stageGold = stageItems.reduce((acc, item) => { return acc + item.drops.gold }, 0)
+        const stageGold = stageItems.reduce((acc, item) => {
+            if (item.type === ObjectType.PAID_CHEST) return acc
+            return acc + item.drops.gold
+        }, 0)
+        const paidGold = stageItems.reduce((acc, item) => {
+            if (item.type !== ObjectType.PAID_CHEST) return acc
+            return acc + item.drops.gold
+        }, 0)
         verbose&&console.log(`%c--start stage ${i}: gold: ${stageGold}, sdacha: ${savedGold}, total: ${stageGold + savedGold}`, 'color: #CC0000')
-        savedGold += stageGold
+        savedGold = savedGold + stageGold + paidGold
         const stageHP = stageItems.reduce((acc, item) => { return acc + item.health }, 0)
         hpCumulativeGoldData[0].x.push(i)
         hpCumulativeGoldData[0].y.push(stageHP)
@@ -169,6 +180,9 @@ export const Plot = () => {
 
         stageGoldData[0].x.push(i)
         stageGoldData[0].y.push(stageGold)
+
+        stageGoldData[1].x.push(i)
+        stageGoldData[1].y.push(paidGold)
 
         //
         // plot dragons for each stage
@@ -224,8 +238,9 @@ export const Plot = () => {
         calcDamageToRealDamageData[1].y.push(window.GD.getClickDamage2(allDragons))
     }
 
+    console.log(clicksData)
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
-    Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true } })
+    Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true }, barmode: 'stack' })
     Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat`, yaxis2: { side: 'right', overlaying: 'y' } })
     Plotly.plot(calcDamageToRealDamagePlot, calcDamageToRealDamageData, { title: 'real damage to calculated damage(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(dragonsPlot, dragonData, { title: 'cumulative dragons', barmode: 'stack'})

@@ -52,6 +52,7 @@ window.onload = () => {
 
     if (URLUtil.getParameterByName('plot') === 'true' &&
         window.GD.config.MODE === 'development') {
+        model.plotReload()
         Plot()
     } else {
         resources

@@ -65,6 +65,10 @@ export const GameModel = () => {
             self.synchronize()
             window.location.reload(true)
         },
+        plotReload: () => {
+            initData()
+            data.ab = AB.GOLDPACKS|AB.DRAGONS
+        },
 
         get stage() { return data.currentStage },
         increaseStage: () => {
