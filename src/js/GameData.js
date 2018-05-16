@@ -11,19 +11,25 @@ export const GameData = (model) => {
         {x: 660, y: 1100, w: 250, h: 300}
     ]
 
-    const stageMult = 2         //на сколько увеличивается урон каждый этап
+	const contentTimeMins = 60;
+	const clickPerSecs = 3;
+	const stageMaxNum = 40;
+	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
+	
+    const stageMult = 2.05         //на сколько увеличивается урон каждый этап
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
-    const tierDamageMult = 50   //множитель след тира
+    const tierDamageMult = 60   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
-    const packClicksNum = 120   //расчётое количество кликов по паку сундуков
+    const tierMax = 6
+    const packClicksNum = stageTimeSecs * clickPerSecs //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
-    const tierSwitchThresholdMultiplier = 1.3
-    const minGoldDrop = 600     //стартовый дроп золота
+    const tierSwitchThresholdMultiplier = 6.3
+    const minGoldDrop = 300     //стартовый дроп золота
 
     let currentTier = 1         //вид дракона
-    const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 2, 2, 2] //доп яиц в каждом паке сундуков
+    const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 1, 2, 2] //доп яиц в каждом паке сундуков
     let currentTierDropStage = 0//позиция в паттерне
 
     const getUpgradePrice = (tier, level) => {
@@ -43,8 +49,9 @@ export const GameData = (model) => {
     const self =  {
         get config() { return config },
         get slots() { return slots },
+		get clickPerSecs() { return clickPerSecs },
         getShiftKoef: stage => {
-            return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
+            return 1// Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
         },
         getTargetDamage: stage => {
             return Math.round(baseDamage * Math.pow(stageMult, stage * self.getShiftKoef(stage)))
@@ -82,14 +89,14 @@ export const GameData = (model) => {
             //определяется порог и переключается тиер
             const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
             let tierJustSwitched = false
-            if (clearTargetDamage / nextTierBaseDamage / shiftKoef > tierSwitchThresholdMultiplier * currentTier) {
+            if (currentTier < tierMax && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier) {
                 tierJustSwitched = true
                 currentTier++
                 currentTierDropStage = 0
             }
 
             //сколько дропать яиц и каких
-            let currentTierEggNumInPack = eggDropPattern[currentTierDropStage]
+            let currentTierEggNumInPack = eggDropPattern[currentTierDropStage] || 2;
             let lastTierEggNumInPack = 2 - currentTierEggNumInPack
             currentTierDropStage++
 			

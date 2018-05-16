@@ -22,6 +22,10 @@ export const Plot = () => {
     clicksPlot.style.cssText = 'width:100%;height:500px'
     lala.appendChild(clicksPlot)
 
+    const timePlot = document.createElement('div')
+    timePlot.style.cssText = 'width:100%;height:500px'
+    lala.appendChild(timePlot)
+
     const calcDamageToRealDamagePlot = document.createElement('div')
     calcDamageToRealDamagePlot.style.cssText = 'width:100%;height:500px'
     lala.appendChild(calcDamageToRealDamagePlot)
@@ -54,6 +58,10 @@ export const Plot = () => {
             x: [], y: [], type: 'scatter', yaxis: 'y2', name: 'stage clicks',
             marker: { color: 'rgb(200, 20, 200)' } }]
 
+    const timeData = [{
+            x: [], y: [], type: 'bar', name: 'stage minutes',
+            marker: { color: 'rgb(50, 200, 200)' } }]
+			
     const calcDamageToRealDamageData = [{
             x: [], y: [], type: 'scatter',
             name: 'calc damage',
@@ -230,6 +238,9 @@ export const Plot = () => {
         verbose&&console.log(`%c--end stage ${i}-----`, 'color: #CC0000')
         clicksData[1].x.push(i)
         clicksData[1].y.push(stageHP/window.GD.getClickDamage2(allDragons))
+		
+		timeData[0].x.push(i)
+        timeData[0].y.push(Math.round(stageHP/window.GD.getClickDamage2(allDragons) / window.GD.clickPerSecs / 60 * 10)/10)
 
         calcDamageToRealDamageData[0].x.push(i)
         calcDamageToRealDamageData[0].y.push(window.GD.getTargetDamage(i))
@@ -242,6 +253,7 @@ export const Plot = () => {
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true }, barmode: 'stack' })
     Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat`, yaxis2: { side: 'right', overlaying: 'y' } })
+    Plotly.plot(timePlot, timeData, { title: `minutes per stage`, yaxis2: { side: 'right', overlaying: 'y' } })
     Plotly.plot(calcDamageToRealDamagePlot, calcDamageToRealDamageData, { title: 'real damage to calculated damage(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(dragonsPlot, dragonData, { title: 'cumulative dragons', barmode: 'stack'})
 }
