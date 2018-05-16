@@ -16,7 +16,7 @@ export const GameData = (model) => {
 	const stageMaxNum = 40;
 	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
 	
-    const stageMult = 2.05         //на сколько увеличивается урон каждый этап
+    const stageMult = 2.04         //на сколько увеличивается урон каждый этап
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
     const tierDamageMult = 60   //множитель след тира
@@ -26,7 +26,7 @@ export const GameData = (model) => {
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
     const tierSwitchThresholdMultiplier = 6.3
-    const minGoldDrop = 300     //стартовый дроп золота
+    const minGoldDrop = 500     //стартовый дроп золота
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 1, 2, 2] //доп яиц в каждом паке сундуков
@@ -105,7 +105,7 @@ export const GameData = (model) => {
 			while (moneyDropStage++ < stage) {
 				moneyDrop *= 1.51
 			}
-			moneyDrop *= shiftKoef * shiftKoef
+			//moneyDrop /= shiftKoef
 			
             if (shallow) return
 

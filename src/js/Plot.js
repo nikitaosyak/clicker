@@ -253,7 +253,7 @@ export const Plot = () => {
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true }, barmode: 'stack' })
     Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat`, yaxis2: { side: 'right', overlaying: 'y' } })
-    Plotly.plot(timePlot, timeData, { title: `minutes per stage`, yaxis2: { side: 'right', overlaying: 'y' } })
+    Plotly.plot(timePlot, timeData, { title: `minutes per stage`})
     Plotly.plot(calcDamageToRealDamagePlot, calcDamageToRealDamageData, { title: 'real damage to calculated damage(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(dragonsPlot, dragonData, { title: 'cumulative dragons', barmode: 'stack'})
 }
