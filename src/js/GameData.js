@@ -16,17 +16,19 @@ export const GameData = (model) => {
 	const stageMaxNum = 40;
 	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
 	
-    const stageMult = 2.04         //на сколько увеличивается урон каждый этап
+    const stagePow = 2.17         //на сколько увеличивается урон каждый этап
+    const stageShift = 1.03
+	const stageScale = 0.6
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
-    const tierDamageMult = 60   //множитель след тира
+    const tierDamageMult = 100   //множитель след тира
     const tierPriceMult = 10    //множитель след тира
     const tierMax = 6
     const packClicksNum = stageTimeSecs * clickPerSecs //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
-    const tierSwitchThresholdMultiplier = 6.3
-    const minGoldDrop = 500     //стартовый дроп золота
+    const tierSwitchThresholdMultiplier = 2.3
+    const minGoldDrop = 400     //стартовый дроп золота
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 1, 2, 2] //доп яиц в каждом паке сундуков
@@ -51,10 +53,10 @@ export const GameData = (model) => {
         get slots() { return slots },
 		get clickPerSecs() { return clickPerSecs },
         getShiftKoef: stage => {
-            return 1// Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
+            return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
         },
         getTargetDamage: stage => {
-            return Math.round(baseDamage * Math.pow(stageMult, stage * self.getShiftKoef(stage)))
+            return Math.round(baseDamage * Math.pow(stagePow, stage * stageShift) * stageScale * self.getShiftKoef(stage)) 
         },
         getSlotRect(at) { return slots[at]},
 
@@ -83,7 +85,7 @@ export const GameData = (model) => {
         },
         generateStageItems: (stage, shallow = false) => {
             const shiftKoef = self.getShiftKoef(stage)
-			const clearTargetDamage = Math.round(baseDamage * Math.pow(stageMult, stage))
+			const clearTargetDamage = Math.round(baseDamage * Math.pow(stagePow, stage))
             const packHP = packClicksNum * self.getTargetDamage(stage)
 
             //определяется порог и переключается тиер
@@ -103,9 +105,9 @@ export const GameData = (model) => {
 			let moneyDrop = minGoldDrop
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				moneyDrop *= 1.51
+				moneyDrop *= 1.52
 			}
-			//moneyDrop /= shiftKoef
+			//moneyDrop /= shiftKoef * shiftKoef
 			
             if (shallow) return
 
