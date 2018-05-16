@@ -1,4 +1,5 @@
 import {AB} from "./AB";
+import {URLUtil} from "./utils/URLUtil";
 
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0
@@ -7,14 +8,7 @@ export const MAX_DRAGON_LEVEL = 25
 export const GameModel = () => {
 
     let connected = false
-    let data = {
-        currentStage: -1,
-        currentGold: -1,
-        currentDragons: {},
-        currentSlotItems: [],
-        currentStageItems: [],
-        ab: -1
-    }
+    let data = {}
 
     const initData = () => {
         data.currentStage = MIN_STAGE
@@ -22,8 +16,14 @@ export const GameModel = () => {
         data.currentDragons = {}
         data.currentSlotItems = []
         data.currentStageItems = []
-        data.ab = AB.selectAB()
+
+        if (typeof URLUtil.getParameterByName('ab') !== 'undefined') {
+            data.ab = Number.parseInt(URLUtil.getParameterByName('ab'))
+        } else {
+            data.ab = AB.selectAB()
+        }
     }
+    initData()
 
     const self = {
         printCurrentState: () => {
@@ -44,7 +44,11 @@ export const GameModel = () => {
                 if (loadData === null) {
                     initData()
                 } else {
-                    data = loadData
+                    data.currentStage = loadData.currentStage
+                    data.currentGold = loadData.currentGold
+                    data.currentDragons = loadData.currentDragons
+                    data.currentSlotItems = loadData.currentSlotItems
+                    data.currentStageItems = loadData.currentStageItems
                 }
                 console.log('monetizing with: ', AB.strValue(data.ab))
                 console.log(data)
@@ -67,7 +71,6 @@ export const GameModel = () => {
         },
         plotReload: () => {
             initData()
-            data.ab = AB.GOLDPACKS|AB.DRAGONS
         },
 
         get stage() { return data.currentStage },
