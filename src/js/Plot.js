@@ -1,5 +1,6 @@
 import {URLUtil} from "./utils/URLUtil";
 import {ObjectType} from "./game/go/GameObjectBase";
+import {MathUtil} from "./utils/MathUtil";
 
 export const Plot = () => {
 
@@ -249,7 +250,7 @@ export const Plot = () => {
         calcDamageToRealDamageData[1].y.push(window.GD.getClickDamage2(allDragons))
     }
 
-    console.log(clicksData)
+    console.log('total play time: ', MathUtil.roundToDigit(clicksData[1].y.reduce((acc, current) => acc + current, 0) / 3 / 60 / 60, 2), 'hours')
     Plotly.plot(hpCumulativeGoldPlot, hpCumulativeGoldData, { title: 'stage hp and cumulative gold(log)', yaxis: { type: 'log', autorange: true } })
     Plotly.plot(stageGoldPlot, stageGoldData, { title: 'gold per stage(log)', yaxis: { type: 'log', autorange: true }, barmode: 'stack' })
     Plotly.plot(clicksPlot, clicksData, { title: `clicks with ${strategy} strat`, yaxis2: { side: 'right', overlaying: 'y' } })
