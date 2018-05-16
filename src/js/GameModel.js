@@ -1,3 +1,4 @@
+import {AB} from "./AB";
 
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0
@@ -5,32 +6,31 @@ export const MAX_DRAGON_LEVEL = 25
 
 export const GameModel = () => {
 
-
-
     let connected = false
-    let currentStage = -1
-    let currentGold = -1
-    let currentDragons = {}
-    let currentSlotItems = []
-    let currentStageItems = []
+    let data = {
+        currentStage: -1,
+        currentGold: -1,
+        currentDragons: {},
+        currentSlotItems: [],
+        currentStageItems: [],
+        ab: -1
+    }
+
+    const initData = () => {
+        data.currentStage = MIN_STAGE
+        data.currentGold = MIN_GOLD
+        data.currentDragons = {}
+        data.currentSlotItems = []
+        data.currentStageItems = []
+        data.ab = AB.selectAB()
+    }
 
     const self = {
         printCurrentState: () => {
-            return JSON.stringify({
-                currentStage: currentStage,
-                currentGold: currentGold,
-                currentDragons: currentDragons,
-                currentSlotItems: currentSlotItems,
-                currentStageItems: currentStageItems
-            }, null)
+            return JSON.stringify(data, null)
         },
         loadState: jsonData => {
-            const data = JSON.parse(jsonData)
-            currentStage = data.currentStage
-            currentGold = data.currentGold
-            currentDragons = data.currentDragons
-            currentSlotItems = data.currentSlotItems
-            currentStageItems = data.currentStageItems
+            data = JSON.parse(jsonData)
             self.synchronize()
             window.location.reload(true)
         },
@@ -40,11 +40,12 @@ export const GameModel = () => {
                     reject("already connected")
                 }
                 connected = true
-                currentStage = Number.parseInt(window.localStorage.clickerSavedStage) || MIN_STAGE
-                currentGold = Number.parseInt(window.localStorage.clickerGold) || MIN_GOLD
-                currentDragons = JSON.parse(window.localStorage.clickerDragons || '{}')
-                currentSlotItems = JSON.parse(window.localStorage.clickerSlotItems || '{"items":[]}').items
-                currentStageItems = JSON.parse(window.localStorage.clickerStageItems || '{"items":[]}').items
+                const loadData = JSON.parse(window.localStorage.dragon_clicker || null)
+                if (loadData === null) {
+                    initData()
+                } else {
+                    data = loadData
+                }
                 console.log(self)
                 resolve()
             })
@@ -54,58 +55,50 @@ export const GameModel = () => {
                 if (!connected) {
                     reject("not connected")
                 }
-                window.localStorage.clickerSavedStage = currentStage
-                window.localStorage.clickerGold = currentGold
-                window.localStorage.clickerDragons = JSON.stringify(currentDragons)
-                window.localStorage.clickerSlotItems = JSON.stringify({items: currentSlotItems})
-                window.localStorage.clickerStageItems = JSON.stringify({items: currentStageItems})
+                window.localStorage.dragon_clicker = JSON.stringify(data)
                 resolve()
             })
         },
         restart: () => {
-            currentStage = MIN_STAGE
-            currentGold = MIN_GOLD
-            currentDragons = {}
-            currentSlotItems = []
-            currentStageItems = []
+            initData()
             self.synchronize()
             window.location.reload(true)
         },
 
-        get stage() { return currentStage },
+        get stage() { return data.currentStage },
         increaseStage: () => {
-            currentStage++
-            console.log('current stage: ', currentStage)
+            data.currentStage++
+            console.log('current stage: ', data.currentStage)
             self.synchronize()
         },
 
-        get gold() { return currentGold },
+        get gold() { return data.currentGold },
         addGold: (v) => {
-            currentGold += v
+            data.currentGold += v
             self.synchronize()
         },
         subtractGold: (v) => {
-            currentGold -= v
+            data.currentGold -= v
             self.synchronize()
         },
 
         get dragonsCount () {
             let sum = 0
-            Object.keys(currentDragons).forEach(tier => {
-                currentDragons[tier].forEach(d => sum+=1)
+            Object.keys(data.currentDragons).forEach(tier => {
+                data.currentDragons[tier].forEach(d => sum+=1)
             })
             return sum
         },
-        get dragons() { return currentDragons },
+        get dragons() { return data.currentDragons },
         getDragons: (tier, level) => {
-            return currentDragons[tier].filter(sh => {if (sh.level === level) return sh})
+            return data.currentDragons[tier].filter(sh => {if (sh.level === level) return sh})
         },
         addDragon: (tier, level) => {
-            if (currentDragons[tier]) {
-                currentDragons[tier].push({tier: tier, level: level})
+            if (data.currentDragons[tier]) {
+                data.currentDragons[tier].push({tier: tier, level: level})
             } else {
-                currentDragons[tier] = []
-                currentDragons[tier].push({tier: tier, level: level})
+                data.currentDragons[tier] = []
+                data.currentDragons[tier].push({tier: tier, level: level})
             }
             self.synchronize()
         },
@@ -114,7 +107,7 @@ export const GameModel = () => {
                 throw `dragon upgrade failed: level ${level+1} is too big, max level is ${MAX_DRAGON_LEVEL}`
             }
 
-            const dragonsOnTier = currentDragons[tier]
+            const dragonsOnTier = data.currentDragons[tier]
             for (let i = 0; i < dragonsOnTier.length; i++) {
                 if (dragonsOnTier[i].level !== level) continue
                 dragonsOnTier[i].level += 1
@@ -124,16 +117,18 @@ export const GameModel = () => {
             throw `dragon upgrade failed: no dragon t${tier}l${level}`
         },
 
-        get slotItems() { return currentSlotItems },
-        get stageItems() { return currentStageItems },
+        get slotItems() { return data.currentSlotItems },
+        get stageItems() { return data.currentStageItems },
         updateStageItems : items => {
-            currentStageItems = items
+            data.currentStageItems = items
             self.synchronize()
         },
         updateSlotItem : (i, item) => {
-            currentSlotItems[i] = item
+            data.currentSlotItems[i] = item
             self.synchronize()
-        }
+        },
+
+        get ab() { return data.ab }
     }
 
     return self
