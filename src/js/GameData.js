@@ -11,28 +11,28 @@ export const GameData = (model) => {
         {x: 660, y: 1100, w: 250, h: 300}
     ]
 
-	const contentTimeMins = 30;
+	const contentTimeMins = 25;
 	const clickPerSecs = 3;
 	const stageMaxNum = 40;
 	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
 	
-    const stagePow = 2.17         //на сколько увеличивается урон каждый этап
-    const stageShift = 1.03
+    const stagePow = 2  //на сколько увеличивается урон каждый этап
+    const stageShift = 0.89
     const stageShiftAB2 = 0.995
 	const stageShiftAB3 = 0.980
-	const stageScale = 0.5
+	const stageScale = 2.1
 	const stageScaleAB3 = 0.7
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
-    const tierDamageMult = 100   //множитель след тира
-    const tierPriceMult = 10    //множитель след тира
+    const tierDamageMult = 150   //множитель след тира
+    const tierPriceMult = 50    //множитель след тира
     const tierMax = 6
     const packClicksNum = stageTimeSecs * clickPerSecs //расчётое количество кликов по паку сундуков
     const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
-    const tierSwitchThresholdMultiplier = 2.3
-    const minGoldDrop = 400     //стартовый дроп золота
-	const maxMoneyBoost = 2 
+    const tierSwitchThresholdMultiplier = 1.3
+    const minGoldDrop = 500     //стартовый дроп золота
+	const maxMoneyBoost = 1 
 
     let currentTier = 1         //вид дракона
     const eggDropPattern = [1, 0, 1, 0, 1 , 1 , 2 , 1, 2, 2, 2, 1, 2, 2] //доп яиц в каждом паке сундуков
@@ -50,7 +50,7 @@ export const GameData = (model) => {
     };
 
     const getTierDamage = (tier, level) => {
-        return Math.round(getTierBaseDamage(tier) * (Math.pow(1.26, 1.1 * level) + level) / 1.5)
+        return Math.round(getTierBaseDamage(tier) * (Math.pow(1.26, 1.4 * level) + level) / 1.5)
     };
 
     const self =  {
@@ -63,12 +63,6 @@ export const GameData = (model) => {
         getTargetDamage: stage => {
 			var sShift = stageShift
 			var sScale = stageScale
-			if (model.ab == 3) {
-				sShift = stageShiftAB3
-				sScale = stageScaleAB3
-			} else if (model.ab == 2) {
-				sShift = stageShiftAB2
-			}
             return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale * self.getShiftKoef(stage)) 
         },
         getSlotRect(at) { return slots[at]},
@@ -111,25 +105,16 @@ export const GameData = (model) => {
             }
 
             //сколько дропать яиц и каких
-            let currentTierEggNumInPack = eggDropPattern[currentTierDropStage] || 2;
+            let currentTierEggNumInPack = eggDropPattern[currentTierDropStage];
             let lastTierEggNumInPack = 2 - currentTierEggNumInPack
             currentTierDropStage++
 			
 			let moneyDrop = minGoldDrop
-			if (model.ab == 2) {
-				moneyDrop = 100
-			}
+
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				if (model.ab == 2) {
-					moneyDrop *= 1.47
-				}
-				else 
-				{
-					moneyDrop *= 1.52
-				}
+				moneyDrop *= 1.52
 			}
-			//moneyDrop /= shiftKoef * shiftKoef
 			
             if (shallow) return
 
@@ -167,7 +152,7 @@ export const GameData = (model) => {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.EGG,
                                 stage: stage,
-                                health: singleChest.health/2,
+                                health: singleChest.health/3,
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier-1, level: 1}}
                             }
                         }
@@ -177,14 +162,9 @@ export const GameData = (model) => {
             }
 			
 			var maxBoost = maxMoneyBoost
-			var switchMult = 0.4
+			var switchMult = 0.1
 			
-			if (model.ab == 3) {
-				maxBoost = 1
-				switchMult = 0.1
-			}
-			
-            if (moneyBoostCounter < maxBoost && model.ab == 2 || model.ab == 3 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
+            if (moneyBoostCounter < maxBoost && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
 				moneyBoostCounter++
 				if (moneyBoostCounter == maxBoost && currentTier != tierMax) {
 					moneyBoostCounter += 4
@@ -195,7 +175,7 @@ export const GameData = (model) => {
                     health: 0,
                     slot: 1,
                     drops: {
-                        [ObjectType.GOLD]: Math.round(moneyDrop) * 10
+                        [ObjectType.GOLD]: Math.round(moneyDrop) * 5
                     }
                 })
             } else if (moneyBoostCounter > 0) {
