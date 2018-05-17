@@ -2,6 +2,7 @@
 export const AB = {
     DRAGONS: 1,
     GOLDPACKS: 2,
+	COMBINE: 3,
     selectAB: () => {
         const r = Math.random()
         if (r < 0.33) return AB.DRAGONS

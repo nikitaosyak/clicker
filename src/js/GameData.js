@@ -11,7 +11,7 @@ export const GameData = (model) => {
         {x: 660, y: 1100, w: 250, h: 300}
     ]
 
-	const contentTimeMins = 60;
+	const contentTimeMins = 30;
 	const clickPerSecs = 3;
 	const stageMaxNum = 40;
 	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
@@ -63,10 +63,10 @@ export const GameData = (model) => {
         getTargetDamage: stage => {
 			var sShift = stageShift
 			var sScale = stageScale
-			if ((model.ab & (AB.DRAGONS | AB.GOLDPACKS)) > 0) {
+			if (model.ab == 3) {
 				sShift = stageShiftAB3
 				sScale = stageScaleAB3
-			} else if ((model.ab & AB.GOLDPACKS) > 0) {
+			} else if (model.ab == 2) {
 				sShift = stageShiftAB2
 			}
             return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale * self.getShiftKoef(stage)) 
@@ -116,12 +116,12 @@ export const GameData = (model) => {
             currentTierDropStage++
 			
 			let moneyDrop = minGoldDrop
-			if ((model.ab & AB.GOLDPACKS) > 0) {
+			if (model.ab == 2) {
 				moneyDrop = 100
 			}
 			let moneyDropStage = 0
 			while (moneyDropStage++ < stage) {
-				if ((model.ab & AB.GOLDPACKS) > 0) {
+				if (model.ab == 2) {
 					moneyDrop *= 1.47
 				}
 				else 
@@ -147,7 +147,7 @@ export const GameData = (model) => {
                     }
 
                     if (currentTierEggNumInPack-- > 0) { // drops egg
-                        if (tierJustSwitched && (model.ab & AB.DRAGONS) > 0) {
+                        if (tierJustSwitched && model.ab == 1) {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.PAID_EGG,
                                 stage: stage,
@@ -179,12 +179,12 @@ export const GameData = (model) => {
 			var maxBoost = maxMoneyBoost
 			var switchMult = 0.4
 			
-			if ((model.ab & (AB.DRAGONS | AB.GOLDPACKS)) > 0) {
+			if (model.ab == 3) {
 				maxBoost = 1
 				switchMult = 0.1
 			}
 			
-            if (moneyBoostCounter < maxBoost && (model.ab & AB.GOLDPACKS) > 0 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
+            if (moneyBoostCounter < maxBoost && model.ab == 2 || model.ab == 3 && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
 				moneyBoostCounter++
 				if (moneyBoostCounter == maxBoost && currentTier != tierMax) {
 					moneyBoostCounter += 4
