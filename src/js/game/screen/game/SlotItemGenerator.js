@@ -6,6 +6,12 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
 
     let gameData = window.GD
     let currentStageItems = savedStageItems.length > 0 ? savedStageItems : gameData.generateStageItems(model.stage)
+    let typeConstructor = {
+        [ObjectType.EGG] : SlotItem,
+        [ObjectType.CHEST] : SlotItem,
+        [ObjectType.PAID_EGG] : PaidSlotItem,
+        [ObjectType.PAID_CHEST] : PaidSlotItem,
+    }
 
     const getChestForSlot = slotIdx => {
         for (let i = 0; i < currentStageItems.length; i++) {
@@ -25,12 +31,7 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
         populateConcrete: (slots, slotIdx, data) => {
             console.log(`populating slot ${slotIdx} with ${data.type}:`, data)
             model.updateSlotItem(slotIdx, data)
-            let item
-            if (data.type === ObjectType.PAID_CHEST || data.type === ObjectType.PAID_EGG) {
-                item = PaidSlotItem(data.type, slotIdx, data.stage, data.drops, data.slot)
-            } else {
-                item  = SlotItem(data.type, slotIdx, data.stage, data.health, data.drops, data.slot)
-            }
+            let item = new typeConstructor[data.type](data.type, slotIdx, data.stage, data.health, data.drops, data.slot)
             owner.add(item)
             slots[slotIdx] = item
         },

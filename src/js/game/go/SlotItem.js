@@ -8,86 +8,91 @@ import {
     IHealthBarOwner, IVisualNumericRep, ObjectType
 } from "./GameObjectBase";
 
-export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
+export class SlotItem {
 
-    let maxHealth = health
-    let currentHealth = maxHealth
+    constructor(type, slot, stage, health, drop, targetSlot) {
+        this._slot = slot
+        this._stage = stage
+        this._maxHealth = health
+        this._currentHealth = health
+        this._drop = drop
+        this._targetSlot = targetSlot
 
-    let animIdx = 0
-    let shakeAnimation = []
-    let currentClick = 0
+        this._animIdx = 0
+        this._shakeAnimation = []
+        this._currentClick = 0
 
-    const self = {
-        get drop() { return drop },
-        get health() { return currentHealth },
-        get targetSlot() { return targetSlot },
-        processDamage: value => {
-            currentHealth = Math.max(0, currentHealth-value)
-            self.setHealthBarValue(currentHealth/maxHealth)
+        Object.assign(this, ITypedObject(type))
+        Object.assign(this, IStageObject(stage))
+        Object.assign(this, INamedObject(this))
 
-            shakeAnimation[animIdx].restart()
-            animIdx = animIdx === 0 ? 1 : 0
-
-            currentClick += 1
-            return currentClick % 3 === 0 // reward with intermediate gold
-        },
-        clear(animation) { // TODO: this here should be an animation
-            return new Promise((resolve, reject) => {
-
-                shakeAnimation[0].kill()
-                shakeAnimation[1].kill()
-
-                self.healthbarVisual.destroy()
-                if (window.GD.config.MODE === 'development') {
-                    self.stageDestroy()
-                    self.targetSlotDestroy()
-                }
-
-                self.visual.interactive = false
-                if (drop[ObjectType.PAID_EGG] || drop[ObjectType.EGG]) {
-                    drop = null
-                    animation.launch(self.visual, 0.5, () => {
-                        self.visual.destroy()
-                        resolve()
-                    })
-                } else {
-                    animation.launch(self.visual, 2.5, () => {
-                        self.visual.destroy()
-                        resolve()
-                    })
-                }
-            })
+        Object.assign(this, ISlotItem(slot))
+        Object.assign(this, ISlotVisualItem(this, type))
+        Object.assign(this, IHealthBarOwner(this))
+        if (window.GD.config.MODE === 'development') {
+            Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
+            Object.assign(this, IVisualNumericRep(this, 'targetSlot', 0.3, 0.25, 0xAA0000))
         }
+        Object.assign(this, IClickable(this))
+
+        const shakeTime = 0.25
+        const shakeOffset = 1
+        const easeConfig = RoughEase.ease.config({strength:10, points:40, template:Linear.easeNone, randomize:false})
+        this._shakeAnimation = [
+            TweenLite.fromTo(
+                this.visual, shakeTime,
+                {x:this.visual.x-shakeOffset},
+                {x:this.visual.x+shakeOffset, ease:easeConfig}),
+            TweenLite.fromTo(
+                this.visual, shakeTime,
+                {y:this.visual.y-shakeOffset},
+                {y:this.visual.y+shakeOffset, ease:easeConfig})
+        ]
+        this._shakeAnimation[0].pause()
+        this._shakeAnimation[1].pause()
     }
 
-    Object.assign(self, ITypedObject(type))
-    Object.assign(self, IStageObject(stage))
-    Object.assign(self, INamedObject(self))
+    get drop() { return this._drop }
+    get health() { return this._currentHealth }
+    get targetSlot() { return this._targetSlot }
 
-    Object.assign(self, ISlotItem(slot))
-    Object.assign(self, ISlotVisualItem(self, type))
-    Object.assign(self, IHealthBarOwner(self))
-    if (window.GD.config.MODE === 'development') {
-        Object.assign(self, IVisualNumericRep(self, 'stage', -0.3, 0.25, 0xCCCC00))
-        Object.assign(self, IVisualNumericRep(self, 'targetSlot', 0.3, 0.25, 0xAA0000))
+    processDamage(value) {
+        this._currentHealth = Math.max(0, this._currentHealth-value)
+        this.setHealthBarValue(this._currentHealth/this._maxHealth)
+
+        this._shakeAnimation[this._animIdx].restart()
+        this._animIdx = this._animIdx === 0 ? 1 : 0
+
+        this._currentClick += 1
+        return this._currentClick % 3 === 0 // reward with intermediate gold
     }
-    Object.assign(self, IClickable(self))
 
-    const shakeTime = 0.25
-    const shakeOffset = 1
-    const easeConfig = RoughEase.ease.config({strength:10, points:40, template:Linear.easeNone, randomize:false})
-    shakeAnimation[0] = TweenLite.fromTo(
-        self.visual, shakeTime,
-        {x:self.visual.x-shakeOffset},
-        {x:self.visual.x+shakeOffset, ease:easeConfig}
-    )
-    shakeAnimation[1] = TweenLite.fromTo(
-        self.visual, shakeTime,
-        {y:self.visual.y-shakeOffset},
-        {y:self.visual.y+shakeOffset, ease:easeConfig}
-    )
-    shakeAnimation[0].pause()
-    shakeAnimation[1].pause()
+    clear(animation) { // TODO: this here should be an animation
+        const self = this
+        return new Promise((resolve, reject) => {
 
-    return self
+            self._shakeAnimation[0].kill()
+            self._shakeAnimation[1].kill()
+
+            self.healthbarVisual.destroy()
+            if (window.GD.config.MODE === 'development') {
+                self.stageDestroy()
+                self.targetSlotDestroy()
+            }
+
+            self.visual.interactive = false
+            if (self._drop[ObjectType.PAID_EGG] || self._drop[ObjectType.EGG]) {
+                self._drop = null
+                animation.launch(self.visual, 0.5, () => {
+                    self.visual.destroy()
+                    resolve()
+                })
+            } else {
+                animation.launch(self.visual, 2.5, () => {
+                    self.visual.destroy()
+                    resolve()
+                })
+            }
+        })
+    }
 }
