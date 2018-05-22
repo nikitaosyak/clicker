@@ -1,5 +1,6 @@
 import {Config} from "./Config";
 import {ObjectType} from "./game/go/GameObjectBase";
+import {AB} from "./AB";
 
 export const GameData = (model) => {
 
@@ -132,7 +133,7 @@ export const GameData = (model) => {
                     }
 
                     if (currentTierEggNumInPack-- > 0) { // drops egg
-                        if (tierJustSwitched && model.ab === 1) {
+                        if (tierJustSwitched && model.ab === AB.DEFAULT_GROUP) {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.PAID_EGG,
                                 stage: stage,

@@ -17,7 +17,7 @@ export const GameModel = () => {
         data.currentSlotItems = []
         data.currentStageItems = []
 
-        if (typeof URLUtil.getParameterByName('ab') !== 'undefined') {
+        if (typeof URLUtil.getParameterByName('ab') !== 'undefined' && URLUtil.getParameterByName('ab') !== null) {
             data.ab = Number.parseInt(URLUtil.getParameterByName('ab'))
         } else {
             data.ab = AB.selectAB()
