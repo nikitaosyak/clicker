@@ -35,7 +35,10 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
             slots[slotIdx] = item
         },
         populateAtGameStart: slots => {
-            self.populateConcrete(slots, 1, getChestForSlot(2))
+            const firstChest = getChestForSlot(2)
+            firstChest.health = window.GD.baseDamage * 10
+            firstChest.drops.egg.health = window.GD.baseDamage * 5
+            self.populateConcrete(slots, 1, firstChest)
         },
         populate: slots => {
             for (let i = 0; i < slots.length; i++) {
