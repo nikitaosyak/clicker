@@ -1,6 +1,5 @@
 import {Config} from "./Config";
 import {ObjectType} from "./game/go/GameObjectBase";
-import {AB} from "./AB";
 
 export const GameData = (model) => {
 
@@ -54,6 +53,7 @@ export const GameData = (model) => {
     };
 
     const self =  {
+        get baseDamage() { return baseDamage },
         get config() { return config },
         get slots() { return slots },
 		get clickPerSecs() { return clickPerSecs },
@@ -61,8 +61,8 @@ export const GameData = (model) => {
             return Math.round(Math.max(100, (-0.0193 * Math.pow(stage, 3) + 1.0649 * Math.pow(stage, 2) - 18.9866 * stage + 208.7088))) / 100
         },
         getTargetDamage: stage => {
-			var sShift = stageShift
-			var sScale = stageScale
+			const sShift = stageShift
+            const sScale = stageScale
             return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale * self.getShiftKoef(stage)) 
         },
         getSlotRect(at) { return slots[at]},
@@ -132,7 +132,7 @@ export const GameData = (model) => {
                     }
 
                     if (currentTierEggNumInPack-- > 0) { // drops egg
-                        if (tierJustSwitched && model.ab == 1) {
+                        if (tierJustSwitched && model.ab === 1) {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.PAID_EGG,
                                 stage: stage,
@@ -161,12 +161,12 @@ export const GameData = (model) => {
                 }
             }
 			
-			var maxBoost = maxMoneyBoost
-			var switchMult = 0.1
+			const maxBoost = maxMoneyBoost
+			const switchMult = 0.1
 			
             if (moneyBoostCounter < maxBoost && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
 				moneyBoostCounter++
-				if (moneyBoostCounter == maxBoost && currentTier != tierMax) {
+				if (moneyBoostCounter === maxBoost && currentTier !== tierMax) {
 					moneyBoostCounter += 4
 				}
                 chestData.push({
