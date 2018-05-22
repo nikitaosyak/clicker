@@ -3,7 +3,7 @@ import {UIFactory} from "../../ui/UIFactory";
 import {MAX_DRAGON_LEVEL} from "../../../GameModel";
 import {MathUtil} from "../../../utils/MathUtil";
 
-export const UpgradeListItem = (owner) => {
+export const UpgradeListItem = (_, owner) => {
 
     let currentDragon = null
     const self = {}

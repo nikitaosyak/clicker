@@ -1,13 +1,11 @@
 import {INamedObject, IText} from "../go/GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 
-export const DamagePercent = (onComplete) => {
+export const DamagePercent = (pool, onComplete) => {
 
-    let pool = null
     let animation = null
     const self = {
-        launch: (_pool, text, x, y) => {
-            pool = _pool
+        launch: (text, x, y) => {
 
             self.visual.text = text
             self.visual.x = x
@@ -25,6 +23,7 @@ export const DamagePercent = (onComplete) => {
         self.visual, 2.5,
         {alpha: 0, y: 0, roundProps: 'y', ease: Linear.easeNone, onComplete: () => {
                 onComplete(self)
+                pool.putOne(self)
             }})
     animation.pause()
 

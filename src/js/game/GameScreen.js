@@ -8,6 +8,7 @@ import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
 import {Dragon} from "./go/Dragon";
 import {ObjectPool} from "../utils/ObjectPool";
 import {DamagePercent} from "./ui/debugDamagePercent";
+import {DestroyAnimation} from "./screen/DestroyAnimation";
 
 export class GameScreen extends BaseScreen {
 
@@ -58,11 +59,10 @@ export class GameScreen extends BaseScreen {
         })
 
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
-
+        this._itemDestroyAnimPool = ObjectPool(DestroyAnimation, [], 3)
         if (window.GD.config.MODE === 'development') {
             this._clickDamageVisPool = ObjectPool(DamagePercent, [_self => {
                 self.remove(_self)
-                this._clickDamageVisPool.putOne(_self)
             }], 10)
         }
     }
@@ -95,8 +95,7 @@ export class GameScreen extends BaseScreen {
                 if (window.GD.config.MODE === 'development') {
                     const dmgVis = this._clickDamageVisPool.getOne()
                     this.add(dmgVis)
-                    dmgVis.launch(this._clickDamageVisPool,
-                        `${Math.round((this._clickDamage / targetDmg) * 100)}%`, c.visual.x, c.visual.y)
+                    dmgVis.launch(`${Math.round((this._clickDamage / targetDmg) * 100)}%`, c.visual.x, c.visual.y)
                 }
                 const rewardingClick = c.processDamage(clicks * this._clickDamage)
 
@@ -105,8 +104,8 @@ export class GameScreen extends BaseScreen {
                 const dropsDragon = typeof drop[ObjectType.DRAGON] !== "undefined"
                 const dropsEgg = typeof drop[ObjectType.EGG] !== "undefined"
                 if (c.health <= 0) {
-                    this.remove(this._slotItems[i])
-                    this._slotItems[i].clear().then(() => {
+                    this._slotItems[i].clear(this._itemDestroyAnimPool.getOne()).then(() => {
+                        this.remove(this._slotItems[i])
                         this._slotItems[i] = null
                         if (dropsEgg) {
                             this._generator.populateConcrete(

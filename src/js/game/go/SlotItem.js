@@ -5,7 +5,7 @@ import {
     ISlotVisualItem,
     IStageObject,
     ITypedObject,
-    IHealthBarOwner, IVisualStageRepresentationOwner, IVisualSlotRepresentationOwner, IVisualNumericRep
+    IHealthBarOwner, IVisualNumericRep, ObjectType
 } from "./GameObjectBase";
 
 export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
@@ -31,20 +31,31 @@ export const SlotItem = (type, slot, stage, health, drop, targetSlot) => {
             currentClick += 1
             return currentClick % 3 === 0 // reward with intermediate gold
         },
-        clear() { // TODO: this here should be an animation
+        clear(animation) { // TODO: this here should be an animation
             return new Promise((resolve, reject) => {
-                drop = null
 
                 shakeAnimation[0].kill()
                 shakeAnimation[1].kill()
 
                 self.healthbarVisual.destroy()
                 if (window.GD.config.MODE === 'development') {
-                    self.stageRepVisual.destroy()
-                    self.targetSlotRepVisual.destroy()
+                    self.stageDestroy()
+                    self.targetSlotDestroy()
                 }
-                self.visual.destroy()
-                resolve()
+
+                self.visual.interactive = false
+                if (drop[ObjectType.PAID_EGG] || drop[ObjectType.EGG]) {
+                    drop = null
+                    animation.launch(self.visual, 0.5, () => {
+                        self.visual.destroy()
+                        resolve()
+                    })
+                } else {
+                    animation.launch(self.visual, 2.5, () => {
+                        self.visual.destroy()
+                        resolve()
+                    })
+                }
             })
         }
     }

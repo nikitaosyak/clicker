@@ -116,7 +116,8 @@ export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size
     if (typeof owner[property] === `undefined`) {
         return {
             get [`${property}RepVisual`]() { return { destroy: () => {} } },
-            [`${property}VisualRefresh`]: () => {}
+            [`${property}VisualRefresh`]: () => {},
+            [`${property}Destroy`]: () => { }
         }
     }
     const parent = owner.visual
@@ -139,7 +140,8 @@ export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size
 
     return {
         get [`${property}RepVisual`]() { return sprite },
-        [`${property}VisualRefresh`]: () => { text.text = owner[property] }
+        [`${property}VisualRefresh`]: () => { text.text = owner[property] },
+        [`${property}Destroy`]: () => { text.destroy(); sprite.destroy() },
     }
 }
 
