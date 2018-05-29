@@ -91,6 +91,7 @@ export class GameScreen extends BaseScreen {
             if (c === null) return
             const clicks = c.extractClicks()
             if (clicks > 0) {
+                window.GA.accumulate('clicks', {num: clicks, stage: c.stage})
                 const targetDmg = window.GD.getTargetDamage(c.stage)
                 if (window.GD.config.MODE === 'development') {
                     const dmgVis = this._clickDamageVisPool.getOne()

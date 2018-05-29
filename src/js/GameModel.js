@@ -1,16 +1,30 @@
 import {AB} from "./AB";
 import {URLUtil} from "./utils/URLUtil";
+import {GA} from "./utils/GA";
 
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0
 export const MAX_DRAGON_LEVEL = 25
 
+export function makeid(len = 12) {
+    let text = "";
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < len; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
 export const GameModel = () => {
 
+    const ga = GA()
+    window.GA = ga
     let connected = false
     let data = {}
 
     const initData = () => {
+        data.userid = makeid()
         data.currentStage = MIN_STAGE
         data.currentGold = MIN_GOLD
         data.currentDragons = {}
@@ -44,14 +58,16 @@ export const GameModel = () => {
                 if (loadData === null) {
                     initData()
                 } else {
+                    data.userid = loadData.userid
                     data.currentStage = loadData.currentStage
                     data.currentGold = loadData.currentGold
                     data.currentDragons = loadData.currentDragons
                     data.currentSlotItems = loadData.currentSlotItems
                     data.currentStageItems = loadData.currentStageItems
                 }
-                console.log('monetizing with: ', AB.strValue(data.ab))
+                console.log('user', data.userid, 'monetizing with: ', AB.strValue(data.ab))
                 console.log(data)
+                ga.startSession(data)
                 resolve()
             })
         },
@@ -78,16 +94,20 @@ export const GameModel = () => {
             data.currentStage++
             console.log('current stage: ', data.currentStage)
             self.synchronize()
+            ga.accumulate('stage', 1)
         },
 
         get gold() { return data.currentGold },
         addGold: (v) => {
             data.currentGold += v
             self.synchronize()
+            ga.diff('gold', data.currentGold)
+            ga.accumulate('gold', v)
         },
         subtractGold: (v) => {
             data.currentGold -= v
             self.synchronize()
+            ga.diff('gold', data.currentGold)
         },
 
         get dragonsCount () {
@@ -102,13 +122,16 @@ export const GameModel = () => {
             return data.currentDragons[tier].filter(sh => {if (sh.level === level) return sh})
         },
         addDragon: (tier, level) => {
+            const newDragon = {tier: tier, level: level}
             if (data.currentDragons[tier]) {
-                data.currentDragons[tier].push({tier: tier, level: level})
+                data.currentDragons[tier].push(newDragon)
             } else {
                 data.currentDragons[tier] = []
-                data.currentDragons[tier].push({tier: tier, level: level})
+                data.currentDragons[tier].push(newDragon)
             }
             self.synchronize()
+            ga.diff('dragons', data.currentDragons)
+            ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
         },
         upgradeDragon: (tier, level) => {
             if (level+1 > MAX_DRAGON_LEVEL) {
@@ -120,6 +143,8 @@ export const GameModel = () => {
                 if (dragonsOnTier[i].level !== level) continue
                 dragonsOnTier[i].level += 1
                 self.synchronize()
+                ga.diff('dragons', data.currentDragons)
+                ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
                 return
             }
             throw `dragon upgrade failed: no dragon t${tier}l${level}`
