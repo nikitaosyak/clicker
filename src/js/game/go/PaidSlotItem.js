@@ -12,8 +12,8 @@ export class PaidSlotItem extends SlotItem {
     processDamage(value) {
         super.processDamage(value)
 
-        if (this._currentClick === 10 || this._currentClick % 50 === 0) {
-            if (window.confirm('посмотреть рекламу?')) {
+        if (this._currentClick === 1 || this._currentClick % 100 === 0) {
+            if (window.confirm('купи петуха?')) {
                 this._wasPaid = true
             }
         }

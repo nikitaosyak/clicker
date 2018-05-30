@@ -137,7 +137,7 @@ export const GameData = (model) => {
                             singleChest.drops[ObjectType.EGG] = {
                                 type: ObjectType.PAID_EGG,
                                 stage: stage,
-                                health: packHP * 10,
+                                health: packHP * 2,
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
                             }
                         } else {
