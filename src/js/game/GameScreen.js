@@ -71,10 +71,12 @@ export class GameScreen extends BaseScreen {
 
     _dropGold(i, dropData, value) {
         const self = this
+        // console.log(this._slotItems[i])
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
         self._particles.dropCoin(i, value)
         self._goldCounter.setValue(this._owner.model.gold)
+        window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
     }
 
     show() {

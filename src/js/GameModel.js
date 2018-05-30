@@ -102,7 +102,6 @@ export const GameModel = () => {
             data.currentGold += v
             self.synchronize()
             ga.diff('gold', data.currentGold)
-            ga.accumulate('gold', v)
         },
         subtractGold: (v) => {
             data.currentGold -= v
