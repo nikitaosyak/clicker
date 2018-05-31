@@ -1,6 +1,6 @@
 
-export const URLUtil = {
-    getParameterByName: (name, url) => {
+export const URLParam = {
+    GET: (name, url) => {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
     const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),

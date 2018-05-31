@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: auto;">
+<head>
+    <title>user story</title>
+    <script type="text/javascript" src="/libraries.js"></script>
+    <script type="text/javascript" src="/bundle-lib.js"></script>
+</head>
+<body class="container">
+
+<a href="/">home</a>
+<p id="overall"></p>
+
+<script type="text/javascript">
+window.onload = () => {
+    console.log(game)
+
+    const roundToDigit = (value, digit) => {
+        return Math.round(value * Math.pow(10, digit)) / Math.pow(10, digit)
+    }
+
+    const data = JSON.parse('<%-JSON.stringify(plotData)%>')
+    console.log(data)
+
+    const createPlot = () => {
+        const plot = document.createElement('div')
+        plot.style.cssText = 'width:100%;height:500px'
+        document.body.appendChild(plot)
+
+        return plot
+    }
+
+    const createPlotData = () => {
+        return [
+            {x: [], y: [], type: 'scatter', name: 'total clicks', marker: {color: 'rgb(200, 20, 200)'}},
+            {x: [], y: [], type: 'scatter', name: 'total gold', yaxis: 'y2', marker: {color: 'rgb(230, 230, 20)'}},
+            {x: [], y: [], type: 'scatter', name: 'clickDamage', yaxis: 'y2', marker: {color: 'rgb(230, 20, 20)'}},
+        ]
+    }
+
+    const summaryDmgPlot = createPlot()
+    const summaryDmgData = [
+        {x: [], y: [], type: 'scatter', name: 'click dmg', marker: {color: 'rgb(200, 20, 200)'}},
+        {x: [], y: [], type: 'scatter', name: 'click dmg calculated', marker: {color: 'rgb(150, 150, 150)'}},
+    ]
+
+    const summaryClickPlot = createPlot()
+    const summaryClickData = [
+        {x: [], y: [], type: 'scatter', name: 'clicks', marker: {color: 'rgb(200, 20, 200)'}},
+        {x: [], y: [], type: 'scatter', name: 'clicks calculated', marker: {color: 'rgb(150, 150, 150)'}},
+    ]
+
+    const allPlots = [createPlot()]
+    const allDatas = [createPlotData()]
+
+    let clicksTotal = {}
+    let currentTime = {0: 0}
+    let currentGoldTotal = {}
+    let currentStage = 0
+    let currentClickDamage = 0
+
+    for (let i = 0; i < data.delta.length; i++) {
+        const d = data.delta[i]
+        const dt = (d.dt > 500 ? 500 : d.dt)/1000
+        // const time = currentTime + dt
+        // currentTime = time
+
+        if (typeof d['clicks'] !== 'undefined') {
+            const clickStage = d.clicks.stage
+            currentTime[clickStage] += dt
+            if (clicksTotal[clickStage]) {
+                clicksTotal[clickStage] += d.clicks.num
+            } else {
+                clicksTotal[clickStage] = d.clicks.num
+            }
+            allDatas[clickStage][0].x.push(currentTime[clickStage])
+            allDatas[clickStage][0].y.push(clicksTotal[clickStage])
+
+            allDatas[clickStage][2].x.push(currentTime[clickStage])
+            allDatas[clickStage][2].y.push(currentClickDamage)
+            continue
+        }
+
+        if (typeof d['gold'] !== 'undefined') {
+            if (d.type === 'acc') {
+                const goldStage = d.gold.stage
+                if (currentGoldTotal[goldStage]) {
+                    currentGoldTotal[goldStage] += d.gold.num
+                } else {
+                    currentGoldTotal[goldStage] = d.gold.num
+                }
+                allDatas[goldStage][1].x.push(currentTime[goldStage])
+                allDatas[goldStage][1].y.push(currentGoldTotal[goldStage])
+                continue
+            }
+        }
+
+        currentTime[currentStage] += dt
+        if (typeof d['clickDamage'] !== 'undefined') {
+            allDatas[currentStage][2].x.push(currentTime[currentStage])
+            allDatas[currentStage][2].y.push(d['clickDamage'])
+            currentClickDamage = d['clickDamage']
+        }
+
+        if (typeof d['stage'] !== 'undefined') {
+            // Plotly.plot(allPlots[currentStage], allDatas[currentStage], {title: 'stage' + currentStage})
+
+            allPlots.push(createPlot())
+            allDatas.push(createPlotData())
+            currentStage += 1
+            currentTime[currentStage] = 0
+        }
+    }
+
+    // console.log(Config)
+    window.GD = game.GameData(game.GameModel())
+    const virtualResult = game.VirtualPlayThrough(window.GD, 'maxTierMinLevel', currentStage, 4, 4, false).play()
+    console.log(virtualResult)
+
+    for (let i = 0; i < currentStage; i++) {
+        Plotly.plot(allPlots[i], allDatas[i], {
+            yaxis2: { side: 'right', type: 'log', autorange: true, overlaying: 'y' },
+            title: `s${i}, avg CPS: ${roundToDigit(allDatas[i][0].y.slice(-1)[0]/allDatas[i][0].x.slice(-1)[0], 2)}`}
+        )
+
+        summaryDmgData[0].x.push(i)
+        summaryDmgData[0].y.push(allDatas[i][2].y.slice(-1)[0])
+
+        summaryDmgData[1].x.push(i)
+        summaryDmgData[1].y.push(virtualResult[i].realDamage)
+
+        summaryClickData[0].x.push(i)
+        summaryClickData[0].y.push(allDatas[i][0].y.slice(-1)[0])
+
+        summaryClickData[1].x.push(i)
+        summaryClickData[1].y.push(virtualResult[i].clicks)
+    }
+
+    const totalTime = allDatas.reduce((acc, data) => {
+        return acc + data.reduce((acc, data) => {
+            if (acc > data.x.slice(-1)[0]) return acc
+            return data.x.slice(-1)[0]
+        }, 0)
+    }, 0)
+
+    const totalClicks = allDatas.reduce((acc, data) => {
+        return acc + data[0].y.slice(-1)[0]
+    }, 0)
+
+    document.getElementById('overall').innerHTML = `
+    stages beaten: ${allDatas.length-1};
+    total time: ${roundToDigit(totalTime/60, 1)}m;
+    total clicks: ${totalClicks};
+    avg CPS: ${roundToDigit(totalClicks/totalTime, 2)}
+    `
+
+    Plotly.plot(summaryDmgPlot, summaryDmgData, {
+        yaxis: { type: 'log', autorange: true},
+        title: `dmg vs calculated`}
+    )
+
+    Plotly.plot(summaryClickPlot, summaryClickData, {
+        title: `clicks vs calculated`}
+    )
+}
+</script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 import {AB} from "./AB";
-import {URLUtil} from "./utils/URLUtil";
+import {URLParam} from "./utils/URLParam";
 import {GA} from "./utils/GA";
 
 export const MIN_STAGE = 0
@@ -31,8 +31,8 @@ export const GameModel = () => {
         data.currentSlotItems = []
         data.currentStageItems = []
 
-        if (typeof URLUtil.getParameterByName('ab') !== 'undefined' && URLUtil.getParameterByName('ab') !== null) {
-            data.ab = Number.parseInt(URLUtil.getParameterByName('ab'))
+        if (typeof URLParam.GET('ab') !== 'undefined' && URLParam.GET('ab') !== null) {
+            data.ab = Number.parseInt(URLParam.GET('ab'))
         } else {
             data.ab = AB.selectAB()
         }
@@ -84,9 +84,6 @@ export const GameModel = () => {
             initData()
             self.synchronize()
             window.location.reload(true)
-        },
-        plotReload: () => {
-            initData()
         },
 
         get stage() { return data.currentStage },

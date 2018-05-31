@@ -84,7 +84,39 @@ gulp.task('step2-webpack', ['step1-prepare-files'], () => {
         .pipe(gulp.dest('build/'))
 })
 
-gulp.task('step3-process-images', ['step2-webpack'], () => {
+gulp.task('step3-webpack-lib', ['step2-webpack'], () => {
+    const stream = require('webpack-stream')
+    const webpack2 = require('webpack')
+
+    const config = {
+        entry: __dirname + (process.env.MODE === 'development' ? '/src/js/index.js' : '/inter/js/index.js'),
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    query: { presets: ['env']}
+                }
+            ]
+        },
+        output: {
+            libraryTarget: 'var',
+            library: 'game',
+            filename: 'bundle-lib.js'
+        },
+        mode: 'development'
+    }
+
+    if (process.env.MODE === 'development') {
+        config.devtool = 'source-map'
+    }
+
+    return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
+        .pipe(stream(config, webpack2))
+        .pipe(gulp.dest('clicker-stats/static/'))
+})
+
+gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
     process.chdir('./assets')
     const fs = require('fs')
     let digest = []
@@ -110,7 +142,7 @@ gulp.task('step3-process-images', ['step2-webpack'], () => {
     return gulp.src('assets/**/*').pipe(gulp.dest('build/assets'))
 })
 
-gulp.task('step4-process-tweenlite', ['step3-process-images'], () => {
+gulp.task('step5-process-tweenlite', ['step4-process-images'], () => {
 
     const stream = gulp.src(['src/lib/tween/TweenLite.js', 'src/lib/tween/plugins/*.js'])
     const concat = require('gulp-concat')
@@ -127,7 +159,7 @@ gulp.task('step4-process-tweenlite', ['step3-process-images'], () => {
     }
 })
 
-gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
+gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
 
     require('fs').copyFileSync('src/index.html', 'build/index.html')
 
@@ -148,6 +180,7 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
             .pipe(concat('libraries.js'))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('build'))
+            .pipe(gulp.dest('clicker-stats/static/'))
     } else {
         return gulp.src([
             'src/lib/fullscreen-api-polyfill.lib.min.js',
@@ -157,6 +190,7 @@ gulp.task('finish-deploy', ['step4-process-tweenlite'], () => {
         ])
             .pipe(concat('libraries.js'))
             .pipe(gulp.dest('build'))
+            .pipe(gulp.dest('clicker-stats/static/'))
     }
 })
 

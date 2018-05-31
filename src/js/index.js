@@ -6,11 +6,11 @@ import {StaticImage} from "./game/go/StaticImage";
 import {GameModel} from "./GameModel";
 import {GameData} from "./GameData";
 import {MathUtil} from "./utils/MathUtil";
-import {URLUtil} from "./utils/URLUtil";
-import {Plot} from "./Plot";
+import {URLParam} from "./utils/URLParam";
+import {Plot} from "./tools/Plot";
+import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 
 window.onload = () => {
-
     debugManager.init()
 
     PIXI.settings.MIPMAP_TEXTURES = false
@@ -50,10 +50,9 @@ window.onload = () => {
         })
     }
 
-    if (URLUtil.getParameterByName('plot') === 'true' &&
+    if (URLParam.GET('plot') === 'true' &&
         window.GD.config.MODE === 'development') {
-        model.plotReload()
-        Plot()
+        Plot(window.GD)
     } else {
         resources
             .add('digest', 'assets/digest.json')
@@ -66,3 +65,5 @@ window.onload = () => {
             })
     }
 }
+
+module.exports = {GameData, GameModel, VirtualPlayThrough}

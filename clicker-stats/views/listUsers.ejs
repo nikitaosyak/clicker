@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>user list</title>
+</head>
+<body class="container">
+
+<% if (users&&users.length) { -%>
+    <% users.forEach(u => { -%>
+    <p><a href="/user/<%-u-%>"><%-u-%></a></p>
+    <% }) -%>
+<% } else { -%>
+    <p>no users</p>
+<% }  -%>
+</body>
+</html>
