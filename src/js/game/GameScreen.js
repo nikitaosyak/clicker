@@ -103,7 +103,6 @@ export class GameScreen extends BaseScreen {
                 const totalDamage = clicks * this._clickDamage
                 const clickDamage = Math.floor(totalDamage * window.GD.clickSourceDamage)
                 const dragonDamage = totalDamage - clickDamage
-                const self = this
                 this._owner.dragonManager.attack(i, dragonDamage)
                 this.processSlotDamage(i, 'click', clickDamage)
             }

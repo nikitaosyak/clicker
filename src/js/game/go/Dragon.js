@@ -1,5 +1,6 @@
 import {ITypedObject, IVisual, IVisualNumericRep, ObjectType} from "./GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
+import {MathUtil} from "../../utils/MathUtil";
 
 export const Dragon = (bounds, tier, level, x, y) => {
 
@@ -20,7 +21,11 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     const self = {
         setAttackFlag: () => lastAttack = Date.now(),
-        canAttack: () => ((Date.now() - lastAttack) / 1000 > attackCooldown),
+        canAttack: (urgencyCoefficient=1) => {
+            urgencyCoefficient = MathUtil.clamp(0.01, 1, urgencyCoefficient)
+            const timeSinceLastAttack = (Date.now() - lastAttack) / 1000
+            return timeSinceLastAttack > (attackCooldown * urgencyCoefficient)
+        },
         get tier() { return tier },
         get level() { return level },
         get name() { return `dragon_t${self.tier}_l${self.level}` },
