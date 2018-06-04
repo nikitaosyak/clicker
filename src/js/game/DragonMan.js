@@ -7,7 +7,7 @@ export const DragonMan = renderer => {
     const commonBounds = { left: 0,right: 0, top: 0, bottom: 0, active: false }
 
     const self = {
-        attack: amount => {
+        attack: (damage, processDamage) => {
 
         },
         update: dt => {
@@ -24,13 +24,11 @@ export const DragonMan = renderer => {
             return dragons.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         },
         updateCommonBounds: (left, right, top, bottom) => {
-            // console.log(left, right, top, bottom)
             commonBounds.left = left; commonBounds.right = right;
             commonBounds.top = top; commonBounds.bottom = bottom;
             commonBounds.active = true
         },
         updateSpecificBounds: (tier, level, left, right, top, bottom) => {
-            // console.log(tier, level, left, right, top, bottom)
             commonBounds.active = false
             self.getVisualDragons(tier, level).forEach(d => d.setLocalBounds(left, right, top, bottom))
         }
