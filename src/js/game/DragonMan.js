@@ -34,7 +34,7 @@ export const DragonMan = renderer => {
             if (damageToDistribute.reduce((acc, slotDamage) => acc + slotDamage, 0) <= 0) return
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
 
-            const available = dragons.filter(d => d.canAttack())
+            const available = dragons.filter(d => d.canAttack(0.5))
             if (available.length === 0) return
             for (let i = 0 ; i < available.length; i++) {
                 const singleAvailable = available[i]
