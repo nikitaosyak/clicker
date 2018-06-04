@@ -63,21 +63,11 @@ export const Renderer = () => {
 
     // debug.on('visibility', _ => resizeCanvas())
 
-    const _dragons = []
-
     const self =  {
         get dom() { return canvas },
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
-        get dragons() { return _dragons },
-        addDragon: go => {
-            _dragons.push(go)
-            self.addObject(go)
-        },
-        getDragons: (tier, level) => {
-            return _dragons.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
-        },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
             const parent = layers[go.layer]
@@ -102,7 +92,6 @@ export const Renderer = () => {
             if (newCanvasW !== canvasW || newCanvasH !== canvasH) {
                 resizeCanvas()
             }
-            _dragons.forEach(sh => sh.update(dt))
             renderer.render(stage)
         }
     }

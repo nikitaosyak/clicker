@@ -5,7 +5,6 @@ import {BaseScreen} from "./screen/BaseScreen";
 import {GoldCounter} from "./ui/GoldCounter";
 import {ObjectType} from "./go/GameObjectBase";
 import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
-import {Dragon} from "./go/Dragon";
 import {ObjectPool} from "../utils/ObjectPool";
 import {DamagePercent} from "./ui/debugDamagePercent";
 import {DestroyAnimation} from "./screen/DestroyAnimation";
@@ -50,11 +49,7 @@ export class GameScreen extends BaseScreen {
         const dragons = this._owner.model.dragons
         Object.keys(dragons).forEach(tier => {
             dragons[tier].forEach(dragonData => {
-                self._renderer.addDragon(Dragon(
-                    this._renderer,
-                    dragonData.tier,
-                    dragonData.level,
-                    100 + Math.round(Math.random()*500), 100 + Math.round(Math.random()*500)))
+                self._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level)
             })
         })
 
@@ -66,8 +61,6 @@ export class GameScreen extends BaseScreen {
             }], 10)
         }
     }
-
-    _setBoundsForDragon(dragonVisual) {dragonVisual.setBounds(50, 750, 50, 750)}
 
     _dropGold(i, dropData, value) {
         const self = this
@@ -84,7 +77,7 @@ export class GameScreen extends BaseScreen {
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-        this._owner.renderer.dragons.forEach(sh => this._setBoundsForDragon(sh))
+        this._owner.dragonManager.updateCommonBounds(50, 750, 50, 750)
     }
 
     update(dt) {
@@ -129,17 +122,10 @@ export class GameScreen extends BaseScreen {
                             TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
                         }
                         const dragonData = drop[ObjectType.DRAGON]
-                        const slot = window.GD.getSlotRect(i)
                         this._owner.model.addDragon(dragonData.tier, dragonData.level)
                         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-                        const dragon = Dragon(
-                            this._renderer,
-                            dragonData.tier,
-                            dragonData.level,
-                            slot.x, slot.y)
-                        this._setBoundsForDragon(dragon)
-                        this._renderer.addDragon(dragon)
+                        this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, window.GD.getSlotRect(i))
                     }
                 } else if (rewardingClick && dropsGold) {
 

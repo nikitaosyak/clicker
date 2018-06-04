@@ -22,7 +22,7 @@ export class UpgradeScreen extends BaseScreen {
         const invalidateUpgrade = () => {
             const flatList =  this._list.invalidate(this._owner.model.dragons)
             flatList.forEach((fl, i) => {
-                const dragons = this._owner.renderer.getDragons(fl[0].tier, fl[0].level)
+                const dragons = this._owner.dragonManager.getVisualDragons(fl[0].tier, fl[0].level)
                 dragons.forEach(d => {
                     const middle = 1100 - i * 120
                     d.setBounds(150, 650, middle-40, middle+40)
@@ -36,7 +36,7 @@ export class UpgradeScreen extends BaseScreen {
 
 
             // console.log(this._owner.renderer.getDragons(dragon.tier, dragon.level))
-            const visualDragons = this._owner.renderer.getDragons(dragon.tier, dragon.level)
+            const visualDragons = this._owner.dragonManager.getVisualDragons(dragon.tier, dragon.level)
             visualDragons[0].levelUp()
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
@@ -47,7 +47,7 @@ export class UpgradeScreen extends BaseScreen {
             const baseTier = dragon.tier
             const baseLevel = dragon.level
             const dragons = owner.model.getDragons(baseTier, baseLevel)
-            const visualDragons = this._owner.renderer.getDragons(baseTier, baseLevel)
+            const visualDragons = this._owner.dragonManager.getVisualDragons(baseTier, baseLevel)
             owner.model.subtractGold(window.GD.getUpgradePrice(baseTier, baseLevel) * dragons.length)
             this._goldCounter.setValue(owner.model.gold)
 
@@ -64,11 +64,8 @@ export class UpgradeScreen extends BaseScreen {
 
         const flatList = this._list.invalidate(this._owner.model.dragons)
         flatList.forEach((fl, i) => {
-            const dragons = this._owner.renderer.getDragons(fl[0].tier, fl[0].level)
-            dragons.forEach(d => {
-                const middle = 1100 - i * 120
-                d.setBounds(150, 650, middle-40, middle+40)
-            })
+            const middle = 1100 - i * 120
+            this._owner.dragonManager.updateSpecificBounds(fl[0].tier, fl[0].level, 150, 650, middle-40, middle+40)
         })
     }
 }

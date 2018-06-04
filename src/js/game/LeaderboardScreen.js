@@ -14,6 +14,6 @@ export class LeaderboardScreen extends BaseScreen {
 
     show() {
         super.show()
-        this._owner.renderer.dragons.forEach(sh => sh.setBounds(50, 750, 50, 1230))
+        this._owner.dragonManager.updateCommonBounds(50, 750, 50, 1230)
     }
 }

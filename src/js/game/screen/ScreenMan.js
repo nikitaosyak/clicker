@@ -4,13 +4,14 @@ import {LeaderboardScreen} from "../LeaderboardScreen";
 
 export const SCREEN_TYPE = {GAME: 'GAME', UPGRADE: 'UPGRADE', LEADERBOARD: 'LEADERBOARD'}
 
-export const ScreenMan = (renderer, model) => {
+export const ScreenMan = (dragonMan, renderer, model) => {
 
     let currentScreen = null
 
     const self =  {
         get current() { return null },
         get renderer() { return renderer },
+        get dragonManager() { return dragonMan },
         get model() { return model },
         instantTransit: screen => {
             if (currentScreen) {

@@ -9,6 +9,7 @@ import {MathUtil} from "./utils/MathUtil";
 import {URLParam} from "./utils/URLParam";
 import {Plot} from "./tools/Plot";
 import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
+import {DragonMan} from "./game/DragonMan";
 
 window.onload = () => {
     debugManager.init()
@@ -27,7 +28,9 @@ window.onload = () => {
             const renderer = Renderer()
             renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
 
-            const screens = ScreenMan(renderer, model)
+            const dragons = DragonMan(renderer)
+
+            const screens = ScreenMan(dragons, renderer, model)
             screens.instantTransit(SCREEN_TYPE.GAME)
             // screens.instantTransit(SCREEN_TYPE.UPGRADE)
 
@@ -39,6 +42,7 @@ window.onload = () => {
                 dt = Math.min(dt, 0.02) // cap delta time for inactivity period
                 time = Date.now()
 
+                dragons.update(dt)
                 screens.update(dt)
                 renderer.update(dt)
 
