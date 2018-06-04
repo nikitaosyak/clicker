@@ -103,7 +103,10 @@ export const VirtualPlayThrough = (gameData, strategy, maxStage, substages, cps,
                 }, 0)
                 verbose&&console.log(`%c--start stage ${i}: gold: ${stageGold}, sdacha: ${savedGold}, total: ${stageGold + savedGold}`, 'color: #CC0000')
                 savedGold = savedGold + stageGold + paidGold
-                const stageHP = stageItems.reduce((acc, item) => { return acc + item.health }, 0)
+                const stageHP = stageItems.reduce((acc, item) => {
+                    if (item.type === ObjectType.PAID_CHEST || item.type === ObjectType.PAID_EGG) return acc
+                    return acc + item.health
+                }, 0)
                 stageResult.stageHp = stageHP
 
                 const additional = typeof result[i-2] === 'undefined' ? 0 : result[i-2].cumulativeGold
