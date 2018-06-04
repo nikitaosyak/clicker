@@ -54,7 +54,7 @@ export const GameData = (model) => {
     };
 
     const self =  {
-        get clickSourceDamage() { return 0.9 },
+        get clickSourceDamage() { return 0.4 },
         get dragonSourceDamage() { return 1 - self.clickSourceDamage },
         get baseDamage() { return baseDamage },
         get config() { return config },

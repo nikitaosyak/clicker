@@ -9,6 +9,7 @@ export class BaseScreen {
         this._type = type
 
         this._active = false
+        this._hiding = false
         this._content = []
         this._controls = []
         this._originalLocationData = {}
@@ -18,12 +19,17 @@ export class BaseScreen {
     get _renderer() { return this._owner.renderer }
 
     animateHide(to, onComplete) {
+        const self = this
+        this._hiding = true
         this._content.forEach((c, i) => {
             TweenLite.to(c.visual, ANIMATION_LENGTH, {
                 pixi: {x: c.visual.x + to.x},
                 ease: EASING,
                 roundProps:"x",
-                onComplete: i === 0 ? onComplete : undefined
+                onComplete: i === 0 ? () => {
+                    self._hiding = false
+                    onComplete()
+                } : undefined
             })
         })
     }
@@ -66,7 +72,7 @@ export class BaseScreen {
             x: obj.visual.x,
             y: obj.visual.y
         }
-        if (this._active) {
+        if (this._active && !this._hiding) {
             this._renderer.addObject(obj)
         }
     }

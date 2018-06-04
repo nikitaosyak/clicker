@@ -14,7 +14,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
     let speedMult = 1
     const localBounds = { left: 0, right: 0, top: 0, bottom: 0 }
 
+    //                    TIER:   1,    2,    3,    4,    5,   6,   7,     8,    9,   10
+    const attackCooldown = [-1, 0.6, 0.58, 0.56, 0.54, 0.52, 0.5, 0.48, 0.46, 0.44, 0.42][tier]
+    let lastAttack = -1
+
     const self = {
+        setAttackFlag: () => lastAttack = Date.now(),
+        canAttack: () => ((Date.now() - lastAttack) / 1000 > attackCooldown),
         get tier() { return tier },
         get level() { return level },
         get name() { return `dragon_t${self.tier}_l${self.level}` },

@@ -22,11 +22,8 @@ export class UpgradeScreen extends BaseScreen {
         const invalidateUpgrade = () => {
             const flatList =  this._list.invalidate(this._owner.model.dragons)
             flatList.forEach((fl, i) => {
-                const dragons = this._owner.dragonManager.getVisualDragons(fl[0].tier, fl[0].level)
-                dragons.forEach(d => {
-                    const middle = 1100 - i * 120
-                    d.setBounds(150, 650, middle-40, middle+40)
-                })
+                const middle = 1100 - i * 120
+                this._owner.dragonManager.updateSpecificBounds(fl[0].tier, fl[0].level, 150, 650, middle-40, middle+40)
             })
         }
 

@@ -40,6 +40,7 @@ export const ScreenMan = (dragonMan, renderer, model) => {
         [SCREEN_TYPE.UPGRADE] : new UpgradeScreen(self),
         [SCREEN_TYPE.LEADERBOARD] : new LeaderboardScreen(self)
     }
+    dragonMan.injectGameScreen(screens[SCREEN_TYPE.GAME])
 
     const makeTransition = (current, currentToOffset, next, nextFromOffset) => {
         screens[current].disableControls()
