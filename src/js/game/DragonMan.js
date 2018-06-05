@@ -10,6 +10,8 @@ export const DragonMan = renderer => {
     const commonBounds = { left: 0,right: 0, top: 0, bottom: 0, active: false }
 
     let damageToDistribute = [0, 0, 0]
+	let lastFocusedSlot = 0
+	let lastDamage = 0
     const GLOBAL_ATTACK_COOLDOWN = 5 //ms
     let lastAttack = -1
 
@@ -27,14 +29,17 @@ export const DragonMan = renderer => {
             }
 
             damageToDistribute[slotIdx] += damage
+			lastFocusedSlot = slotIdx;
+			lastDamage = damage;
         },
         update: dt => {
             dragons.forEach(d => d.update(dt))
 
             if (damageToDistribute.reduce((acc, slotDamage) => acc + slotDamage, 0) <= 0) return
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
-
-            const available = dragons.filter(d => d.canAttack(0.5))
+			var sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
+			var spdMul = 0.2 + (lastDamage / sumDmg * 2)
+            const available = dragons.filter(d => d.canAttack(spdMul))
             if (available.length === 0) return
             for (let i = 0 ; i < available.length; i++) {
                 const singleAvailable = available[i]
