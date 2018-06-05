@@ -9,5 +9,5 @@ export const MathUtil  = {
         const letter = letters[pow]
         return `${MathUtil.roundToDigit(value/Math.pow(10, pow*3), 2)}${letter}`
     },
-    clamp: (min, max, v) => Math.max(max,Math.min(min,v))
+    clamp: (min, max, v) => Math.max(min,Math.min(max,v))
 }
