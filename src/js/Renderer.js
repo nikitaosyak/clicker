@@ -9,6 +9,8 @@ export const Renderer = () => {
     let adjustedVSize = {x: 0, y: 0}
     let canvasW = 0, canvasH = 0
 
+    const supposedAspectRatio = vSize.x / vSize.y
+
     const stage = new PIXI.Container()
     const layers = {}
     Object.keys(RENDER_LAYER).forEach(layer => {
@@ -18,7 +20,7 @@ export const Renderer = () => {
 
     const canvas = document.getElementById('gameCanvas')
     const renderer = PIXI.autoDetectRenderer({
-        roundPixels: false,
+        roundPixels: true,
         width: vSize.x,
         height: vSize.y,
         view: canvas,
@@ -26,7 +28,7 @@ export const Renderer = () => {
         antialias: false,
         resolution: 1,
         forceFXAA: false,
-        // autoResize: false
+        // autoResize: true
     })
 
     const resizeCanvas = () => {
@@ -34,8 +36,11 @@ export const Renderer = () => {
         canvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth)
         canvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight)
 
-        console.log(`real ar: ${canvasW / canvasH}, supposed ar: ${vSize.x / vSize.y}`)
-        if (canvasW / canvasH > vSize.x / vSize.y) {
+        const currentAspectRatio = canvasW / canvasH
+        console.log(`real ar: ${currentAspectRatio}, supposed ar: ${supposedAspectRatio}`)
+        if (currentAspectRatio > supposedAspectRatio) {
+            //
+            // wide screen
             const adjustedW = Math.round(vSize.x * (canvasH / vSize.y))
             const marginH = dMenuVisible ? 0 : (canvasW - adjustedW) / 2
             renderer.resize(canvasW, canvasH)
@@ -47,16 +52,14 @@ export const Renderer = () => {
             adjustedVSize.x = Math.round(vSize.x * (canvasW / adjustedW))
             adjustedVSize.y = vSize.y
         } else {
-            const adjustedH = Math.round(vSize.y * (canvasW / vSize.x))
-            const marginV = dMenuVisible ? 0 : (canvasH - adjustedH) / 2
+            //
+            // tall screen
             renderer.resize(canvasW, canvasH)
 
-            stage.scale.x = renderer.width / vSize.x
-            stage.scale.y = adjustedH / vSize.y
-            stage.x = 0
-            stage.y = marginV
+            stage.scale.x = stage.scale.y = canvasW / vSize.x
+            stage.x = stage.y = 0
             adjustedVSize.x = vSize.x
-            adjustedVSize.y = Math.round(vSize.y * (canvasH / adjustedH))
+            adjustedVSize.y = Math.round(vSize.x / currentAspectRatio)
         }
     }
     resizeCanvas()
