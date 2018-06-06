@@ -5,11 +5,13 @@ export const RENDER_LAYER = {BACKGROUND: 'BACKGROUND', GAME: 'GAME', UI: 'UI'}
 export const Renderer = () => {
     let dMenuVisible = false
 
-    let vSize = {x: 800, y: 1280}
-    let adjustedVSize = {x: 0, y: 0}
+    const vSize = {x: 800, y: 1280}
+    const maximumWideAR = 0.8
+    const adjustedVSize = {x: 0, y: 0}
     let canvasW = 0, canvasH = 0
 
     const supposedAspectRatio = vSize.x / vSize.y
+    let currentAspectRatio = supposedAspectRatio
 
     const stage = new PIXI.Container()
     const layers = {}
@@ -31,36 +33,36 @@ export const Renderer = () => {
         // autoResize: true
     })
 
+    const resizableObjects = []
     const resizeCanvas = () => {
         dMenuVisible = debugManager.menu.visible
         canvasW = Math.max(window.innerWidth || 0, document.documentElement.clientWidth)
         canvasH = Math.max(window.innerHeight || 0, document.documentElement.clientHeight)
 
-        const currentAspectRatio = canvasW / canvasH
+        currentAspectRatio = canvasW / canvasH
+        renderer.resize(canvasW, canvasH)
         console.log(`real ar: ${currentAspectRatio}, supposed ar: ${supposedAspectRatio}`)
         if (currentAspectRatio > supposedAspectRatio) {
             //
             // wide screen
-            const adjustedW = Math.round(vSize.x * (canvasH / vSize.y))
-            const marginH = dMenuVisible ? 0 : (canvasW - adjustedW) / 2
-            renderer.resize(canvasW, canvasH)
-
-            stage.scale.x = adjustedW / vSize.x
-            stage.scale.y = renderer.height / vSize.y
-            stage.x = marginH
-            stage.y = 0
-            adjustedVSize.x = Math.round(vSize.x * (canvasW / adjustedW))
+            const actualWidth = Math.ceil(vSize.y * currentAspectRatio)
+            stage.scale.x = stage.scale.y = canvasH / vSize.y
+            adjustedVSize.x = Math.min(vSize.y * maximumWideAR, actualWidth)
             adjustedVSize.y = vSize.y
+
+            if (canvasW > canvasH * maximumWideAR) {
+                stage.x = Math.round((canvasW - (canvasH * maximumWideAR))/2)
+            } else {
+                stage.x = 0
+            }
         } else {
             //
             // tall screen
-            renderer.resize(canvasW, canvasH)
-
             stage.scale.x = stage.scale.y = canvasW / vSize.x
-            stage.x = stage.y = 0
             adjustedVSize.x = vSize.x
-            adjustedVSize.y = Math.round(vSize.x / currentAspectRatio)
+            adjustedVSize.y = Math.ceil(vSize.x / currentAspectRatio)
         }
+        resizableObjects.forEach(o => o.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize))
     }
     resizeCanvas()
 
@@ -71,6 +73,15 @@ export const Renderer = () => {
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
+        addResizableObject: (go) => {
+            go.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize)
+            resizableObjects.push(go)
+            self.addObject(go)
+        },
+        removeResizableObject: (go) => {
+            resizableObjects.splice(resizableObjects.indexOf(go), 1)
+            self.removeObject(go)
+        },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
             const parent = layers[go.layer]

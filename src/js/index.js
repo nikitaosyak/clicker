@@ -1,8 +1,7 @@
 import {debugManager} from "./debugManager";
-import {Renderer} from "./Renderer";
+import {RENDER_LAYER, Renderer} from "./Renderer";
 import {Resources} from "./Resrouces";
 import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
-import {StaticImage} from "./game/go/StaticImage";
 import {GameModel} from "./GameModel";
 import {GameData} from "./GameData";
 import {MathUtil} from "./utils/MathUtil";
@@ -10,6 +9,7 @@ import {URLParam} from "./utils/URLParam";
 import {Plot} from "./tools/Plot";
 import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
+import {AdoptableSprite} from "./game/stretching/AdoptableSprite";
 
 window.onload = () => {
     debugManager.init()
@@ -26,13 +26,20 @@ window.onload = () => {
                 window.money = MathUtil
             }
             const renderer = Renderer()
-            renderer.addObject(StaticImage('background', 400, 640, 800, 1280))
+            renderer.addResizableObject(new AdoptableSprite(
+                'background',
+                {x: 800, y: 1280},
+                {x: 0.5, y: 0.5},
+                {x: 'center', y: 'middle'},
+                {x: Number.MAX_VALUE, y: Number.MAX_VALUE},
+                RENDER_LAYER.BACKGROUND)
+            )
 
             const dragons = DragonMan(renderer)
 
             const screens = ScreenMan(dragons, renderer, model)
-            // screens.instantTransit(SCREEN_TYPE.GAME)
-            screens.instantTransit(SCREEN_TYPE.UPGRADE)
+            screens.instantTransit(SCREEN_TYPE.GAME)
+            // screens.instantTransit(SCREEN_TYPE.UPGRADE)
 
             let time = Date.now()
             const gameLoop = () => {

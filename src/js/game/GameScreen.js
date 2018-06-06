@@ -21,7 +21,7 @@ export class GameScreen extends BaseScreen {
         }
         // this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180))
         if (window.GD.config.MODE !== 'production') {
-            this.addControl(uiCreator.getButton('ui_restart', 720, 180, () => {
+            this.addControl(uiCreator.getButton('ui_restart', 720, 190, () => {
                 if (window.confirm('прогресс будет сброшен. продолжить?')) {
                     this._owner.model.restart()
                 }
