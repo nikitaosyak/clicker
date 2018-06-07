@@ -13,6 +13,7 @@ export class BaseScreen {
         this._content = []
         this._controls = []
         this._originalLocationData = {}
+        this._cachedViewportSize = {x: 0, y: 0, equal(vpSize){ return this.x === vpSize.x && this.y === vpSize.y }}
     }
 
     get type() { return this._type }

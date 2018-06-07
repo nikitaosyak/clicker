@@ -44,14 +44,14 @@ export const Dragon = (bounds, tier, level, x, y) => {
             let dirChange = false
 
             nextDecisionIn -= dt
-            if (nextDecisionIn <= 0) {
-                dir.x *= -1
-                dir.y *= Math.random() > 0.5 ? 1 : -1
-                speedMult = 0.9 + Math.random() * 0.2
-
-                nextDecisionIn = 3 + Math.random() * 3
-                dirChange = true
-            }
+            // if (nextDecisionIn <= 0) {
+            //     dir.x *= -1
+            //     dir.y *= Math.random() > 0.5 ? 1 : -1
+            //     speedMult = 0.9 + Math.random() * 0.2
+            //
+            //     nextDecisionIn = 3 + Math.random() * 3
+            //     dirChange = true
+            // }
             if (self.visual.x >= (bounds.active ? bounds.right : localBounds.right)) {
                 dir.x = -1
                 dirChange = true

@@ -35,7 +35,7 @@ export class GameScreen extends BaseScreen {
             }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 160}))
         }
 
-        this._goldCounter = GoldCounter({x: 'center', y: 'bottom', yOffset: 400}, this._owner.model.gold)
+        this._goldCounter = GoldCounter({x: 'center', xOffset: 10, y: 'bottom', yOffset: 400}, this._owner.model.gold)
         this.add(this._goldCounter)
 
         this._particles = CoinParticlesManager(this, this._goldCounter.visual)
@@ -86,7 +86,7 @@ export class GameScreen extends BaseScreen {
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-        this._owner.dragonManager.updateCommonBounds(50, 750, 50, 750)
+        this._owner.dragonManager.updateCommonBounds(50, this._owner.renderer.size.x-50, 50, this._owner.renderer.size.y-450)
 
         while(this._savedRewards.length) {
             this._savedRewards.shift()()
@@ -106,6 +106,12 @@ export class GameScreen extends BaseScreen {
     }
 
     update(dt) {
+        if (!this._cachedViewportSize.equal(this._owner.renderer.size)) {
+            this._cachedViewportSize.x = this._owner.renderer.size.x
+            this._cachedViewportSize.y = this._owner.renderer.size.y
+            this._owner.dragonManager.updateCommonBounds(50, this._owner.renderer.size.x-50, 50, this._owner.renderer.size.y-450)
+        }
+
         this._particles.update(dt)
         this._slotItems.forEach((c, i) => {
             if (c === null) return
