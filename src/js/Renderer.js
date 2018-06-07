@@ -69,21 +69,18 @@ export const Renderer = () => {
     // debug.on('visibility', _ => resizeCanvas())
 
     const self =  {
+        get ar() { return currentAspectRatio },
+        get var() { return supposedAspectRatio },
         get dom() { return canvas },
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
-        addResizableObject: (go) => {
-            go.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize)
-            resizableObjects.push(go)
-            self.addObject(go)
-        },
-        removeResizableObject: (go) => {
-            resizableObjects.splice(resizableObjects.indexOf(go), 1)
-            self.removeObject(go)
-        },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
+            if (typeof go.adopt !== 'undefined') {
+                resizableObjects.push(go)
+                go.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize)
+            }
             const parent = layers[go.layer]
             if (parent) {
                 parent.addChild(go.visual)
@@ -93,6 +90,9 @@ export const Renderer = () => {
         },
         removeObject: go => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be removed from render`)
+            if (typeof go.adopt !== 'undefined') {
+                resizableObjects.splice(resizableObjects.indexOf(go), 1)
+            }
             const parent = layers[go.layer]
             if (parent) {
                 parent.removeChild(go.visual)

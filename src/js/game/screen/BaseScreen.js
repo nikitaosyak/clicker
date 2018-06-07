@@ -37,10 +37,16 @@ export class BaseScreen {
     animateShow(from, onComplete) {
         this.show()
         this._content.forEach((c, i) => {
+            let animateFrom = this._originalLocationData[c.name].x + from.x
+            let animateTo = this._originalLocationData[c.name].x
+            if (typeof c.adopt !== 'undefined') {
+                animateFrom = c.visual.x + from.x
+                animateTo = c.visual.x
+            }
             TweenLite.fromTo(c.visual, ANIMATION_LENGTH,
-                {pixi: {x: this._originalLocationData[c.name].x + from.x}},
+                {pixi: {x: animateFrom}},
                 {
-                    pixi: {x: this._originalLocationData[c.name].x},
+                    pixi: {x: animateTo},
                     ease: EASING,
                     roundProps:"x",
                     onComplete: i === 0 ? onComplete : undefined

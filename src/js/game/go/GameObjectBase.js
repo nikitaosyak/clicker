@@ -46,18 +46,6 @@ export const IVisual = (t, x, y, w, h, layer = undefined) => {
     }
 }
 
-export const IVisual2 = (t, size, anchor, layer) => {
-    const s = new PIXI.Sprite(window.resources.getTexture(t))
-    s.width = size.x; s.height = size.y
-    s.anchor.x = anchor.x; s.anchor.y = anchor.y
-
-    return {
-        get layer() { return layer || RENDER_LAYER.GAME },
-        get hasVisual() { return true },
-        get visual() { return s }
-    }
-}
-
 export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefined, layer = undefined) => {
     const t = new PIXI.Text(text, new PIXI.TextStyle(style))
     t.x = x; t.y = y;

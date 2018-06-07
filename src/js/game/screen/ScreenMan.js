@@ -25,7 +25,7 @@ export const ScreenMan = (dragonMan, renderer, model) => {
                 console.warn(`unhandled transition ${currentScreen}->${to}`)
                 self.instantTransit(to)
             } else {
-                transitions[currentScreen][to]()
+                transitions[currentScreen][to](renderer.size.x)
             }
         },
         update: dt => {
@@ -55,21 +55,21 @@ export const ScreenMan = (dragonMan, renderer, model) => {
 
     const transitions = {
         [SCREEN_TYPE.GAME] : {
-            [SCREEN_TYPE.UPGRADE]: () => {
-                makeTransition(SCREEN_TYPE.GAME, 800, SCREEN_TYPE.UPGRADE, -800)
+            [SCREEN_TYPE.UPGRADE]: (offset) => {
+                makeTransition(SCREEN_TYPE.GAME, offset, SCREEN_TYPE.UPGRADE, -offset)
             },
-            [SCREEN_TYPE.LEADERBOARD]: () => {
-                makeTransition(SCREEN_TYPE.GAME, -800, SCREEN_TYPE.LEADERBOARD, 800)
+            [SCREEN_TYPE.LEADERBOARD]: (offset) => {
+                makeTransition(SCREEN_TYPE.GAME, -offset, SCREEN_TYPE.LEADERBOARD, offset)
             }
         },
         [SCREEN_TYPE.UPGRADE]: {
-            [SCREEN_TYPE.GAME]: () => {
-                makeTransition(SCREEN_TYPE.UPGRADE, -800, SCREEN_TYPE.GAME, 800)
+            [SCREEN_TYPE.GAME]: (offset) => {
+                makeTransition(SCREEN_TYPE.UPGRADE, -offset, SCREEN_TYPE.GAME, offset)
             }
         },
         [SCREEN_TYPE.LEADERBOARD]: {
-            [SCREEN_TYPE.GAME]: () => {
-                makeTransition(SCREEN_TYPE.LEADERBOARD, 800, SCREEN_TYPE.GAME, -800)
+            [SCREEN_TYPE.GAME]: (offset) => {
+                makeTransition(SCREEN_TYPE.LEADERBOARD, offset, SCREEN_TYPE.GAME, -offset)
             }
         }
     }

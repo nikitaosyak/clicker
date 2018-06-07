@@ -10,8 +10,10 @@ export class UpgradeScreen extends BaseScreen {
         super(owner, SCREEN_TYPE.UPGRADE)
 
         const uiCreator = UIFactory.forParent(this.type)
-        const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
-        this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.GAME, 'ui_right_arrow', 720, 80))
+        // const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
+        this.addControl(uiCreator.getNavButton(
+            owner, SCREEN_TYPE.GAME,
+            'ui_right_arrow', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
 
         this._goldCounter = GoldCounter(740, 1230, this._owner.model.gold)
         this.add(this._goldCounter)

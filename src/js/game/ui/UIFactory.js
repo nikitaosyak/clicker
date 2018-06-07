@@ -1,27 +1,28 @@
-import {INamedUIElement, ISimpleButton, IToggleButton, TOGGLE_STATE} from "./UIElementBase";
-import {IAnimated, IContainer, IParticleContainer, IText} from "../go/GameObjectBase";
+import {INamedUIElement, ISimpleButton} from "./UIElementBase";
+import {IAnimated, IContainer, IText} from "../go/GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 import {StaticImage} from "../go/StaticImage";
+import {IAdoptableBase, IAdoptableButton, IAdoptableToggleButton, TOGGLE_STATE} from "../stretching/AdoptableBase";
 
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
 
 export const UIFactory = {
     forParent: parent => {
-        return {
-            getFullScreenButton: fsElement => {
+        const self = {
+            getFullScreenButton: (fsElement, anchor, pivotRules) => {
                 if (typeof document.fullscreenEnabled !== undefined &&
                     window.GD.config.PLATFORM === 'standalone') {
                     const button = {}
                     Object.assign(button, INamedUIElement(parent, 'full_screen'))
-                    Object.assign(button, IToggleButton(state => {
+                    Object.assign(button, IAdoptableToggleButton(state => {
                         if (state === TOGGLE_STATE.TOGGLED) {
                             fsElement.requestFullscreen()
                         } else {
                             document.exitFullscreen()
                         }
-                    }, 'ui_fullscreen_to', 'ui_fullscreen_from', 720, 80, BUTTON_WIDTH, BUTTON_HEIGHT))
-
+                    }, 'ui_fullscreen_to', 'ui_fullscreen_from', {x: BUTTON_WIDTH, y: BUTTON_HEIGHT}, anchor))
+                    Object.assign(button, IAdoptableBase(button.visual, pivotRules, null))
                     return button
                 }
                 return null
@@ -36,13 +37,19 @@ export const UIFactory = {
                 return button
             },
 
-            getNavButton: (screenManager, destination, texture, x, y) => {
+            getButton2: (texture, onClick, anchor, pivotRules, name = 'button') => {
+                const size = {x: BUTTON_WIDTH, y: BUTTON_HEIGHT}
                 const button = {}
-                Object.assign(button, INamedUIElement(parent, `navigate_to_${destination}`))
-                Object.assign(button, ISimpleButton(() => {
-                    screenManager.transit(destination)
-                }, texture, x, y, BUTTON_WIDTH, BUTTON_HEIGHT))
+                Object.assign(button, INamedUIElement(parent, name))
+                Object.assign(button, IAdoptableButton(onClick, texture, size, anchor))
+                Object.assign(button, IAdoptableBase(button.visual, pivotRules, null))
                 return button
+            },
+
+            getNavButton: (screenManager, destination, texture, anchor, pivotRules) => {
+                return self.getButton2(texture, () => {
+                    screenManager.transit(destination)
+                }, anchor, pivotRules, `navigate_to_${destination}`)
             },
 
             getText: (text, x, y, style, anchor) => {
@@ -95,5 +102,6 @@ export const UIFactory = {
                 return w
             }
         }
+        return self
     }
 }

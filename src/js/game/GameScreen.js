@@ -15,17 +15,24 @@ export class GameScreen extends BaseScreen {
         super(owner, SCREEN_TYPE.GAME)
 
         const uiCreator = UIFactory.forParent(this.type)
-        const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
+
+        const fs = uiCreator.getFullScreenButton(
+            owner.renderer.dom,
+            {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40})
+        fs && this.addControl(fs)
+
         if (this._owner.model.slotItems.length === 3) {
-            this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
+            this.addControl(uiCreator.getNavButton(
+                owner, SCREEN_TYPE.UPGRADE,
+                'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
         }
-        // this.addControl(uiCreator.getNavButton(owner, SCREEN_TYPE.LEADERBOARD, 'ui_leaderboard', 720, 180))
+
         if (window.GD.config.MODE !== 'production') {
-            this.addControl(uiCreator.getButton('ui_restart', 720, 190, () => {
+            this.addControl(uiCreator.getButton2('ui_restart', () => {
                 if (window.confirm('прогресс будет сброшен. продолжить?')) {
                     this._owner.model.restart()
                 }
-            }))
+            }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 160}))
         }
 
         this._goldCounter = GoldCounter(520, 800, this._owner.model.gold)
@@ -139,9 +146,12 @@ export class GameScreen extends BaseScreen {
                 }
                 if (dropsDragon) {
                     if (this._owner.model.dragonsCount === 0) {
-                        this.addControl(
-                            UIFactory.forParent(this.type)
-                                .getNavButton(this._owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
+                        // this.addControl(
+                        //     UIFactory.forParent(this.type)
+                        //         .getNavButton(this._owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
+                        this.addControl(uiCreator.getNavButton(
+                            owner, SCREEN_TYPE.UPGRADE,
+                            'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
                         TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
                     }
                     const dragonData = drop[ObjectType.DRAGON]

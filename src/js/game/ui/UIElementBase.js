@@ -1,28 +1,10 @@
 import {RENDER_LAYER} from "../../Renderer";
 
-export const TOGGLE_STATE = {NORMAL: 'NORMAL', TOGGLED: 'TOGGLED'}
 
 let INSTANCE_COUNTER = 0
 
 export const INamedUIElement = (parent, type) => {
     return {get name() {return `${type}_${parent}_${INSTANCE_COUNTER++}`}}
-}
-
-export const IToggleButton = (onToggle, normalState, toggledState, x, y, w, h) => {
-
-    let currentState = TOGGLE_STATE.NORMAL
-    const button = ISimpleButton(() => {
-        if (currentState === TOGGLE_STATE.NORMAL) {
-            currentState = TOGGLE_STATE.TOGGLED
-            button.visual.texture = window.resources.getTexture(toggledState)
-        } else {
-            currentState = TOGGLE_STATE.NORMAL
-            button.visual.texture = window.resources.getTexture(normalState)
-        }
-        onToggle(currentState)
-    }, normalState, x, y, w, h)
-
-    return button
 }
 
 export const ISimpleButton = (onClick, texture, x, y, w, h) => {
