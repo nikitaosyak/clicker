@@ -41,7 +41,6 @@ export const Renderer = () => {
 
         currentAspectRatio = canvasW / canvasH
         renderer.resize(canvasW, canvasH)
-        console.log(`real ar: ${currentAspectRatio}, supposed ar: ${supposedAspectRatio}`)
         if (currentAspectRatio > supposedAspectRatio) {
             //
             // wide screen
@@ -62,7 +61,8 @@ export const Renderer = () => {
             adjustedVSize.x = vSize.x
             adjustedVSize.y = Math.ceil(vSize.x / currentAspectRatio)
         }
-        resizableObjects.forEach(o => o.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize))
+        console.log(`real ar: ${currentAspectRatio}, supposed ar: ${supposedAspectRatio}, ${800/adjustedVSize.x}`)
+        resizableObjects.forEach(o => o.adopt(Math.min(currentAspectRatio, maximumWideAR), supposedAspectRatio, adjustedVSize, vSize, maximumWideAR))
     }
     resizeCanvas()
 
@@ -71,6 +71,7 @@ export const Renderer = () => {
     const self =  {
         get ar() { return currentAspectRatio },
         get var() { return supposedAspectRatio },
+        get maximumWideAR() { return maximumWideAR },
         get dom() { return canvas },
         get size() { return adjustedVSize },
         get vSize() { return vSize },
@@ -79,7 +80,7 @@ export const Renderer = () => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
             if (typeof go.adopt !== 'undefined') {
                 resizableObjects.push(go)
-                go.adopt(currentAspectRatio, supposedAspectRatio, adjustedVSize)
+                go.adopt(Math.min(currentAspectRatio, maximumWideAR), supposedAspectRatio, adjustedVSize, vSize, maximumWideAR)
             }
             const parent = layers[go.layer]
             if (parent) {

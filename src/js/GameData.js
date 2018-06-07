@@ -6,9 +6,9 @@ export const GameData = (model) => {
 
     const config = Config()
     const slots  = [
-        {x: 140, y: 1100, w: 250, h: 300},
-        {x: 400, y: 1100, w: 250, h: 300},
-        {x: 660, y: 1100, w: 250, h: 300}
+        {w: 250, h: 300, pivotRules: {x: 'center', xOffsetMin: -260, xOffsetMax: -330, y: 'bottom', yOffset: 180}},
+        {w: 250, h: 300, pivotRules: {x: 'center', y: 'bottom', yOffset: 180}},
+        {w: 250, h: 300, pivotRules: {x: 'center', xOffsetMin: 260, xOffsetMax: 330, y: 'bottom', yOffset: 180}}
     ]
 
 	const contentTimeMins = 25;

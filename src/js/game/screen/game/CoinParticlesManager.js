@@ -1,7 +1,7 @@
 import {IContainer} from "../../go/GameObjectBase";
 import {RENDER_LAYER} from "../../../Renderer";
 
-export const CoinParticlesManager = (targetLocation) => {
+export const CoinParticlesManager = (gameScreen, targetLocation) => {
 
     const config = {
         "alpha": {
@@ -70,7 +70,7 @@ export const CoinParticlesManager = (targetLocation) => {
         dropCoin: (fromSlot, value) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
 
-            const spawnPos = window.GD.getSlotRect(fromSlot)
+            const spawnPos = gameScreen._slotItems[fromSlot].visual
             currentParticleToSpawn = value
             emitter.emitterLifetime = 2
             emitter.updateSpawnPos(spawnPos.x, spawnPos.y)

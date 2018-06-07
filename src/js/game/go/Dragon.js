@@ -36,7 +36,6 @@ export const Dragon = (bounds, tier, level, x, y) => {
         levelUp: () => {
             level += 1
             if (window.GD.config.MODE === 'development') {
-                console.log(self)
                 self.tierVisualRefresh()
                 self.levelVisualRefresh()
             }

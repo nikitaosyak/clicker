@@ -57,7 +57,7 @@ export const DragonMan = renderer => {
                     projectile.launch(finalDamage, j,
                         singleAvailable.tier,
                         singleAvailable.visual.x, singleAvailable.visual.y,
-                        window.GD.slots[j].x, window.GD.slots[j].y)
+                        gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
 
                     singleAvailable.setAttackFlag()
 

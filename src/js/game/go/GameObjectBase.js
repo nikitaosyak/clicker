@@ -145,17 +145,6 @@ export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size
     }
 }
 
-export const ISlotItem = slot => {
-    return {
-        get slotRect() { return window.GD.getSlotRect(slot) }
-    }
-}
-export const ISlotVisualItem = (self, t) => {
-    return IVisual(t,
-        self.slotRect.x, self.slotRect.y,
-        self.slotRect.w, self.slotRect.h)
-}
-
 export const IClickable = (self) => {
 
     let clicks = 0

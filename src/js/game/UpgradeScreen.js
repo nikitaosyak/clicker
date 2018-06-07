@@ -15,7 +15,7 @@ export class UpgradeScreen extends BaseScreen {
             owner, SCREEN_TYPE.GAME,
             'ui_right_arrow', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
 
-        this._goldCounter = GoldCounter(740, 1230, this._owner.model.gold)
+        this._goldCounter = GoldCounter({x: 'center', y: 'bottom', yOffset: 60}, this._owner.model.gold)
         this.add(this._goldCounter)
 
         this._list = UpgradeList(owner.model, 0, 1100)

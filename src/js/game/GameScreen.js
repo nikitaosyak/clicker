@@ -14,31 +14,31 @@ export class GameScreen extends BaseScreen {
     constructor(owner) {
         super(owner, SCREEN_TYPE.GAME)
 
-        const uiCreator = UIFactory.forParent(this.type)
+        this.uiCreator = UIFactory.forParent(this.type)
 
-        const fs = uiCreator.getFullScreenButton(
+        const fs = this.uiCreator.getFullScreenButton(
             owner.renderer.dom,
             {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40})
         fs && this.addControl(fs)
 
         if (this._owner.model.slotItems.length === 3) {
-            this.addControl(uiCreator.getNavButton(
+            this.addControl(this.uiCreator.getNavButton(
                 owner, SCREEN_TYPE.UPGRADE,
                 'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
         }
 
         if (window.GD.config.MODE !== 'production') {
-            this.addControl(uiCreator.getButton2('ui_restart', () => {
+            this.addControl(this.uiCreator.getButton2('ui_restart', () => {
                 if (window.confirm('прогресс будет сброшен. продолжить?')) {
                     this._owner.model.restart()
                 }
             }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 160}))
         }
 
-        this._goldCounter = GoldCounter(520, 800, this._owner.model.gold)
+        this._goldCounter = GoldCounter({x: 'center', y: 'bottom', yOffset: 400}, this._owner.model.gold)
         this.add(this._goldCounter)
 
-        this._particles = CoinParticlesManager(this._goldCounter.visual)
+        this._particles = CoinParticlesManager(this, this._goldCounter.visual)
         this.add(this._particles)
 
         this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems)
@@ -93,6 +93,18 @@ export class GameScreen extends BaseScreen {
         }
     }
 
+    animateHide(to, onComplete) {
+        this._slotItems.forEach(si => si.disable())
+        super.animateHide(to, onComplete)
+    }
+
+    animateShow(from, onComplete) {
+        super.animateShow(from, () => {
+            this._slotItems.forEach(si => si.enable())
+            onComplete()
+        })
+    }
+
     update(dt) {
         this._particles.update(dt)
         this._slotItems.forEach((c, i) => {
@@ -141,16 +153,12 @@ export class GameScreen extends BaseScreen {
                     }
                 })
                 if (dropsGold) {
-                    console.log(slotItem)
                     this._dropGold(slotIdx, drop, drop[ObjectType.GOLD])
                 }
                 if (dropsDragon) {
                     if (this._owner.model.dragonsCount === 0) {
-                        // this.addControl(
-                        //     UIFactory.forParent(this.type)
-                        //         .getNavButton(this._owner, SCREEN_TYPE.UPGRADE, 'ui_upgrade', 80, 80))
-                        this.addControl(uiCreator.getNavButton(
-                            owner, SCREEN_TYPE.UPGRADE,
+                        this.addControl(this.uiCreator.getNavButton(
+                            this._owner, SCREEN_TYPE.UPGRADE,
                             'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
                         TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
                     }
@@ -158,7 +166,7 @@ export class GameScreen extends BaseScreen {
                     this._owner.model.addDragon(dragonData.tier, dragonData.level)
                     this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-                    this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, window.GD.getSlotRect(slotIdx))
+                    this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, this._slotItems[slotIdx].visual)
                 }
             }
             if (this._active && !this._hiding) {

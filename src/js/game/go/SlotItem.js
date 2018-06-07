@@ -5,8 +5,10 @@ import {
     ISlotVisualItem,
     IStageObject,
     ITypedObject,
-    IHealthBarOwner, IVisualNumericRep, ObjectType
+    IHealthBarOwner, IVisualNumericRep, ObjectType, IVisual
 } from "./GameObjectBase";
+import {IAdoptableBase, IAdoptableVisual} from "../stretching/AdoptableBase";
+import {RENDER_LAYER} from "../../Renderer";
 
 export class SlotItem {
 
@@ -26,8 +28,11 @@ export class SlotItem {
         Object.assign(this, IStageObject(stage))
         Object.assign(this, INamedObject(this))
 
-        Object.assign(this, ISlotItem(slot))
-        Object.assign(this, ISlotVisualItem(this, type))
+        Object.assign(this, IAdoptableVisual(type,
+            {x: window.GD.slots[slot].w, y: window.GD.slots[slot].h},
+            {x: 0.5, y: 0.5}, RENDER_LAYER.GAME))
+        this._adopter = IAdoptableBase(this.visual, window.GD.slots[slot].pivotRules)
+
         Object.assign(this, IHealthBarOwner(this))
         if (window.GD.config.MODE === 'development') {
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
@@ -36,31 +41,58 @@ export class SlotItem {
         Object.assign(this, IClickable(this))
 
         const shakeTime = 0.25
-        const shakeOffset = 1
         const easeConfig = RoughEase.ease.config({strength:10, points:40, template:Linear.easeNone, randomize:false})
         this._shakeAnimation = [
             TweenLite.fromTo(
                 this.visual, shakeTime,
-                {x:this.visual.x-shakeOffset},
-                {x:this.visual.x+shakeOffset, ease:easeConfig}),
+                {x:this.visual.x},
+                {x:this.visual.x, ease:easeConfig}),
             TweenLite.fromTo(
                 this.visual, shakeTime,
-                {y:this.visual.y-shakeOffset},
-                {y:this.visual.y+shakeOffset, ease:easeConfig})
+                {y:this.visual.y},
+                {y:this.visual.y, ease:easeConfig})
         ]
         this._shakeAnimation[0].pause()
         this._shakeAnimation[1].pause()
+        this._enabled = true
     }
 
     get drop() { return this._drop }
     get health() { return this._currentHealth }
     get targetSlot() { return this._targetSlot }
 
+    disable() {
+        this._enabled = false
+        this._shakeAnimation[0].pause()
+        this._shakeAnimation[1].pause()
+    }
+
+    enable() {
+        this._enabled = true
+    }
+
+    // override method
+    adopt(currentAr, virtualAr, canvasSize, virtualCanvasSize, maxAr) {
+        this._shakeAnimation[0].invalidate()
+        this._shakeAnimation[1].invalidate()
+
+        this._adopter.adopt(currentAr, virtualAr, canvasSize, virtualCanvasSize, maxAr)
+
+        const shakeOffset = 1
+        this._shakeAnimation[0].vars.startAt.x = this.visual.x - shakeOffset
+        this._shakeAnimation[0].vars.x = this.visual.x + shakeOffset
+
+        this._shakeAnimation[1].vars.startAt.y = this.visual.y - shakeOffset
+        this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
+    }
+
     processDamage(value) {
         this._currentHealth = Math.max(0, this._currentHealth-value)
         this.setHealthBarValue(this._currentHealth/this._maxHealth)
 
-        this._shakeAnimation[this._animIdx].restart()
+        if (this._enabled) {
+            this._shakeAnimation[this._animIdx].restart()
+        }
         this._animIdx = this._animIdx === 0 ? 1 : 0
 
         this._currentClick += 1
