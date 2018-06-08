@@ -4,6 +4,7 @@ export const GA = () => {
     const statUrl = `${window.location.protocol}//${window.location.hostname}:8083`
     let anchorTime = Date.now()
     let userId = null
+    let sessionActive = false
 
     return {
         startSession: (state) => {
@@ -23,10 +24,13 @@ export const GA = () => {
                     clicks: 0
                 })
             }).then(response => {
-                // console.log(response)
-            }).catch(console.error)
+                sessionActive = true
+            }).catch(err => {
+                sessionActive = false
+            })
         },
         diff: (attribute, newValue) => {
+            if (!sessionActive) return
             fetch(`${statUrl}/api/diff`, {
                 method: 'POST',
                 headers: {
@@ -40,6 +44,7 @@ export const GA = () => {
             anchorTime = Date.now()
         },
         accumulate: (attribute, value) => {
+            if (!sessionActive) return
             fetch(`${statUrl}/api/accumulate`, {
                 method: 'POST',
                 headers: {

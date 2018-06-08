@@ -31,8 +31,8 @@ window.onload = () => {
             const dragons = DragonMan(renderer)
 
             const screens = ScreenMan(dragons, renderer, model)
-            screens.instantTransit(SCREEN_TYPE.GAME)
-            // screens.instantTransit(SCREEN_TYPE.UPGRADE)
+            // screens.instantTransit(SCREEN_TYPE.GAME)
+            screens.instantTransit(SCREEN_TYPE.UPGRADE)
 
             let time = Date.now()
             const gameLoop = () => {

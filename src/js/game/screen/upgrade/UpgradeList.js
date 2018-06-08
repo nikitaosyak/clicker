@@ -1,9 +1,9 @@
 import {ObjectPool} from "../../../utils/ObjectPool";
 import {UpgradeListItem} from "./UpgradeListItem";
-import {IContainer} from "../../go/GameObjectBase";
+import {IVisual, IContainer} from "../../go/GameObjectBase";
 import {INamedUIElement} from "../../ui/UIElementBase";
 import {EmitterBehaviour} from "../../../utils/EmitterBehaviour";
-import {IAdoptableBase} from "../../stretching/AdoptableBase";
+import {IAdoptableBase, IAdoptableVisual} from "../../stretching/AdoptableBase";
 import {RENDER_LAYER} from "../../../Renderer";
 import {MAX_DRAGON_LEVEL} from "../../../GameModel";
 
@@ -19,7 +19,11 @@ export const UpgradeList = (model) => {
 
     self.updateBounds = (viewportSize, dragonMan) => {
         // self.visual.hitArea.x = 0; self.visual.hitArea.y = 0
-        // self.visual.hitArea.width = viewportSize.x; self.visual.hitArea.y = viewportSize.y - pivotRules.yOffset;
+        // self.visual.hitArea.width = viewportSize.x; self.visual.hitArea.height = viewportSize.y - pivotRules.yOffset;
+        // console.log(self.visual.hitArea)
+        // self.visual.width = viewportSize.x
+        // self.visual.height = viewportSize.y - pivotRules.yOffset
+        console.log(self.visual.x, self.visual.y)
 
         children.forEach((listItem, i) => {
             listItem.updateLayout(viewportSize, dragonMan, i)
@@ -85,19 +89,17 @@ export const UpgradeList = (model) => {
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
-    // self.visual.hitArea = new PIXI.Rectangle(0, 0, 100, 100)
-    // self.visual.interactive = true
-    // self.visual.buttonMode = true
+    self.visual.interactive = true
     Object.assign(self, IAdoptableBase(self.visual, pivotRules))
     Object.assign(self, EmitterBehaviour({}))
 
-    // self.visual.on('mousedown', () => {
-    //     console.log('start')
-    // })
-    // self.visual.on('mouseup', () => {
-    //     console.log('up')
-    // })
-    // self.visual.on('mousemove', () => {
+    self.visual.on('pointerdown', () => {
+        console.log('start')
+    })
+    self.visual.on('pointerup', () => {
+        console.log('up')
+    })
+    // self.visual.on('pointermove', () => {
     //     console.log('move')
     // })
     return self

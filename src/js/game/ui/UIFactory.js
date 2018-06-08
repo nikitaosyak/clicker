@@ -74,35 +74,6 @@ export const UIFactory = {
                 return c
             },
 
-            getUpgradeInfoWidget: (x, y) => {
-
-                const bg = StaticImage('pixel', 0, 0, 100, 100)
-                const tier = UIFactory.forParent('info_widget').getText('', -30, -30, {
-                    fontSize: 30, fill: '#000000'
-                }, {x: 0.5, y: 0.5})
-                const level = UIFactory.forParent('info_widget').getText('', 30, -30, {
-                    fontSize: 30, fill: '#000000'
-                }, {x: 0.5, y: 0.5})
-                const price = UIFactory.forParent('info_widget').getText('', 0, 30, {
-                    fontSize: 30, fill: '#ffd700'
-                }, {x: 0.5, y: 0.5})
-
-                const w = {
-                    set tier(v) {tier.visual.text = `t${v}`},
-                    set level(v) {level.visual.text = `l${v}`},
-                    set damage(v) {},
-                    set price(v) {price.visual.text = v},
-                }
-
-                Object.assign(w, IContainer(x, y))
-                w.visual.addChild(bg.visual)
-                w.visual.addChild(tier.visual)
-                w.visual.addChild(level.visual)
-                w.visual.addChild(price.visual)
-
-                return w
-            },
-
             getLevelIndicatorWidget: () => {
                 const background = StaticImage('ui_white_circle', 0, 0, 80, 80, undefined, {x: 0.5, y: 0.5})
                 const levelVis = UIFactory.forParent('level_indicator').getText('', 0, 0, {

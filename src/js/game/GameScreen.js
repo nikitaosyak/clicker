@@ -140,7 +140,7 @@ export class GameScreen extends BaseScreen {
     processSlotDamage(slotIdx, source, damage) {
         const slotItem = this._slotItems[slotIdx]
         if (slotItem.health <= 0) {
-            console.log('slot item already destroying, but got damage from source ', source)
+            // console.log('slot item already destroying, but got damage from source ', source)
             return
         }
         const rewardingClick = slotItem.processDamage(damage)
