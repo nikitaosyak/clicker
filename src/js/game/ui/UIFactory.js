@@ -135,6 +135,28 @@ export const UIFactory = {
                 }
 
                 return btn
+            },
+
+            getDamagePercentWidget: () => {
+
+                const icon = StaticImage('ui_attack', 0, 0, 80, 80, undefined, {x: 1, y: 0.5})
+                icon.visual.x = -5
+                const damage = UIFactory.forParent('info_widget').getText('', 0, 0, {
+                    fontSize: 45, fill: '#11cccc'
+                }, {x: 0, y: 0.5})
+
+                const w = {
+                    set damage(v) {
+                        damage.visual.text = `${v}%`
+                        damage.visual.x = 60
+                    },
+                }
+
+                Object.assign(w, IContainer(0, 0))
+                w.visual.addChild(damage.visual)
+                w.visual.addChild(icon.visual)
+
+                return w
             }
         }
         return self
