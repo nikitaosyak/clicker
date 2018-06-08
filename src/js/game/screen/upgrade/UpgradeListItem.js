@@ -1,67 +1,55 @@
 import {IContainer} from "../../go/GameObjectBase";
 import {UIFactory} from "../../ui/UIFactory";
-import {MAX_DRAGON_LEVEL} from "../../../GameModel";
-import {MathUtil} from "../../../utils/MathUtil";
 
 export const UpgradeListItem = (_, owner) => {
 
     let currentDragon = null
+    let dragonUpgrade = null
     const self = {}
     const uiCreator = UIFactory.forParent('upgrade')
-    const infoWidget = uiCreator.getUpgradeInfoWidget(80, 0)
-    const upgradeButton = uiCreator.getButton('ui_upgrade_dragon', 720, 0, () => {
-        owner.emit('upgrade', currentDragon)
-    }, 100, 100)
-    const upgradeAllButton = uiCreator.getButton('ui_upgrade_all_dragons', 600, 0, () => {
-        owner.emit('upgrade-all', currentDragon)
-    }, 100, 100)
+    const levelWidget = uiCreator.getLevelIndicatorWidget()
+    const upgradeBtn = uiCreator.getUpgradeButton(() => {
+        owner.emit('upgrade', dragonUpgrade)
+    })
 
-    self.setup = (referenceDragon, dragonsOnLevel) => {
-        currentDragon = referenceDragon
-        infoWidget.tier = referenceDragon.tier
-        infoWidget.level = referenceDragon.level
-        infoWidget.damage = window.GD.getSingleDragonDamage(
-            referenceDragon.tier, referenceDragon.level)
-
-        if (referenceDragon.level >= MAX_DRAGON_LEVEL) {
-            infoWidget.price = ''
-
-            upgradeButton.visual.visible = false
-            upgradeAllButton.visual.visible = false
-        } else {
-            let price = window.GD.getUpgradePrice(referenceDragon.tier, referenceDragon.level)
-            infoWidget.price = MathUtil.convert(price)
-
-            upgradeButton.visual.visible = true
-
-            if (owner.model.gold >= price) {
-                upgradeButton.visual.tint = 0xFFFFFF
-                upgradeButton.visual.interactive = true
-            } else {
-                upgradeButton.visual.tint = 0xAAAAAA
-                upgradeButton.visual.interactive = false
-            }
-
-            if (dragonsOnLevel > 1) {
-                upgradeAllButton.visual.visible = true
-                price = price * dragonsOnLevel
-
-                if (owner.model.gold >= price) {
-                    upgradeAllButton.visual.tint = 0xFFFFFF
-                    upgradeAllButton.visual.interactive = true
-                } else {
-                    upgradeAllButton.visual.visible = false
-                }
-            } else {
-                upgradeAllButton.visual.visible = false
-            }
-        }
-
+    self.setupWithDragons = dragonList => {
+        currentDragon = dragonList[0]
+        dragonUpgrade = null
+        levelWidget.setLevel(currentDragon.level)
+        self.visual.addChild(levelWidget.visual)
+        self.visual.removeChild(upgradeBtn.visual)
     }
+
+    self.setupUpgradeButton = (price, forDragon) => {
+        dragonUpgrade = forDragon
+        currentDragon = null
+        self.visual.removeChild(levelWidget.visual)
+        self.visual.addChild(upgradeBtn.visual)
+        upgradeBtn.setPrice(price)
+
+        if (owner.model.gold >= price) {
+            upgradeBtn.visual.tint = 0xFFFFFF
+            upgradeBtn.visual.interactive = true
+        } else {
+            upgradeBtn.visual.tint = 0xAAAAAA
+            upgradeBtn.visual.interactive = false
+        }
+    }
+
+    self.updateLayout = (viewportSize, dragonManager, itemIndex) => {
+        self.visual.x = 80
+        self.visual.y = -itemIndex * (120)
+
+        if (currentDragon) {
+            dragonManager.updateSpecificBounds(currentDragon.tier, currentDragon.level,
+                170, viewportSize.x-100,
+                owner.visual.y + self.visual.y - 20, owner.visual.y + self.visual.y + 20)
+        } else {
+            upgradeBtn.visual.x = viewportSize.x / 2 - self.visual.x/2
+        }
+    }
+
     Object.assign(self, IContainer(0, 0))
-    self.visual.addChild(infoWidget.visual)
-    self.visual.addChild(upgradeButton.visual)
-    self.visual.addChild(upgradeAllButton.visual)
 
     return self
 }

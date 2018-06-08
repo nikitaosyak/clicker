@@ -3,22 +3,33 @@ import {UpgradeListItem} from "./UpgradeListItem";
 import {IContainer} from "../../go/GameObjectBase";
 import {INamedUIElement} from "../../ui/UIElementBase";
 import {EmitterBehaviour} from "../../../utils/EmitterBehaviour";
+import {IAdoptableBase} from "../../stretching/AdoptableBase";
+import {RENDER_LAYER} from "../../../Renderer";
 
-export const UpgradeList = (model, x, y) => {
+export const UpgradeList = (model) => {
 
     const self = {
         get model() { return model }
     }
     const pool = ObjectPool(UpgradeListItem, [self], 10)
-    let current = []
+    let children = []
+    let groupedByLevel = []
 
-    self.invalidate = dragons => {
-        current.forEach(el => {
+    self.updateBounds = (viewportSize, dragonMan) => {
+        console.log(viewportSize, self.visual.height)
+        children.forEach((listItem, i) => {
+            listItem.updateLayout(viewportSize, dragonMan, i)
+        })
+    }
+
+    self.invalidate = (dragons) => {
+        children.forEach(el => {
             self.visual.removeChild(el.visual)
             pool.putOne(el)
         })
+        children = []
 
-        const flatList = []
+        groupedByLevel = []
         let listIndex = -1
         Object.keys(dragons).forEach(tier => {
             dragons[tier].sort((a, b) => {
@@ -30,35 +41,42 @@ export const UpgradeList = (model, x, y) => {
             for (let i = 0; i < dragons[tier].length; i++) {
                 const dragon = dragons[tier][i]
                 if (dragon.level > currentLevel) {
-                    flatList.push([])
+                    groupedByLevel.push([])
                     listIndex+=1
                     currentLevel = dragon.level
                 }
-                flatList[listIndex].push(dragon)
+                groupedByLevel[listIndex].push(dragon)
             }
         })
 
-        let vOffset = 0
-        current = flatList.map(sortedDragons => {
-            const listItem = pool.getOne()
-            listItem.setup(sortedDragons[0], sortedDragons.length)
-            listItem.visual.x = 0
-            listItem.visual.y = vOffset * -120
-            vOffset += 1
+        let currentTier = 0
+        for (let i = 0; i < groupedByLevel.length; i++) {
+            const dragonsOfLevel = groupedByLevel[i]
+            const addDragonItem = () => {
+                const listItem = pool.getOne()
+                listItem.setupWithDragons(dragonsOfLevel)
+                self.visual.addChild(listItem.visual)
+                children.push(listItem)
+            }
 
-            self.visual.addChild(listItem.visual)
-            return listItem
-        })
+            if (currentTier === dragonsOfLevel[0].tier) {
+                addDragonItem()
+            } else {
+                currentTier += 1
+                const listItem = pool.getOne()
+                listItem.setupUpgradeButton(window.GD.getUpgradePrice(dragonsOfLevel[0].tier, dragonsOfLevel[0].level), dragonsOfLevel[0])
+                self.visual.addChild(listItem.visual)
+                children.push(listItem)
+                addDragonItem()
+            }
+        }
 
-        current.forEach(el => {
-            self.visual.addChild(el.visual)
-        })
-
-        return flatList
+        children.forEach(el => self.visual.addChild(el.visual))
     }
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))
-    Object.assign(self, IContainer(x, y))
+    Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
+    Object.assign(self, IAdoptableBase(self.visual, {x: 'left', xOffset: 0, y: 'bottom', yOffset: 170}))
     Object.assign(self, EmitterBehaviour({}))
     return self
 }

@@ -92,7 +92,15 @@ export class BaseScreen {
         }
     }
 
-    update(dt) { /*virtual method*/ }
+    update(dt) {
+        if (!this._cachedViewportSize.equal(this._owner.renderer.size)) {
+            this._cachedViewportSize.x = this._owner.renderer.size.x
+            this._cachedViewportSize.y = this._owner.renderer.size.y
+            this.onViewportSizeChanged()
+        }
+    }
+
+    onViewportSizeChanged() { /*virtual method*/ }
 
     show() {
         this._active = true

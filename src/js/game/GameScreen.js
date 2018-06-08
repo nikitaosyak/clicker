@@ -81,12 +81,19 @@ export class GameScreen extends BaseScreen {
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
     }
 
+    onViewportSizeChanged() {
+        this._owner.dragonManager.updateCommonBounds(
+            50, this._owner.renderer.size.x-50,
+            50, this._owner.renderer.size.y-450
+        )
+    }
+
     show() {
         super.show()
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-        this._owner.dragonManager.updateCommonBounds(50, this._owner.renderer.size.x-50, 50, this._owner.renderer.size.y-450)
+        this.onViewportSizeChanged()
 
         while(this._savedRewards.length) {
             this._savedRewards.shift()()
@@ -106,11 +113,7 @@ export class GameScreen extends BaseScreen {
     }
 
     update(dt) {
-        if (!this._cachedViewportSize.equal(this._owner.renderer.size)) {
-            this._cachedViewportSize.x = this._owner.renderer.size.x
-            this._cachedViewportSize.y = this._owner.renderer.size.y
-            this._owner.dragonManager.updateCommonBounds(50, this._owner.renderer.size.x-50, 50, this._owner.renderer.size.y-450)
-        }
+        super.update(dt)
 
         this._particles.update(dt)
         this._slotItems.forEach((c, i) => {

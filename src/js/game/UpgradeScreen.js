@@ -18,53 +18,30 @@ export class UpgradeScreen extends BaseScreen {
         this._goldCounter = GoldCounter({x: 'center', y: 'bottom', yOffset: 60}, this._owner.model.gold)
         this.add(this._goldCounter)
 
-        this._list = UpgradeList(owner.model, 0, 1100)
+        this._list = UpgradeList(owner.model)
         this.add(this._list)
-
-        const invalidateUpgrade = () => {
-            const flatList =  this._list.invalidate(this._owner.model.dragons)
-            flatList.forEach((fl, i) => {
-                const middle = 1100 - i * 120
-                this._owner.dragonManager.updateSpecificBounds(fl[0].tier, fl[0].level, 150, 650, middle-40, middle+40)
-            })
-        }
 
         this._list.on('upgrade', dragon => {
             owner.model.subtractGold(window.GD.getUpgradePrice(dragon.tier, dragon.level))
             this._goldCounter.setValue(owner.model.gold)
 
-
-            // console.log(this._owner.renderer.getDragons(dragon.tier, dragon.level))
             const visualDragons = this._owner.dragonManager.getVisualDragons(dragon.tier, dragon.level)
             visualDragons[0].levelUp()
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
-            invalidateUpgrade.call(this)
+            this._list.invalidate(this._owner.model.dragons)
+            this._list.updateBounds(this._cachedViewportSize, this._owner.dragonManager)
         })
+    }
 
-        this._list.on('upgrade-all', dragon => {
-            const baseTier = dragon.tier
-            const baseLevel = dragon.level
-            const dragons = owner.model.getDragons(baseTier, baseLevel)
-            const visualDragons = this._owner.dragonManager.getVisualDragons(baseTier, baseLevel)
-            owner.model.subtractGold(window.GD.getUpgradePrice(baseTier, baseLevel) * dragons.length)
-            this._goldCounter.setValue(owner.model.gold)
-
-            dragons.forEach(d => owner.model.upgradeDragon(baseTier, baseLevel))
-            visualDragons.forEach(vd => vd.levelUp())
-
-            invalidateUpgrade.call(this)
-        })
+    onViewportSizeChanged() {
+        this._list.updateBounds(this._cachedViewportSize, this._owner.dragonManager)
     }
 
     show() {
         super.show()
         this._goldCounter.setValueInstantly(this._owner.model.gold)
-
-        const flatList = this._list.invalidate(this._owner.model.dragons)
-        flatList.forEach((fl, i) => {
-            const middle = 1100 - i * 120
-            this._owner.dragonManager.updateSpecificBounds(fl[0].tier, fl[0].level, 150, 650, middle-40, middle+40)
-        })
+        this._list.invalidate(this._owner.model.dragons)
+        this._list.updateBounds(this._cachedViewportSize, this._owner.dragonManager)
     }
 }

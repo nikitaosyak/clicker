@@ -3,6 +3,7 @@ import {IAnimated, IContainer, IText} from "../go/GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 import {StaticImage} from "../go/StaticImage";
 import {IAdoptableBase, IAdoptableButton, IAdoptableToggleButton, TOGGLE_STATE} from "../stretching/AdoptableBase";
+import {MathUtil} from "../../utils/MathUtil";
 
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
@@ -100,6 +101,40 @@ export const UIFactory = {
                 w.visual.addChild(price.visual)
 
                 return w
+            },
+
+            getLevelIndicatorWidget: () => {
+                const background = StaticImage('ui_white_circle', 0, 0, 80, 80, undefined, {x: 0.5, y: 0.5})
+                const levelVis = UIFactory.forParent('level_indicator').getText('', 0, 0, {
+                    fontSize: 30, fill: '#000000'
+                }, {x: 0.5, y: 0.5})
+
+                background.setLevel = v => {
+                    levelVis.visual.text = v
+                }
+                background.visual.addChild(levelVis.visual)
+
+                return background
+            },
+
+            getUpgradeButton: (onClick) => {
+                const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 100)
+                const icon = StaticImage('ui_upgrade_dragon', 0, 4, 80, 80, undefined, {x: 0, y: 0.5})
+                btn.visual.addChild(icon.visual)
+
+                const price = UIFactory.forParent('upgrade_button').getText('', 0, 0, {
+                    fontSize: 30, fill: '#000000'
+                }, {x: 0, y: 0.5})
+                btn.visual.addChild(price.visual)
+
+                btn.setPrice = v => {
+                    price.visual.text =  MathUtil.convert(v)
+                    const totalW = icon.visual.width + price.visual.width + 20
+                    icon.visual.x = -totalW/2
+                    price.visual.x = icon.visual.x + icon.visual.width + 20
+                }
+
+                return btn
             }
         }
         return self
