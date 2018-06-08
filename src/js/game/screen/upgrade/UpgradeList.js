@@ -18,8 +18,8 @@ export const UpgradeList = (model) => {
     const pivotRules = {x: 'left', xOffset: 0, y: 'bottom', yOffset: 170}
 
     self.updateBounds = (viewportSize, dragonMan) => {
-        self.visual.hitArea.x = 0; self.visual.hitArea.y = 0
-        self.visual.hitArea.width = viewportSize.x; self.visual.hitArea.y = viewportSize.y - pivotRules.yOffset;
+        // self.visual.hitArea.x = 0; self.visual.hitArea.y = 0
+        // self.visual.hitArea.width = viewportSize.x; self.visual.hitArea.y = viewportSize.y - pivotRules.yOffset;
 
         children.forEach((listItem, i) => {
             listItem.updateLayout(viewportSize, dragonMan, i)
@@ -85,9 +85,9 @@ export const UpgradeList = (model) => {
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
-    self.visual.hitArea = new PIXI.Rectangle(0, 0, 100, 100)
-    self.visual.interactive = true
-    self.visual.buttonMode = true
+    // self.visual.hitArea = new PIXI.Rectangle(0, 0, 100, 100)
+    // self.visual.interactive = true
+    // self.visual.buttonMode = true
     Object.assign(self, IAdoptableBase(self.visual, pivotRules))
     Object.assign(self, EmitterBehaviour({}))
 
