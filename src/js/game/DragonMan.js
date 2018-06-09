@@ -12,7 +12,7 @@ export const DragonMan = renderer => {
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
 	let lastDamage = 0
-    const GLOBAL_ATTACK_COOLDOWN = 5 //ms
+    const GLOBAL_ATTACK_COOLDOWN = 1 //ms
     let lastAttack = -1
 
     const projectilePool = ObjectPool(DragonProjectile, [(self) => {
@@ -35,9 +35,9 @@ export const DragonMan = renderer => {
         update: dt => {
             dragons.forEach(d => d.update(dt))
 
-            if (damageToDistribute.reduce((acc, slotDamage) => acc + slotDamage, 0) <= 0) return
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
-			var sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
+            const sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
+            if (sumDmg <= 0) return
 			var spdMul = 0.2 + (lastDamage / sumDmg * 2)
             const available = dragons.filter(d => d.canAttack(spdMul))
             if (available.length === 0) return
@@ -73,6 +73,11 @@ export const DragonMan = renderer => {
                 location ? location.x : 100 + Math.round(Math.random()*500),
                 location ? location.y : 100 + Math.round(Math.random()*500))
             dragons.push(d)
+            dragons.sort((a, b) => {
+                if (window.GD.getSingleDragonDamage(a.tier, a.level) > window.GD.getSingleDragonDamage(b.tier, b.level)) return -1
+                if (window.GD.getSingleDragonDamage(a.tier, a.level) < window.GD.getSingleDragonDamage(b.tier, b.level)) return 1
+                return 0
+            })
             renderer.addObject(d)
         },
         getVisualDragons: (tier, level) => {

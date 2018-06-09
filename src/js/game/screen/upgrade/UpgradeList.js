@@ -23,7 +23,7 @@ export const UpgradeList = (model) => {
         // console.log(self.visual.hitArea)
         // self.visual.width = viewportSize.x
         // self.visual.height = viewportSize.y - pivotRules.yOffset
-        console.log(self.visual.x, self.visual.y)
+        // console.log(self.visual.x, self.visual.y)
 
         children.forEach((listItem, i) => {
             listItem.updateLayout(viewportSize, dragonMan, i)
