@@ -22,7 +22,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
     const self = {
         setAttackFlag: () => lastAttack = Date.now(),
         canAttack: (urgencyCoefficient=1) => {
-            urgencyCoefficient = MathUtil.clamp(0.01, 1, urgencyCoefficient)
+            urgencyCoefficient = MathUtil.clamp(0.01, 10, urgencyCoefficient)
             const timeSinceLastAttack = (Date.now() - lastAttack) / 1000
             return timeSinceLastAttack > (attackCooldown * urgencyCoefficient)
         },

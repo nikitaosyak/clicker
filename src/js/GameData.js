@@ -66,7 +66,7 @@ export const GameData = (model) => {
         getTargetDamage: stage => {
 			const sShift = stageShift
             const sScale = stageScale
-            return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale * self.getShiftKoef(stage)) 
+            return Math.round(baseDamage * Math.pow(stagePow, stage * sShift) * sScale) 
         },
         getSlotRect(at) { return slots[at]},
 

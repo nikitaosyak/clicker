@@ -11,6 +11,7 @@ export const DragonMan = renderer => {
 
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
+	//todo: make damage available before first click 
 	let lastDamage = 0
     const GLOBAL_ATTACK_COOLDOWN = 1 //ms
     let lastAttack = -1
@@ -36,9 +37,18 @@ export const DragonMan = renderer => {
             dragons.forEach(d => d.update(dt))
 
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
+			
+			const autoDamageMult = 0.001;
+			damageToDistribute[0] += lastDamage * autoDamageMult
+			damageToDistribute[1] += lastDamage * autoDamageMult
+			damageToDistribute[2] += lastDamage * autoDamageMult
+			
+			//console.log("acc dmg:  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
+			
             const sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
             if (sumDmg <= 0) return
-			var spdMul = 0.2 + (lastDamage / sumDmg * 2)
+			var spdMul = 0.3 + (lastDamage / sumDmg * 6)
+			
             const available = dragons.filter(d => d.canAttack(spdMul))
             if (available.length === 0) return
             for (let i = 0 ; i < available.length; i++) {
@@ -46,12 +56,14 @@ export const DragonMan = renderer => {
                 const damage = window.GD.getSingleDragonDamage(singleAvailable.tier, singleAvailable.level)
                 let wasAttack = false
                 for (let j = 0; j < damageToDistribute.length; j++) {
-                    if (damageToDistribute[j] <= 0) continue
-                    // here is the point of assigning some damage
+					if (damageToDistribute[j] < damage) continue //dragon cant attack for half of his power
+                    if (!gameScreen.isSlotLive(j)) continue //no reason to attack empty slot
+					// here is the point of assigning some damage
 
                     const finalDamage = Math.min(damageToDistribute[j], damage)
                     damageToDistribute[j] = Math.max(0, damageToDistribute[j] - damage)
-
+					
+					
                     const projectile = projectilePool.getOne()
                     gameScreen.add(projectile)
                     projectile.launch(finalDamage, j,
@@ -60,6 +72,9 @@ export const DragonMan = renderer => {
                         gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
 
                     singleAvailable.setAttackFlag()
+					
+					const slotDragonAreaRange = 150
+					singleAvailable.setLocalBounds(gameScreen._slotItems[j].visual.x - slotDragonAreaRange,gameScreen._slotItems[j].visual.x + slotDragonAreaRange, commonBounds.top + 50, commonBounds.bottom)
 
                     lastAttack = Date.now()
                     wasAttack = true
@@ -86,7 +101,8 @@ export const DragonMan = renderer => {
         updateCommonBounds: (left, right, top, bottom) => {
             commonBounds.left = left; commonBounds.right = right;
             commonBounds.top = top; commonBounds.bottom = bottom;
-            commonBounds.active = true
+			//now needs always custom bounds
+            //commonBounds.active = true
         },
         updateSpecificBounds: (tier, level, left, right, top, bottom) => {
             commonBounds.active = false

@@ -74,9 +74,12 @@ export class GameScreen extends BaseScreen {
     _dropGold(i, dropData, value) {
         const self = this
         // console.log(this._slotItems[i])
+		var allCoins = dropData[ObjectType.GOLD];
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
-        self._particles.dropCoin(i, value)
+		var visualCoins = Math.max(1, value / allCoins * 200);
+		console.log(visualCoins)
+        self._particles.dropCoin(i, visualCoins)
         self._goldCounter.setValue(this._owner.model.gold)
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
     }
@@ -110,6 +113,11 @@ export class GameScreen extends BaseScreen {
             this._slotItems.forEach(si => si.enable())
             onComplete()
         })
+    }
+	
+	isSlotLive(idx) {
+        if (this._slotItems[idx] === null) return false
+        return this._slotItems[idx].health > 0
     }
 
     update(dt) {

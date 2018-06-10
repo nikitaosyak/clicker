@@ -36,7 +36,7 @@ export const DragonProjectile = (pool, onComplete) => {
     Object.assign(self, IVisual('spec', 0, 0, 32, 32, RENDER_LAYER.GAME))
 
     animation = TweenLite.to(
-        self.visual, 2, {pixi: {x: 0, y: 0}, roundProps: 'x,y', ease: Linear.easeNone, onComplete: () => {
+        self.visual, 2, {pixi: {x: 0, y: 0}, roundProps: 'x,y', ease:Power1.easeIn, onComplete: () => {
             onComplete(self)
             pool.putOne(self)
             }})
