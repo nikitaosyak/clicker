@@ -10,6 +10,7 @@ export const DragonMan = renderer => {
 
     const commonBounds = { left: 0,right: 0, top: 0, bottom: 0 }
     let canUpdateDragonBounds = true
+    let holdAttack = false
 
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
@@ -26,6 +27,7 @@ export const DragonMan = renderer => {
     const self = {
         injectGameScreen: _gameScreen => gameScreen = _gameScreen,
         set canUpdateBounds(value) { canUpdateDragonBounds = value },
+        set holdAttack(value) { holdAttack = value },
         attack: (slotIdx, damage) => {
             if (dragons.length === 0) {
                 gameScreen.processSlotDamage(slotIdx, DAMAGE_SOURCE.CLICK, damage)
@@ -40,7 +42,7 @@ export const DragonMan = renderer => {
             dragons.forEach(d => d.update(dt))
 
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
-			
+
 			const autoDamageMult = 0.001;
 			damageToDistribute[0] += lastDamage * autoDamageMult
 			damageToDistribute[1] += lastDamage * autoDamageMult
@@ -63,19 +65,6 @@ export const DragonMan = renderer => {
                     if (!gameScreen.isSlotLive(j)) continue //no reason to attack empty slot
 					// here is the point of assigning some damage
 
-                    const finalDamage = Math.min(damageToDistribute[j], damage)
-                    damageToDistribute[j] = Math.max(0, damageToDistribute[j] - damage)
-					
-					
-                    const projectile = projectilePool.getOne()
-                    gameScreen.add(projectile)
-                    projectile.launch(finalDamage, j,
-                        singleAvailable.tier,
-                        singleAvailable.visual.x, singleAvailable.visual.y,
-                        gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
-
-                    singleAvailable.setAttackFlag()
-
                     if (canUpdateDragonBounds) {
                         const slotDragonAreaRange = 150
                         singleAvailable.setLocalBounds(
@@ -85,6 +74,19 @@ export const DragonMan = renderer => {
                             commonBounds.bottom
                         )
                     }
+                    if (holdAttack) continue
+
+                    const finalDamage = Math.min(damageToDistribute[j], damage)
+                    damageToDistribute[j] = Math.max(0, damageToDistribute[j] - damage)
+
+                    const projectile = projectilePool.getOne()
+                    gameScreen.add(projectile)
+                    projectile.launch(finalDamage, j,
+                        singleAvailable.tier,
+                        singleAvailable.visual.x, singleAvailable.visual.y,
+                        gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
+
+                    singleAvailable.setAttackFlag()
 
                     lastAttack = Date.now()
                     wasAttack = true

@@ -22,13 +22,15 @@ export const ScreenMan = (dragonMan, renderer, model) => {
             dragonMan.canUpdateBounds = to === SCREEN_TYPE.GAME
         },
         transit: to => {
+            dragonMan.holdAttack = true
+            dragonMan.canUpdateBounds = to === SCREEN_TYPE.GAME
+
             if (typeof transitions[currentScreen][to] === "undefined") {
                 console.warn(`unhandled transition ${currentScreen}->${to}`)
                 self.instantTransit(to)
             } else {
                 transitions[currentScreen][to](renderer.size.x)
             }
-            dragonMan.canUpdateBounds = to === SCREEN_TYPE.GAME
         },
         update: dt => {
             Object.keys(screens).forEach(k => {
@@ -47,11 +49,13 @@ export const ScreenMan = (dragonMan, renderer, model) => {
     const makeTransition = (current, currentToOffset, next, nextFromOffset) => {
         screens[current].disableControls()
         screens[current].animateHide({x: currentToOffset}, () => {
+            console.log('will hide', current)
             screens[current].hide()
         })
         screens[next].animateShow({x: nextFromOffset}, () => {
             screens[next].enableControls()
             currentScreen = next
+            dragonMan.holdAttack = false
         })
     }
 

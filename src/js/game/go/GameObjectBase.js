@@ -46,6 +46,12 @@ export const IVisual = (t, x, y, w, h, layer = undefined) => {
     }
 }
 
+export const IUnimportantContent = () => {
+    return {
+        get unimportantContent() { return true }
+    }
+}
+
 export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefined, layer = undefined) => {
     const t = new PIXI.Text(text, new PIXI.TextStyle(style))
     t.x = x; t.y = y;
