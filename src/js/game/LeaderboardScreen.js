@@ -13,9 +13,4 @@ export class LeaderboardScreen extends BaseScreen {
             owner, SCREEN_TYPE.GAME,
             'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
     }
-
-    show() {
-        super.show()
-        this._owner.dragonManager.updateCommonBounds(50, 750, 50, 1230)
-    }
 }

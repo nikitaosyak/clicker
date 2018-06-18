@@ -94,10 +94,10 @@ export const UpgradeList = (model) => {
     Object.assign(self, EmitterBehaviour({}))
 
     self.visual.on('pointerdown', () => {
-        console.log('start')
+        // console.log('start')
     })
     self.visual.on('pointerup', () => {
-        console.log('up')
+        // console.log('up')
     })
     // self.visual.on('pointermove', () => {
     //     console.log('move')

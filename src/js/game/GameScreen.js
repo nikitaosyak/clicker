@@ -8,6 +8,7 @@ import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
 import {ObjectPool} from "../utils/ObjectPool";
 import {DamagePercent} from "./ui/debugDamagePercent";
 import {DestroyAnimation} from "./screen/DestroyAnimation";
+import {DAMAGE_SOURCE} from "./DamageSource";
 
 export class GameScreen extends BaseScreen {
 
@@ -69,6 +70,7 @@ export class GameScreen extends BaseScreen {
         }
 
         this._savedRewards = []
+        this._canUseCommonBounds = true
     }
 
     _dropGold(i, dropData, value) {
@@ -78,17 +80,22 @@ export class GameScreen extends BaseScreen {
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
 		var visualCoins = Math.max(1, value / allCoins * 200);
-		console.log(visualCoins)
+		// console.log(visualCoins)
         self._particles.dropCoin(i, visualCoins)
         self._goldCounter.setValue(this._owner.model.gold)
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
     }
 
-    onViewportSizeChanged() {
-        this._owner.dragonManager.updateCommonBounds(
+    _updateBounds() {
+        this._owner.dragonManager.setCommonBounds(
             50, this._owner.renderer.size.x-50,
             50, this._owner.renderer.size.y-450
         )
+    }
+
+    onViewportSizeChanged() {
+        if (!this._canUseCommonBounds) return
+        this._updateBounds()
     }
 
     show() {
@@ -96,7 +103,7 @@ export class GameScreen extends BaseScreen {
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
-        this.onViewportSizeChanged()
+        this._updateBounds()
 
         while(this._savedRewards.length) {
             this._savedRewards.shift()()
@@ -128,6 +135,7 @@ export class GameScreen extends BaseScreen {
             if (c === null) return
             const clicks = c.extractClicks()
             if (clicks > 0) {
+                this._canUseCommonBounds = false
                 window.GA.accumulate('clicks', {num: clicks, stage: c.stage})
                 const targetDmg = window.GD.getTargetDamage(c.stage)
                 if (window.GD.config.MODE === 'development') {
@@ -140,7 +148,7 @@ export class GameScreen extends BaseScreen {
                 const clickDamage = Math.floor(totalDamage * window.GD.clickSourceDamage)
                 const dragonDamage = totalDamage - clickDamage
                 this._owner.dragonManager.attack(i, dragonDamage)
-                this.processSlotDamage(i, 'click', clickDamage)
+                this.processSlotDamage(i, DAMAGE_SOURCE.CLICK, clickDamage)
             }
         })
     }

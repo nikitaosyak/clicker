@@ -46,7 +46,7 @@ export const UpgradeListItem = (_, owner) => {
         self.visual.y = -itemIndex * (120)
 
         if (currentDragon) {
-            dragonManager.updateSpecificBounds(currentDragon.tier, currentDragon.level,
+            dragonManager.setBatchLocalBounds(currentDragon.tier, currentDragon.level,
                 170, viewportSize.x-300,
                 owner.visual.y + self.visual.y - 20, owner.visual.y + self.visual.y + 20)
             damageWidget.visual.x = viewportSize.x - 270

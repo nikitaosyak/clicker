@@ -1,13 +1,15 @@
 import {Dragon} from "./go/Dragon";
 import {ObjectPool} from "../utils/ObjectPool";
 import {DragonProjectile} from "./go/DragonProjectile";
+import {DAMAGE_SOURCE} from "./DamageSource";
 
 export const DragonMan = renderer => {
 
     let gameScreen = null
     const dragons = []
 
-    const commonBounds = { left: 0,right: 0, top: 0, bottom: 0, active: false }
+    const commonBounds = { left: 0,right: 0, top: 0, bottom: 0 }
+    let canUpdateDragonBounds = true
 
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
@@ -17,15 +19,16 @@ export const DragonMan = renderer => {
     let lastAttack = -1
 
     const projectilePool = ObjectPool(DragonProjectile, [(self) => {
-        gameScreen.processSlotDamage(self.slotIdx, 'dragon', self.damage)
+        gameScreen.processSlotDamage(self.slotIdx, DAMAGE_SOURCE.DRAGON, self.damage)
         gameScreen.remove(self)
     }], 3)
 
     const self = {
         injectGameScreen: _gameScreen => gameScreen = _gameScreen,
+        set canUpdateBounds(value) { canUpdateDragonBounds = value },
         attack: (slotIdx, damage) => {
             if (dragons.length === 0) {
-                gameScreen.processSlotDamage(slotIdx, 'dragons', damage)
+                gameScreen.processSlotDamage(slotIdx, DAMAGE_SOURCE.CLICK, damage)
                 return
             }
 
@@ -72,9 +75,16 @@ export const DragonMan = renderer => {
                         gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
 
                     singleAvailable.setAttackFlag()
-					
-					const slotDragonAreaRange = 150
-					singleAvailable.setLocalBounds(gameScreen._slotItems[j].visual.x - slotDragonAreaRange,gameScreen._slotItems[j].visual.x + slotDragonAreaRange, commonBounds.top + 50, commonBounds.bottom)
+
+                    if (canUpdateDragonBounds) {
+                        const slotDragonAreaRange = 150
+                        singleAvailable.setLocalBounds(
+                            gameScreen._slotItems[j].visual.x - slotDragonAreaRange,
+                            gameScreen._slotItems[j].visual.x + slotDragonAreaRange,
+                            commonBounds.top + 50,
+                            commonBounds.bottom
+                        )
+                    }
 
                     lastAttack = Date.now()
                     wasAttack = true
@@ -98,14 +108,12 @@ export const DragonMan = renderer => {
         getVisualDragons: (tier, level) => {
             return dragons.filter(sh => {if (sh.tier === tier && sh.level === level) return sh})
         },
-        updateCommonBounds: (left, right, top, bottom) => {
+        setCommonBounds: (left, right, top, bottom) => {
             commonBounds.left = left; commonBounds.right = right;
             commonBounds.top = top; commonBounds.bottom = bottom;
-			//now needs always custom bounds
-            //commonBounds.active = true
+            dragons.forEach(d => d.deactivateLocalBounds())
         },
-        updateSpecificBounds: (tier, level, left, right, top, bottom) => {
-            commonBounds.active = false
+        setBatchLocalBounds: (tier, level, left, right, top, bottom) => {
             self.getVisualDragons(tier, level).forEach(d => d.setLocalBounds(left, right, top, bottom))
         }
     }

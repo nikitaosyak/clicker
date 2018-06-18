@@ -13,7 +13,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     let nextDecisionIn = 3 + Math.random() * 3
     let speedMult = 1
-    const localBounds = { left: 0, right: 0, top: 0, bottom: 0 }
+    const localBounds = { left: 0, right: 0, top: 0, bottom: 0, active: false }
 
     //                    TIER:   1,    2,    3,    4,    5,   6,   7,     8,    9,   10
     const attackCooldown = [-1, 0.6, 0.58, 0.56, 0.54, 0.52, 0.5, 0.48, 0.46, 0.44, 0.42][tier]
@@ -32,6 +32,10 @@ export const Dragon = (bounds, tier, level, x, y) => {
         setLocalBounds: (left, right, top, bottom) => {
             localBounds.left = left; localBounds.right = right;
             localBounds.top = top; localBounds.bottom = bottom;
+            localBounds.active = true
+        },
+        deactivateLocalBounds: () => {
+            localBounds.active = false
         },
         levelUp: () => {
             level += 1
@@ -52,19 +56,19 @@ export const Dragon = (bounds, tier, level, x, y) => {
                 nextDecisionIn = 3 + Math.random() * 3
                 dirChange = true
             }
-            if (self.visual.x >= (bounds.active ? bounds.right : localBounds.right)) {
+            if (self.visual.x >= (localBounds.active ? localBounds.right : bounds.right)) {
                 dir.x = -1
                 dirChange = true
             }
-            if (self.visual.x <= (bounds.active ? bounds.left : localBounds.left)) {
+            if (self.visual.x <= (localBounds.active ? localBounds.left : bounds.left)) {
                 dir.x = 1
                 dirChange = true
             }
 
-            if (self.visual.y >= (bounds.active ? bounds.bottom : localBounds.bottom)) {
+            if (self.visual.y >= (localBounds.active ? localBounds.bottom : bounds.bottom)) {
                 dir.y = -1
             }
-            if (self.visual.y <= (bounds.active ? bounds.top : localBounds.top)) {
+            if (self.visual.y <= (localBounds.active ? localBounds.top : bounds.top)) {
                 dir.y = 1
             }
 

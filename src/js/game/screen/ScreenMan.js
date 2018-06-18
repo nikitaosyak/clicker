@@ -13,12 +13,13 @@ export const ScreenMan = (dragonMan, renderer, model) => {
         get renderer() { return renderer },
         get dragonManager() { return dragonMan },
         get model() { return model },
-        instantTransit: screen => {
+        instantTransit: to => {
             if (currentScreen) {
                 screens[currentScreen].hide()
             }
-            screens[screen].show()
-            currentScreen = screen
+            screens[to].show()
+            currentScreen = to
+            dragonMan.canUpdateBounds = to === SCREEN_TYPE.GAME
         },
         transit: to => {
             if (typeof transitions[currentScreen][to] === "undefined") {
@@ -27,6 +28,7 @@ export const ScreenMan = (dragonMan, renderer, model) => {
             } else {
                 transitions[currentScreen][to](renderer.size.x)
             }
+            dragonMan.canUpdateBounds = to === SCREEN_TYPE.GAME
         },
         update: dt => {
             Object.keys(screens).forEach(k => {
