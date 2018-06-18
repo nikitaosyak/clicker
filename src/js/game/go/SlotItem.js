@@ -86,7 +86,7 @@ export class SlotItem {
         this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
     }
 
-    processDamage(value) {
+    processDamage(value, source) {
         this._currentHealth = Math.max(0, this._currentHealth-value)
         this.setHealthBarValue(this._currentHealth/this._maxHealth)
 

@@ -159,7 +159,7 @@ export class GameScreen extends BaseScreen {
             // console.log('slot item already destroying, but got damage from source ', source)
             return
         }
-        const rewardingClick = slotItem.processDamage(damage)
+        const rewardingClick = slotItem.processDamage(damage, source)
         const drop = slotItem.drop
         const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
         const dropsDragon = typeof drop[ObjectType.DRAGON] !== "undefined"
