@@ -28,7 +28,7 @@ window.onload = () => {
             const renderer = Renderer()
             renderer.addObject(Background())
 
-            const dragons = DragonMan(renderer)
+            const dragons = DragonMan(renderer, window.GD.getClickDamage(model.dragons))
 
             const screens = ScreenMan(dragons, renderer, model)
             screens.instantTransit(SCREEN_TYPE.GAME)

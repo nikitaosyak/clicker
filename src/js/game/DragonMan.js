@@ -3,7 +3,7 @@ import {ObjectPool} from "../utils/ObjectPool";
 import {DragonProjectile} from "./go/DragonProjectile";
 import {DAMAGE_SOURCE} from "./DamageSource";
 
-export const DragonMan = renderer => {
+export const DragonMan = (renderer, clickDamage) => {
 
     let gameScreen = null
     const dragons = []
@@ -15,7 +15,7 @@ export const DragonMan = renderer => {
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
 	//todo: make damage available before first click 
-	let lastDamage = 0
+	let lastDamage = clickDamage
     const GLOBAL_ATTACK_COOLDOWN = 1 //ms
     let lastAttack = -1
 
