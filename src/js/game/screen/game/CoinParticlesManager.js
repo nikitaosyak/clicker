@@ -52,46 +52,51 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
         "spawnType": "burst",
         "particlesPerWave": 1,
         "particleSpacing": 0,
-        "angleStart": 0
+        "angleStart": 0,
+        "emit": false
     }
-    let emitter
+    let emitters = []
     let currentParticleToSpawn = 0
 
     const self = {
         update: dt => {
-            const particles = emitter.update(dt)
-            if (particles > 0) {
-                currentParticleToSpawn = Math.max(0, currentParticleToSpawn - particles)
-                if (currentParticleToSpawn === 0) {
-                    emitter.emit = false
+            emitters.forEach(emitter => {
+                const particles = emitter.update(dt)
+                if (particles > 0) {
+                    currentParticleToSpawn = Math.max(0, currentParticleToSpawn - particles)
+                    if (currentParticleToSpawn === 0) {
+                        emitter.emit = false
+                    }
                 }
-            }
+            })
         },
         dropCoin: (fromSlot, value) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
 
             const spawnPos = gameScreen._slotItems[fromSlot].visual
             currentParticleToSpawn = value
-            emitter.emitterLifetime = 2
-            emitter.updateSpawnPos(spawnPos.x, spawnPos.y)
-            emitter.emit = true
+            emitters[fromSlot].emitterLifetime = 2
+            emitters[fromSlot].updateSpawnPos(spawnPos.x, spawnPos.y)
+            emitters[fromSlot].emit = true
         }
     }
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
 
-    emitter = new PIXI.particles.Emitter(
-        self.visual,
-        {
-            spritesheet: 'assets/anim/coin.png',
-            framerate: 50,
-            loop: true,
-            textures: Object.keys(window.resources.getAnimation('anim_coin'))
-                .map(k => PIXI.Texture.fromFrame(k))
-        },
-        config
-    )
-    emitter.emit = false
-    emitter.particleConstructor = PIXI.particles.AnimatedParticle
+    for (let i = 0; i < 3; i++) {
+        emitters.push(new PIXI.particles.Emitter(
+            self.visual,
+            {
+                spritesheet: 'assets/anim/coin.png',
+                framerate: 50,
+                loop: true,
+                textures: Object.keys(window.resources.getAnimation('anim_coin'))
+                    .map(k => PIXI.Texture.fromFrame(k))
+            },
+            config
+        ))
+        emitters[i].particleConstructor = PIXI.particles.AnimatedParticle
+    }
+
 
     return self
 }
