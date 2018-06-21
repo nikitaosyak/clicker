@@ -18,9 +18,9 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "end": "#ffffff"
         },
         "speed": {
-            "start": 150,
+            "start": 120,
             "end": 100,
-            "minimumSpeedMultiplier": 3
+            "minimumSpeedMultiplier": 1
         },
         "acceleration": {
             "x": 0,
