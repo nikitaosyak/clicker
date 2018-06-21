@@ -83,15 +83,6 @@ export const IAnimated = (texture, x, y, w, h, layer = undefined) => {
     }
 }
 
-export const IParticleContainer = layer => {
-    const pc = new PIXI.particles.ParticleContainer()
-    return {
-        get layer() { return layer || RENDER_LAYER.UI },
-        get hasVisual() { return true },
-        get visual() { return pc }
-    }
-}
-
 export const IHealthBarOwner = self => {
     const parent = self.visual
     const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))

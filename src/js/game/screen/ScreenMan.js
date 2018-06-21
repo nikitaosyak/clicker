@@ -49,7 +49,6 @@ export const ScreenMan = (dragonMan, renderer, model) => {
     const makeTransition = (current, currentToOffset, next, nextFromOffset) => {
         screens[current].disableControls()
         screens[current].animateHide({x: currentToOffset}, () => {
-            console.log('will hide', current)
             screens[current].hide()
         })
         screens[next].animateShow({x: nextFromOffset}, () => {

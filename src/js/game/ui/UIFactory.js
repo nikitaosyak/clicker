@@ -91,11 +91,13 @@ export const UIFactory = {
             getUpgradeButton: (onClick) => {
                 const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 100)
                 const icon = StaticImage('ui_upgrade_dragon', 0, 4, 80, 80, undefined, {x: 0, y: 0.5})
+                icon.interactive = false
                 btn.visual.addChild(icon.visual)
 
                 const price = UIFactory.forParent('upgrade_button').getText('', 0, 0, {
                     fontSize: 30, fill: '#000000'
                 }, {x: 0, y: 0.5})
+                price.interactive = false
                 btn.visual.addChild(price.visual)
 
                 btn.setPrice = v => {

@@ -51,8 +51,10 @@ export const UpgradeListItem = (_, owner) => {
                 owner.visual.y + self.visual.y - 20, owner.visual.y + self.visual.y + 20)
             damageWidget.visual.x = viewportSize.x - 270
         } else {
-            upgradeBtn.visual.x = viewportSize.x / 2 - self.visual.x/2
+            upgradeBtn.visual.x = viewportSize.x / 2 - self.visual.x/2 - 30
         }
+        self.visual.hitArea = new PIXI.Rectangle(-80, -60, viewportSize.x, 120)
+        // console.log(self.visual.width, self.visual.height)
     }
 
     Object.assign(self, IContainer(0, 0))

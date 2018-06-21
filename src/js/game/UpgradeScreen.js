@@ -9,6 +9,9 @@ export class UpgradeScreen extends BaseScreen {
     constructor(owner) {
         super(owner, SCREEN_TYPE.UPGRADE)
 
+        this._list = UpgradeList(owner.model, owner.renderer)
+        this.add(this._list)
+
         const uiCreator = UIFactory.forParent(this.type)
         // const fs = uiCreator.getFullScreenButton(owner.renderer.dom); fs && this.addControl(fs)
         this.addControl(uiCreator.getNavButton(
@@ -17,9 +20,6 @@ export class UpgradeScreen extends BaseScreen {
 
         this._goldCounter = GoldCounter({x: 'center', y: 'bottom', yOffset: 60}, this._owner.model.gold)
         this.add(this._goldCounter)
-
-        this._list = UpgradeList(owner.model)
-        this.add(this._list)
 
         this._list.on('upgrade', dragon => {
             owner.model.subtractGold(window.GD.getUpgradePrice(dragon.tier, dragon.level))
@@ -30,7 +30,7 @@ export class UpgradeScreen extends BaseScreen {
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
             this._list.invalidate(this._owner.model.dragons)
-            this._list.updateBounds(this._cachedViewportSize, this._owner.dragonManager)
+            this._list.updateDragonsLayout(this._cachedViewportSize, this._owner.dragonManager)
         })
     }
 
@@ -43,5 +43,6 @@ export class UpgradeScreen extends BaseScreen {
         this._goldCounter.setValueInstantly(this._owner.model.gold)
         this._list.invalidate(this._owner.model.dragons)
         this._list.updateBounds(this._cachedViewportSize, this._owner.dragonManager)
+        this._list.scrollToTop()
     }
 }
