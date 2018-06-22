@@ -18,8 +18,8 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "end": "#ffffff"
         },
         "speed": {
-            "start": 120,
-            "end": 100,
+            "start": 160,
+            "end": 130,
             "minimumSpeedMultiplier": 1
         },
         "acceleration": {
@@ -37,8 +37,8 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "max": 50
         },
         "lifetime": {
-            "min": 0.9,
-            "max": 0.1
+            "min": 1.1,
+            "max": 1.2
         },
         "blendMode": "normal",
         "frequency": 0.01,
@@ -48,7 +48,7 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "x": 500,
             "y": 500
         },
-        "addAtBack": false,
+        "addAtBack": true,
         "spawnType": "burst",
         "particlesPerWave": 1,
         "particleSpacing": 0,
@@ -56,16 +56,25 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
         "emit": false
     }
     let emitters = []
-    let currentParticleToSpawn = 0
+    let currentParticleToSpawn = [0, 0, 0]
 
     const self = {
         update: dt => {
-            emitters.forEach(emitter => {
-                const particles = emitter.update(dt)
-                if (particles > 0) {
-                    currentParticleToSpawn = Math.max(0, currentParticleToSpawn - particles)
-                    if (currentParticleToSpawn === 0) {
-                        emitter.emit = false
+            emitters.forEach((emitter, i) => {
+                if (currentParticleToSpawn[i] <= 0) {
+                    emitter.update(dt)
+                    return
+                }
+                let currentDelta = 0
+                while (currentDelta < dt) {
+                    currentDelta += config.frequency
+                    const particles = emitter.update(config.frequency)
+                    if (particles > 0) {
+                        currentParticleToSpawn[i] = Math.max(0, currentParticleToSpawn[i] - particles)
+                        if (currentParticleToSpawn[i] === 0) {
+                            emitter.emit = false
+                            currentDelta = dt
+                        }
                     }
                 }
             })
@@ -74,8 +83,8 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
 
             const spawnPos = gameScreen._slotItems[fromSlot].visual
-            currentParticleToSpawn = value
-            emitters[fromSlot].emitterLifetime = 2
+            currentParticleToSpawn[fromSlot] = value
+            emitters[fromSlot].emitterLifetime = [0.3, 0.45, 0.7][fromSlot]
             emitters[fromSlot].updateSpawnPos(spawnPos.x, spawnPos.y)
             emitters[fromSlot].emit = true
         }

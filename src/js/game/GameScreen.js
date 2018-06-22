@@ -79,7 +79,7 @@ export class GameScreen extends BaseScreen {
 		var allCoins = dropData[ObjectType.GOLD];
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
-		var visualCoins = Math.max(1, value / allCoins * 200);
+		var visualCoins = Math.floor(Math.max(1, value / allCoins * 200));
 		// console.log(visualCoins)
         self._particles.dropCoin(i, visualCoins)
         self._goldCounter.setValue(this._owner.model.gold)
