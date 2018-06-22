@@ -58,6 +58,7 @@ export const Renderer = () => {
             //
             // tall screen
             stage.scale.x = stage.scale.y = canvasW / vSize.x
+            stage.x = 0
             adjustedVSize.x = vSize.x
             adjustedVSize.y = Math.ceil(vSize.x / currentAspectRatio)
         }
