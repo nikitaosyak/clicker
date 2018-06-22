@@ -21,6 +21,7 @@ window.onload = () => {
 
     const startGame = () => {
         model.connect().then(() => {
+            window.GD.progressToStage(model.stage)
             if (window.GD.config.MODE === 'development') {
                 window.GAMEMODEL = model
                 window.money = MathUtil

@@ -89,8 +89,10 @@ export const GameData = (model) => {
             return (baseDamage + damage)// * 20
         },
         progressToStage: stage => {
-            for (let i = 0; i < stage; i++) {
-                self.generateStageItems(i, true)
+            if (stage > 0) {
+                for (let i = 0; i <= stage; i++) {
+                    self.generateStageItems(i)
+                }
             }
         },
         generateStageItems: (stage, shallow = false) => {
@@ -193,7 +195,7 @@ export const GameData = (model) => {
     }
 
     // integral progress to current stage
-    self.progressToStage(model.stage)
+
     // const result = {}
     // for (let i = 0; i < 40; i++) {
     //     result[`stage${i}`] = self.generateStageItems(i).map(chest => `[${chest.stage}:${chest.health}, {g:${chest.drops.gold}${chest.drops.egg?'; d' + chest.drops.egg.drops.dragon.tier : ''}}]`)
