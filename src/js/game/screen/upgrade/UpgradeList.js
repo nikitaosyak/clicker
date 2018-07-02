@@ -152,8 +152,12 @@ export const UpgradeList = (model, renderer) => {
         dragging = false
     }
     self.visual.on('pointerup', finishDrag)
+    self.visual.on('pointerupoutside', finishDrag)
     self.visual.on('pointerout', finishDrag)
     self.visual.on('pointercancel', finishDrag)
+    // self.visual.on('touchend', finishDrag)
+    // self.visual.on('touchendoutside', finishDrag)
+    // self.visual.on('touchcancel', finishDrag)
 
     dropAnimation = TweenLite.to(self.visual, 0.5, {y: 0, ease: Expo.easeOut, roundProps: 'y', onUpdate: () => {
         self.updateDragonsLayout(lastVP, dragonMan)
