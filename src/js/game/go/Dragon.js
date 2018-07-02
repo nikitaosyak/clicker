@@ -91,6 +91,24 @@ export const Dragon = (bounds, tier, level, x, y) => {
         deactivateLocalBounds: () => {
             localBounds.active = false
         },
+        get boundsDifference() {
+            let largestDifference = 0
+            const currentBounds = localBounds.active ? localBounds : bounds
+            if (self.visual.x >= currentBounds.right) {
+                largestDifference = Math.max(largestDifference, self.visual.x - currentBounds.right)
+            }
+            if (self.visual.x <= currentBounds.left) {
+                largestDifference = Math.max(largestDifference, currentBounds.left - self.visual.x)
+            }
+
+            if (self.visual.y >= currentBounds.bottom) {
+                largestDifference = Math.max(largestDifference, self.visual.y - currentBounds.bottom)
+            }
+            if (self.visual.y <= currentBounds.top) {
+                largestDifference = Math.max(largestDifference, currentBounds.top - self.visual.y)
+            }
+            return largestDifference
+        },
         levelUp: () => {
             level += 1
             if (window.GD.config.MODE === 'development') {

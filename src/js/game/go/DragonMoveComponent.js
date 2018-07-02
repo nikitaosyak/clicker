@@ -6,7 +6,7 @@ export const DragonMoveComponent = (tier, level) => {
 
     // units per second
     const BASE_SPEED = 150
-    const MAX_SPEED = 370
+    const MAX_SPEED = 280
     const ACCELERATION = 180
     const DECELERATION = 230
     const SPEED_MULTS = [0.8, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98, 1.01]

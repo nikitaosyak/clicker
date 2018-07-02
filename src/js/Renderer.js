@@ -78,7 +78,6 @@ export const Renderer = () => {
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
-        get vDencityCoefficient() { return adjustedVSize.y/canvasH },
         addObject: (go) => {
             if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
             if (typeof go.adopt !== 'undefined') {

@@ -25,6 +25,7 @@ export const DragonMan = (renderer, clickDamage) => {
     }], 3)
 
     const self = {
+        get dragons() { return dragons },
         injectGameScreen: _gameScreen => gameScreen = _gameScreen,
         set canUpdateBounds(value) { canUpdateDragonBounds = value },
         set holdAttack(value) { holdAttack = value },

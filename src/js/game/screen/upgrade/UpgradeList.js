@@ -106,28 +106,40 @@ export const UpgradeList = (model, renderer) => {
     Object.assign(self, IAdoptableBase(self.visual, {x: 'left', y: 'bottom', yOffset: 170}))
     Object.assign(self, EmitterBehaviour({}))
 
+    const cachedPoint = new PIXI.Point()
     let dragging = false
-    let anchorY = NaN
+    let startAnchorY = NaN
+    let lastEventAnchorY = NaN
     let visualAnchorY = NaN
     self.visual.on('pointerdown', e => {
         if (!scrollable) return
         dropAnimation.pause()
         dragging = true
 
-        anchorY = e.data.global.y
+        startAnchorY = lastEventAnchorY = e.data.getLocalPosition(renderer.stage, cachedPoint).y
         visualAnchorY = self.visual.y
     })
     self.visual.on('pointermove', e => {
         if (!dragging) return
 
-        let movement = Math.round((e.data.global.y - anchorY) * renderer.vDencityCoefficient)
+        const pointerPosition = e.data.getLocalPosition(renderer.stage, cachedPoint)
+
+        let movement = pointerPosition.y - startAnchorY
+        let eventMovement = pointerPosition.y - lastEventAnchorY
         if (self.visual.y < bottomBoundY) {
             const maxFullAccMovement = bottomBoundY - visualAnchorY
             movement = maxFullAccMovement + (movement - maxFullAccMovement)/2
+            eventMovement /= 2
         } else if (self.visual.y > 100 + self.visual.height) {
             const maxFullAccMovement = (self.visual.height+100) - visualAnchorY
             movement = maxFullAccMovement + (movement - maxFullAccMovement) / 2
+            eventMovement /= 2
         }
+        dragonMan.dragons.forEach(d => {
+            if (d.boundsDifference > 50) return
+            d.visual.y += eventMovement * 0.95
+        })
+        lastEventAnchorY = pointerPosition.y
         self.visual.y = visualAnchorY + movement
         self.updateDragonsLayout(lastVP, dragonMan)
     })
@@ -155,12 +167,18 @@ export const UpgradeList = (model, renderer) => {
     self.visual.on('pointerupoutside', finishDrag)
     self.visual.on('pointerout', finishDrag)
     self.visual.on('pointercancel', finishDrag)
-    // self.visual.on('touchend', finishDrag)
-    // self.visual.on('touchendoutside', finishDrag)
-    // self.visual.on('touchcancel', finishDrag)
 
-    dropAnimation = TweenLite.to(self.visual, 0.5, {y: 0, ease: Expo.easeOut, roundProps: 'y', onUpdate: () => {
-        self.updateDragonsLayout(lastVP, dragonMan)
+    dropAnimation = TweenLite.to(self.visual, 0.5, {y: 0, ease: Expo.easeOut, roundProps: 'y',
+        onStart: () => {
+            dropAnimation.prevTargetY = self.visual.y
+        },
+        onUpdate: () => {
+            const diffY = self.visual.y - dropAnimation.prevTargetY
+            dropAnimation.prevTargetY = self.visual.y
+            dragonMan.dragons.forEach(d => {
+                d.visual.y += diffY * 0.75
+            })
+            self.updateDragonsLayout(lastVP, dragonMan)
         }})
     dropAnimation.pause()
 
