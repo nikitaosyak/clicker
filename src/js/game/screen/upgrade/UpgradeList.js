@@ -116,9 +116,15 @@ export const UpgradeList = (model, renderer) => {
     })
     self.visual.on('pointermove', e => {
         if (!dragging) return
-        // console.log('move', e)
 
-        const movement = Math.round((e.data.global.y - anchorY) * renderer.vDencityCoefficient)
+        let movement = Math.round((e.data.global.y - anchorY) * renderer.vDencityCoefficient)
+        if (self.visual.y < bottomBoundY) {
+            const maxFullAccMovement = bottomBoundY - visualAnchorY
+            movement = maxFullAccMovement + (movement - maxFullAccMovement)/2
+        } else if (self.visual.y > 100 + self.visual.height) {
+            const maxFullAccMovement = (self.visual.height+100) - visualAnchorY
+            movement = maxFullAccMovement + (movement - maxFullAccMovement) / 2
+        }
         self.visual.y = visualAnchorY + movement
         self.updateDragonsLayout(lastVP, dragonMan)
     })
