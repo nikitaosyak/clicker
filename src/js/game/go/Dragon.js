@@ -1,6 +1,7 @@
 import {ITypedObject, IVisual, IVisualNumericRep, ObjectType} from "./GameObjectBase";
 import {RENDER_LAYER} from "../../Renderer";
 import {MathUtil} from "../../utils/MathUtil";
+import {DragonMoveComponent} from "./DragonMoveComponent";
 
 const upgradeParticlesConfig = {
         "alpha": {
@@ -60,15 +61,10 @@ const upgradeParticlesConfig = {
 
 export const Dragon = (bounds, tier, level, x, y) => {
 
+    const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
-        self.visual.scale.x = dir.x > 0 ? Math.abs(self.visual.scale.x) : -Math.abs(self.visual.scale.x)
+        self.visual.scale.x = movement.direction.x > 0 ? Math.abs(self.visual.scale.x) : -Math.abs(self.visual.scale.x)
     }
-
-    const speed = 200
-    const dir = {x: Math.random() > 0.5 ? 1 : -1, y: Math.random() > 0.5 ? 1 : -1}
-
-    let nextDecisionIn = 3 + Math.random() * 3
-    let speedMult = 1
     const localBounds = { left: 0, right: 0, top: 0, bottom: 0, active: false }
 
     //                    TIER:   1,    2,    3,    4,    5,   6,   7,     8,    9,   10
@@ -104,6 +100,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
             self.visual.parent.addChild(self.visual)
 
+            movement.updateSpeedVariation(level)
+
             emitter.parent = self.visual.parent
             emitter.playOnce()
         },
@@ -112,39 +110,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
             emitter.updateSpawnPos(self.visual.x, self.visual.y)
             emitter.update(dt)
 
-            let dirChange = false
-
-            nextDecisionIn -= dt
-            if (nextDecisionIn <= 0) {
-                dir.x *= -1
-                dir.y *= Math.random() > 0.5 ? 1 : -1
-                speedMult = 0.9 + Math.random() * 0.2
-
-                nextDecisionIn = 3 + Math.random() * 3
-                dirChange = true
-            }
-            if (self.visual.x >= (localBounds.active ? localBounds.right : bounds.right)) {
-                dir.x = -1
-                dirChange = true
-            }
-            if (self.visual.x <= (localBounds.active ? localBounds.left : bounds.left)) {
-                dir.x = 1
-                dirChange = true
-            }
-
-            if (self.visual.y >= (localBounds.active ? localBounds.bottom : bounds.bottom)) {
-                dir.y = -1
-            }
-            if (self.visual.y <= (localBounds.active ? localBounds.top : bounds.top)) {
-                dir.y = 1
-            }
-
-            if (dirChange) {
-                invalidateVisual()
-            }
-
-            self.visual.x += dir.x * speed * speedMult * dt
-            self.visual.y += dir.y * speed * speedMult * dt
+            const dirChange = movement.update(self.visual, bounds, localBounds, dt)
+            dirChange && invalidateVisual()
         }
     }
 
