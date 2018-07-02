@@ -71,12 +71,14 @@ gulp.task('step2-webpack', ['step1-prepare-files'], () => {
                 }
             ]
         },
-        output: { filename: 'bundle.js' },
-        mode: 'development'
+        output: { filename: 'bundle.js' }
     }
 
     if (process.env.MODE === 'development') {
+        config.mode = 'development'
         config.devtool = 'source-map'
+    } else {
+        config.mode = 'production'
     }
 
     return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
@@ -89,7 +91,7 @@ gulp.task('step3-webpack-lib', ['step2-webpack'], () => {
     const webpack2 = require('webpack')
 
     const config = {
-        entry: __dirname + (process.env.MODE === 'development' ? '/src/js/index.js' : '/inter/js/index.js'),
+        entry: __dirname + (process.env.MODE === 'development' ? '/src/js/index.js' : '/inter/index.js'),
         module: {
             rules: [
                 {
@@ -108,7 +110,10 @@ gulp.task('step3-webpack-lib', ['step2-webpack'], () => {
     }
 
     if (process.env.MODE === 'development') {
+        config.mode = 'development'
         config.devtool = 'source-map'
+    } else {
+        config.mode = 'production'
     }
 
     return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
@@ -222,7 +227,7 @@ gulp.task('buildbot-run', () => {
         }
     }
 
-    fs.writeFileSync('./.env', 'MODE=development\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=8082')
+    fs.writeFileSync('./.env', 'MODE=production\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=8082')
     fs.writeFileSync('./bbprocess', process.pid.toString())
     gulp.start('default')
 })
