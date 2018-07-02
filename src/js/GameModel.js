@@ -43,13 +43,21 @@ export const GameModel = () => {
         printCurrentState: () => {
             return JSON.stringify(data, null)
         },
-        loadState: jsonData => {
-            data = JSON.parse(jsonData)
-            self.synchronize()
-            window.location.reload(true)
+        loadState: jsonData => self.loadState2(JSON.parse(jsonData)),
+        loadState2: parsedData => {
+            data = parsedData
+            self.synchronize().then(() => {
+                window.location.href = window.location.origin
+            })
         },
         connect: () => { // TODO: init connection here
             return new Promise((resolve, reject) => {
+                if (URLParam.GET('loadState')) {
+                    connected = true
+                    self.loadState(URLParam.GET('loadState'))
+                    reject()
+                }
+
                 if (connected) {
                     reject("already connected")
                 }
