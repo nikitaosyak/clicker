@@ -17,7 +17,7 @@ export class PaidSlotItem extends SlotItem {
         if (source !== DAMAGE_SOURCE.CLICK) return
         this._fingerClick += 1
         if (this._fingerClick === 1 || this._fingerClick % 30 === 0) {
-            if (window.confirm('посмотреть рекламу?')) {
+            if (window.confirm('watch ad?')) {
                 this._wasPaid = true
             }
         }
