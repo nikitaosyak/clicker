@@ -158,12 +158,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     const cfg = Object.assign({}, upgradeParticlesConfig)
     const color = [
-        -1, "#00AA00",
-        "#FF2222",
-        "#111111",
-        "#FF22FF",
-        "#AAAA22",
-        "#22AAAA"
+        -1,         // particle color:
+        "#00AA00",  // tier 1
+        "#FF2222",  // tier 2
+        "#111111",  // tier 3
+        "#FF22FF",  // tier 4
+        "#AAAA22",  // tier 5
+        "#22AAAA"   // tier 6
     ][tier]
     cfg.color.start = color
     cfg.color.end = color
