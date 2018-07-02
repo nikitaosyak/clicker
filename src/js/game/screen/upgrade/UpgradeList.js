@@ -19,6 +19,8 @@ export const UpgradeList = (model, renderer) => {
     let scrollable = true
     let bottomBoundY = NaN
 
+    let dropAnimation
+
     const self = {
         get model() { return model },
         scrollToTop: () => {
@@ -109,6 +111,7 @@ export const UpgradeList = (model, renderer) => {
     let visualAnchorY = NaN
     self.visual.on('pointerdown', e => {
         if (!scrollable) return
+        dropAnimation.pause()
         dragging = true
 
         anchorY = e.data.global.y
@@ -133,11 +136,15 @@ export const UpgradeList = (model, renderer) => {
         if (!dragging) return
 
         if (self.visual.y < bottomBoundY) {
-            self.visual.y = bottomBoundY
+            dropAnimation.invalidate()
+            dropAnimation.vars.y = bottomBoundY
+            dropAnimation.restart()
         }
 
         if (self.visual.y > 100 + self.visual.height) {
-            self.visual.y = 100 + self.visual.height
+            dropAnimation.invalidate()
+            dropAnimation.vars.y = 100 + self.visual.height
+            dropAnimation.restart()
         }
 
         self.updateDragonsLayout(lastVP, dragonMan)
@@ -147,6 +154,11 @@ export const UpgradeList = (model, renderer) => {
     self.visual.on('pointerup', finishDrag)
     self.visual.on('pointerout', finishDrag)
     self.visual.on('pointercancel', finishDrag)
+
+    dropAnimation = TweenLite.to(self.visual, 0.5, {y: 0, ease: Expo.easeOut, roundProps: 'y', onUpdate: () => {
+        self.updateDragonsLayout(lastVP, dragonMan)
+        }})
+    dropAnimation.pause()
 
     return self
 }
