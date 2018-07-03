@@ -30,7 +30,8 @@ export class UpgradeScreen extends BaseScreen {
             owner.model.upgradeDragon(dragon.tier, dragon.level)
 
             this._list.invalidate(this._owner.model.dragons)
-            this._list.updateDragonsLayout(this._cachedViewportSize, this._owner.dragonManager)
+            this._list.updateElements(this._cachedViewportSize, this._owner.dragonManager)
+            this._list.adjustShortList()
         })
     }
 

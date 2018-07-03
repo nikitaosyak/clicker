@@ -16,19 +16,26 @@ export const UpgradeList = (model, renderer) => {
 
     let lastVP = null
     let dragonMan = null
-    let scrollable = true
     let bottomBoundY = NaN
 
     let dropAnimation
 
+    const isListShort = () => {
+        return self.visual.height - (lastVP.y - 270) < 0
+    }
+
     const self = {
         get model() { return model },
         scrollToTop: () => {
-            if (!scrollable) return
             self.visual.y = 100 + self.visual.height
-            self.updateDragonsLayout(lastVP, dragonMan)
+            self.updateElements(lastVP, dragonMan)
         },
-        updateDragonsLayout: (viewportSize, _dragonMan) => {
+        adjustShortList: () => {
+            if (isListShort()) {
+                self.scrollToTop()
+            }
+        },
+        updateElements: (viewportSize, _dragonMan) => {
             children.forEach((listItem, i) => {
                 listItem.updateLayout(viewportSize, _dragonMan, i)
             })
@@ -36,10 +43,9 @@ export const UpgradeList = (model, renderer) => {
         updateBounds: (viewportSize, _dragonMan) => {
             lastVP = viewportSize
             dragonMan = _dragonMan
-            self.updateDragonsLayout(viewportSize, _dragonMan)
+            self.updateElements(viewportSize, _dragonMan)
 
             bottomBoundY = self.visual.y
-            scrollable = viewportSize.y - 280 < self.visual.height
         },
         invalidate: (dragons) => {
             children.forEach(el => {
@@ -108,11 +114,11 @@ export const UpgradeList = (model, renderer) => {
 
     const cachedPoint = new PIXI.Point()
     let dragging = false
+    let moving = false
     let startAnchorY = NaN
     let lastEventAnchorY = NaN
     let visualAnchorY = NaN
     self.visual.on('pointerdown', e => {
-        if (!scrollable) return
         dropAnimation.pause()
         dragging = true
 
@@ -121,47 +127,67 @@ export const UpgradeList = (model, renderer) => {
     })
     self.visual.on('pointermove', e => {
         if (!dragging) return
+        moving = true
 
         const pointerPosition = e.data.getLocalPosition(renderer.stage, cachedPoint)
 
         let movement = pointerPosition.y - startAnchorY
         let eventMovement = pointerPosition.y - lastEventAnchorY
-        if (self.visual.y < bottomBoundY) {
-            const maxFullAccMovement = bottomBoundY - visualAnchorY
-            movement = maxFullAccMovement + (movement - maxFullAccMovement)/2
-            eventMovement /= 2
-        } else if (self.visual.y > 100 + self.visual.height) {
-            const maxFullAccMovement = (self.visual.height+100) - visualAnchorY
-            movement = maxFullAccMovement + (movement - maxFullAccMovement) / 2
-            eventMovement /= 2
+        if (self.visual.height - (lastVP.y - 270) > 0) {
+            if (self.visual.y < bottomBoundY) {
+                const maxFullAccMovement = bottomBoundY - visualAnchorY
+                movement = maxFullAccMovement + (movement - maxFullAccMovement)/2
+                eventMovement /= 2
+            } else if (self.visual.y > 100 + self.visual.height) {
+                const maxFullAccMovement = (self.visual.height+100) - visualAnchorY
+                movement = maxFullAccMovement + (movement - maxFullAccMovement) / 2
+                eventMovement /= 2
+            }
+        } else {
+            movement /= 3
+            eventMovement /= 3
         }
+
         dragonMan.dragons.forEach(d => {
             if (d.boundsDifference > 50) return
             d.visual.y += eventMovement * 0.95
         })
         lastEventAnchorY = pointerPosition.y
         self.visual.y = visualAnchorY + movement
-        self.updateDragonsLayout(lastVP, dragonMan)
+        self.updateElements(lastVP, dragonMan)
     })
 
     const finishDrag = e => {
         if (!dragging) return
-
-        if (self.visual.y < bottomBoundY) {
-            dropAnimation.invalidate()
-            dropAnimation.vars.y = bottomBoundY
-            dropAnimation.restart()
+        if (!moving) {
+            dragging = false
+            return
         }
 
-        if (self.visual.y > 100 + self.visual.height) {
-            dropAnimation.invalidate()
-            dropAnimation.vars.y = 100 + self.visual.height
-            dropAnimation.restart()
+        if (self.visual.height - (lastVP.y - 270) > 0) {
+            if (self.visual.y > 100 + self.visual.height) {
+                dropAnimation.invalidate()
+                dropAnimation.vars.y = 100 + self.visual.height
+                dropAnimation.restart()
+            }
+
+            if (self.visual.y < bottomBoundY) {
+                dropAnimation.invalidate()
+                dropAnimation.vars.y = bottomBoundY
+                dropAnimation.restart()
+            }
+        } else {
+            if (self.visual.y !== bottomBoundY) {
+                dropAnimation.invalidate()
+                dropAnimation.vars.y = 100 + self.visual.height
+                dropAnimation.restart()
+            }
         }
 
-        self.updateDragonsLayout(lastVP, dragonMan)
+        self.updateElements(lastVP, dragonMan)
 
         dragging = false
+        moving = false
     }
     self.visual.on('pointerup', finishDrag)
     self.visual.on('pointerupoutside', finishDrag)
@@ -178,7 +204,7 @@ export const UpgradeList = (model, renderer) => {
             dragonMan.dragons.forEach(d => {
                 d.visual.y += diffY * 0.75
             })
-            self.updateDragonsLayout(lastVP, dragonMan)
+            self.updateElements(lastVP, dragonMan)
         }})
     dropAnimation.pause()
 
