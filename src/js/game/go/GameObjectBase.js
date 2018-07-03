@@ -85,26 +85,53 @@ export const IAnimated = (texture, x, y, w, h, layer = undefined) => {
 
 export const IHealthBarOwner = self => {
     const parent = self.visual
-    const sprite = new PIXI.Sprite(window.resources.getTexture('pixel'))
 
-    sprite.width = parent.width/parent.scale.x * 0.9;
-    sprite.height = 10/parent.scale.y
+    const getChildSprite = (parent, size, anchor, tint, alpha) => {
+        const pw = parent.width/parent.scale.x
+        const ph = parent.height/parent.scale.y
 
-    sprite.x = -(parent.width/parent.scale.x)/2 + (parent.width/parent.scale.x)*0.05;
-    sprite.y = -(parent.height/parent.scale.y)/2
+        const child = new PIXI.Sprite(window.resources.getTexture('pixel'))
 
-    sprite.anchor.x = 0; sprite.anchor.y = 1
-    sprite.tint = 0xCC0000
-    sprite.alpha = 0.7
+        child.width = pw*size.x; child.height = ph*size.y
+        child.anchor.x = anchor.x; child.anchor.y = anchor.y
+        child.tint = tint; child.alpha = alpha
+        parent.addChild(child)
 
-    parent.addChild(sprite)
+        Object.assign(child, {
+            get pw() {return parent.width/parent.scale.x},
+            get ph() {return parent.height/parent.scale.y}
+        })
 
-    const maxWidth = sprite.width
+        return child
+    }
+
+    const background = getChildSprite(self.visual, {x:1,y:0.06}, {x:0,y:0.5}, 0x666666, 0.85)
+    background.x = -background.pw/2
+    background.y = -background.ph/2
+
+    const mainHp = getChildSprite(background, {x:0.98, y:0.9}, {x:0,y:0.5}, 0xAA0000, 0.9)
+    mainHp.x = mainHp.pw * 0.01
+
+    const drainedHp = getChildSprite(background, {x:0, y:0.9}, {x:0,y:0.5}, 0xAACC00, 0.9)
+    drainedHp.x = mainHp.x + mainHp.width
+
+    const maxWidth = mainHp.width
+    let lastValue = 1
+
+    const drainAnimation = TweenLite.to(drainedHp, 0.5, {width: 0, delay: 0.5})
+    drainAnimation.pause()
 
     return {
-        get healthbarVisual() { return sprite },
+        get healthbarVisual() { return background },
         setHealthBarValue(v) {
-            sprite.width = Math.max(0, maxWidth * v)
+            mainHp.width = Math.max(0, maxWidth * v)
+
+            const diff = lastValue - v
+            lastValue = v
+
+            drainedHp.x = mainHp.x + mainHp.width
+            drainedHp.width += maxWidth * diff
+            drainAnimation.invalidate().restart(true)
         }
     }
 }
