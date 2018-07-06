@@ -1,23 +1,8 @@
 import {MathUtil} from "../utils/MathUtil";
 
-export const IAdoptable = (visual, pivotRules, stretch = false) => {
+export const IAdoptable = (visual, pivotRules) => {
     return {
         adopt: (currentAr, virtualAr, canvasSize, virtualCanvasSize, maxAr) => {
-
-            if (stretch) {
-                visual.height = canvasSize.y
-                visual.scale.x = visual.scale.y
-                // if (currentAr > virtualAr) {    // wide screen
-                //     visual.width = canvasSize.x
-                //     // noinspection JSSuspiciousNameCombination
-                //     visual.scale.y = visual.scale.x
-                // } else {                        // tall screen
-                //     visual.height = canvasSize.y
-                //     // noinspection JSSuspiciousNameCombination
-                //     visual.scale.x = visual.scale.y
-                // }
-            }
-
             if (pivotRules !== null) {
                 const xPivot = pivotRules.x
                 let xOffset = typeof pivotRules.xOffset === 'undefined' ? 0 : pivotRules.xOffset

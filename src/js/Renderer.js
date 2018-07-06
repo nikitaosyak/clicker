@@ -78,6 +78,7 @@ export const Renderer = () => {
         get size() { return adjustedVSize },
         get vSize() { return vSize },
         get stage() { return stage },
+        get layers() { return layers },
         addObject: (go) => {
             if (typeof go.visual === 'undefined') return console.error(`object ${go} cannot be added for render`)
             if (typeof go.adopt !== 'undefined') {

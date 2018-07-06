@@ -30,7 +30,7 @@ export class BaseScreen {
             i -= 1
         }
 
-        this._content.forEach((c, i) => {
+        this._content.forEach((c, i) => { // todo: pool this tweens
             TweenLite.to(c.visual, ANIMATION_LENGTH, {
                 pixi: {x: c.visual.x + to.x},
                 ease: EASING,
@@ -45,7 +45,6 @@ export class BaseScreen {
 
     animateShow(from, onComplete) {
         this.show()
-        console.log('will animate', this._content)
         this._content.forEach((c, i) => {
             let animateFrom = c._originalLocationData.x + from.x
             let animateTo = c._originalLocationData.x

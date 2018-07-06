@@ -7,7 +7,8 @@ export const SCREEN_TYPE = {GAME: 'GAME', UPGRADE: 'UPGRADE', LEADERBOARD: 'LEAD
 
 export const ScreenMan = (dragonMan, renderer, model) => {
 
-    const background = renderer.addObject(Background())
+    const background = Background(renderer)
+    // renderer.addObject(background)
     let currentScreen = null
 
     const self =  {
@@ -64,19 +65,23 @@ export const ScreenMan = (dragonMan, renderer, model) => {
         [SCREEN_TYPE.GAME] : {
             [SCREEN_TYPE.UPGRADE]: (offset) => {
                 makeTransition(SCREEN_TYPE.GAME, offset, SCREEN_TYPE.UPGRADE, -offset)
+                background.animateToPosition(0)
             },
             [SCREEN_TYPE.LEADERBOARD]: (offset) => {
                 makeTransition(SCREEN_TYPE.GAME, -offset, SCREEN_TYPE.LEADERBOARD, offset)
+                background.animateToPosition(2)
             }
         },
         [SCREEN_TYPE.UPGRADE]: {
             [SCREEN_TYPE.GAME]: (offset) => {
                 makeTransition(SCREEN_TYPE.UPGRADE, -offset, SCREEN_TYPE.GAME, offset)
+                background.animateToPosition(1)
             }
         },
         [SCREEN_TYPE.LEADERBOARD]: {
             [SCREEN_TYPE.GAME]: (offset) => {
                 makeTransition(SCREEN_TYPE.LEADERBOARD, offset, SCREEN_TYPE.GAME, -offset)
+                background.animateToPosition(1)
             }
         }
     }
