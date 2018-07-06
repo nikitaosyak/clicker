@@ -1,6 +1,6 @@
-import {SlotItem} from "../../go/SlotItem";
-import {ObjectType} from "../../go/GameObjectBase";
-import {PaidSlotItem} from "../../go/PaidSlotItem";
+import {SlotItem} from "./SlotItem";
+import {ObjectType} from "../behaviours/Base";
+import {PaidSlotItem} from "./PaidSlotItem";
 
 export const SlotItemGenerator = (owner, model, savedStageItems) => {
 

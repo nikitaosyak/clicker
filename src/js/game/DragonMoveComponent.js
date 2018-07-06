@@ -1,4 +1,4 @@
-import {MAX_DRAGON_LEVEL} from "../../GameModel";
+import {MAX_DRAGON_LEVEL} from "../model/GameModel";
 
 let COUNTER = 0
 

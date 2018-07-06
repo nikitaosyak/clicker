@@ -1,4 +1,4 @@
-export const EmitterBehaviour = (dict) => {
+export const IEmitter = (dict) => {
     return {
         on: (e, callback) => {
             if (e in dict) {

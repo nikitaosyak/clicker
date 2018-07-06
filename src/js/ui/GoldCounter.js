@@ -1,16 +1,15 @@
-import {StaticImage} from "../go/StaticImage";
-import {RENDER_LAYER} from "../../Renderer";
-import {IContainer} from "../go/GameObjectBase";
+import {RENDER_LAYER} from "../Renderer";
+import {IContainer, IVisual} from "../behaviours/Base";
 import {UIFactory} from "./UIFactory";
-import {INamedUIElement} from "./UIElementBase";
-import {MathUtil} from "../../utils/MathUtil";
-import {IAdoptableBase} from "../stretching/AdoptableBase";
+import {INamedUIElement} from "../behaviours/Base";
+import {MathUtil} from "../utils/MathUtil";
+import {IAdoptable} from "../behaviours/IAdoptable";
 
 export const GoldCounter = (pivotRules, initialValue) => {
 
     const counter = UIFactory.forParent('gold_counter')
         .getText('0', -50, 0, {fontSize: 60, fill: '#ffd700'}, {x: 0.5, y: 0.5})
-    const icon = StaticImage('ui_coin', 0, 0, 80, 80, RENDER_LAYER.UI)
+    const icon = IVisual('ui_coin').setSize(80, 80).setLayer(RENDER_LAYER.UI)
 
     let cachedSize = 0
     const layoutProperly = () => {
@@ -50,7 +49,7 @@ export const GoldCounter = (pivotRules, initialValue) => {
     }
     Object.assign(self, INamedUIElement('game', 'gold_counter'))
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
-    Object.assign(self, IAdoptableBase(self.visual, pivotRules, null))
+    Object.assign(self, IAdoptable(self.visual, pivotRules, null))
     self.add(counter)
     self.add(icon)
 

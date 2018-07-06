@@ -1,15 +1,14 @@
-import {debugManager} from "./debugManager";
-import {RENDER_LAYER, Renderer} from "./Renderer";
+import {debugManager} from "./debug/debugManager";
+import {Renderer} from "./Renderer";
 import {Resources} from "./Resrouces";
-import {SCREEN_TYPE, ScreenMan} from "./game/screen/ScreenMan";
-import {GameModel} from "./GameModel";
-import {GameData} from "./GameData";
+import {SCREEN_TYPE, ScreenMan} from "./screen/ScreenMan";
+import {GameModel} from "./model/GameModel";
+import {GameData} from "./model/GameData";
 import {MathUtil} from "./utils/MathUtil";
 import {URLParam} from "./utils/URLParam";
-import {Plot} from "./tools/Plot";
-import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
+import {Plot} from "./debug/Plot";
+import {VirtualPlayThrough} from "./debug/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
-import {Background} from "./game/stretching/Background";
 
 window.onload = () => {
     debugManager.init()
@@ -27,7 +26,6 @@ window.onload = () => {
                 window.money = MathUtil
             }
             const renderer = Renderer()
-            renderer.addObject(Background())
 
             const dragons = DragonMan(renderer, window.GD.getClickDamage(model.dragons))
 

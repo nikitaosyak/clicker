@@ -1,9 +1,8 @@
-import {INamedUIElement, ISimpleButton} from "./UIElementBase";
-import {IAnimated, IContainer, IText} from "../go/GameObjectBase";
-import {RENDER_LAYER} from "../../Renderer";
-import {StaticImage} from "../go/StaticImage";
-import {IAdoptableBase, IAdoptableButton, IAdoptableToggleButton, TOGGLE_STATE} from "../stretching/AdoptableBase";
-import {MathUtil} from "../../utils/MathUtil";
+import {INamedUIElement} from "../behaviours/Base";
+import {IAnimated, IButton, IContainer, IText, IToggleButton, IVisual} from "../behaviours/Base";
+import {RENDER_LAYER} from "../Renderer";
+import {IAdoptable} from "../behaviours/IAdoptable";
+import {MathUtil} from "../utils/MathUtil";
 
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
@@ -16,14 +15,18 @@ export const UIFactory = {
                     window.GD.config.PLATFORM === 'standalone') {
                     const button = {}
                     Object.assign(button, INamedUIElement(parent, 'full_screen'))
-                    Object.assign(button, IAdoptableToggleButton(state => {
-                        if (state === TOGGLE_STATE.TOGGLED) {
-                            fsElement.requestFullscreen()
-                        } else {
-                            document.exitFullscreen()
-                        }
-                    }, 'ui_fullscreen_to', 'ui_fullscreen_from', {x: BUTTON_WIDTH, y: BUTTON_HEIGHT}, anchor))
-                    Object.assign(button, IAdoptableBase(button.visual, pivotRules, null))
+                    Object.assign(button, IToggleButton(
+                        'ui_fullscreen_to',
+                        'ui_fullscreen_from',
+                            check => {
+                                if (check) {
+                                    fsElement.requestFullscreen()
+                                } else {
+                                    document.exitFullscreen()
+                                }
+                            }).setSize(BUTTON_WIDTH, BUTTON_HEIGHT).setAnchor(anchor.x, anchor.y)
+                    )
+                    Object.assign(button, IAdoptable(button.visual, pivotRules, null))
                     return button
                 }
                 return null
@@ -32,18 +35,23 @@ export const UIFactory = {
             getButton: (texture, x, y, onClick, sizeX = undefined, sizeY = undefined) => {
                 const button = {}
                 Object.assign(button, INamedUIElement(parent, `button`))
-                Object.assign(button, ISimpleButton(onClick, texture, x, y,
-                    sizeX || BUTTON_WIDTH,
-                    sizeY || BUTTON_HEIGHT))
+                Object.assign(button,
+                    IButton(texture, onClick)
+                        .setPosition(x, y)
+                        .setSize(sizeX || BUTTON_WIDTH, sizeY || BUTTON_HEIGHT)
+                )
                 return button
             },
 
             getButton2: (texture, onClick, anchor, pivotRules, name = 'button') => {
-                const size = {x: BUTTON_WIDTH, y: BUTTON_HEIGHT}
                 const button = {}
                 Object.assign(button, INamedUIElement(parent, name))
-                Object.assign(button, IAdoptableButton(onClick, texture, size, anchor))
-                Object.assign(button, IAdoptableBase(button.visual, pivotRules, null))
+                Object.assign(button,
+                    IButton(texture, onClick)
+                        .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+                        .setAnchor(anchor.x, anchor.y)
+                )
+                Object.assign(button, IAdoptable(button.visual, pivotRules, null))
                 return button
             },
 
@@ -75,7 +83,7 @@ export const UIFactory = {
             },
 
             getLevelIndicatorWidget: () => {
-                const background = StaticImage('ui_white_circle', 0, 0, 80, 80, undefined, {x: 0.5, y: 0.5})
+                const background = IVisual('ui_white_circle').setSize(80, 80)
                 const levelVis = UIFactory.forParent('level_indicator').getText('', 0, 0, {
                     fontSize: 30, fill: '#000000'
                 }, {x: 0.5, y: 0.5})
@@ -90,7 +98,7 @@ export const UIFactory = {
 
             getUpgradeButton: (onClick) => {
                 const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 100)
-                const icon = StaticImage('ui_upgrade_dragon', 0, 4, 80, 80, undefined, {x: 0, y: 0.5})
+                const icon = IVisual('ui_upgrade_dragon').setPosition(0, 4).setSize(80, 80).setAnchor(0, 0.5)
                 icon.interactive = false
                 btn.visual.addChild(icon.visual)
 
@@ -112,7 +120,7 @@ export const UIFactory = {
 
             getDamagePercentWidget: () => {
 
-                const icon = StaticImage('ui_attack', 0, 0, 80, 80, undefined, {x: 1, y: 0.5})
+                const icon = IVisual('ui_attack').setSize(80, 80).setAnchor(1, 0.5).setLayer(RENDER_LAYER.UI)
                 icon.visual.x = -5
                 const damage = UIFactory.forParent('info_widget').getText('', 0, 0, {
                     fontSize: 45, fill: '#11cccc'

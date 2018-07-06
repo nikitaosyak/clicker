@@ -1,4 +1,4 @@
-import {ObjectType} from "../game/go/GameObjectBase";
+import {ObjectType} from "../behaviours/Base";
 import {MathUtil} from "../utils/MathUtil";
 
 export const VirtualPlayThrough = (gameData, strategy, maxStage, substages, cps, verbose = false) => {

@@ -1,14 +1,14 @@
-import {SCREEN_TYPE} from "./screen/ScreenMan";
-import {UIFactory} from "./ui/UIFactory";
-import {SlotItemGenerator} from "./screen/game/SlotItemGenerator";
-import {BaseScreen} from "./screen/BaseScreen";
-import {GoldCounter} from "./ui/GoldCounter";
-import {ObjectType} from "./go/GameObjectBase";
-import {CoinParticlesManager} from "./screen/game/CoinParticlesManager";
-import {ObjectPool} from "../utils/ObjectPool";
-import {DamagePercent} from "./ui/debugDamagePercent";
-import {DestroyAnimation} from "./screen/DestroyAnimation";
-import {DAMAGE_SOURCE} from "./DamageSource";
+import {SCREEN_TYPE} from "./ScreenMan";
+import {UIFactory} from "../ui/UIFactory";
+import {SlotItemGenerator} from "../game/SlotItemGenerator";
+import {BaseScreen} from "./BaseScreen";
+import {GoldCounter} from "../ui/GoldCounter";
+import {ObjectType} from "../behaviours/Base";
+import {CoinParticlesManager} from "../game/CoinParticlesManager";
+import {ObjectPool} from "../game/poolable/ObjectPool";
+import {DamagePercent} from "../debug/debugDamagePercent";
+import {DestroyAnimation} from "../game/poolable/DestroyAnimation";
+import {DAMAGE_SOURCE} from "../game/DamageSource";
 
 export class GameScreen extends BaseScreen {
 

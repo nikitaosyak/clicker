@@ -1,6 +1,6 @@
-import {Config} from "./Config";
-import {ObjectType} from "./game/go/GameObjectBase";
-import {AB} from "./AB";
+import {Config} from "../Config";
+import {ObjectType} from "../behaviours/Base";
+import {AB} from "../tools/AB";
 
 export const GameData = (model) => {
 

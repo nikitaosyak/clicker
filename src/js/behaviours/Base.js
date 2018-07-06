@@ -1,18 +1,8 @@
-import {RENDER_LAYER} from "../../Renderer";
+import {RENDER_LAYER} from "../Renderer";
 
 export const ObjectType = {
     PAID_EGG: 'paid_egg', PAID_CHEST: 'paid_chest',
     CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold'
-}
-
-let INSTANCE_COUNTER = 0
-
-export const ITypedObject = v => { return {get type() {return v}} }
-export const IStageObject = t => { return {get stage() {return t}}}
-export const INamedObject = self => {
-    if (self.type && self.stage) return {get name() {return `${self.type}_${self.stage}_${INSTANCE_COUNTER++}`}}
-    if (self.type) return {get name() {return `${self.type}_${INSTANCE_COUNTER++}`}}
-    return {get name() {return `unknown_entity_${INSTANCE_COUNTER++}`}}
 }
 
 export const IContainer = (x, y, layer) => {
@@ -28,22 +18,58 @@ export const IContainer = (x, y, layer) => {
             c.addChild(obj.visual)
         },
         get layer() { return layer },
-        get hasVisual() { return true },
         get visual() { return c }
     }
 }
 
-export const IVisual = (t, x, y, w, h, layer = undefined) => {
-    const s = new PIXI.Sprite(window.resources.getTexture(t))
-    s.width = w; s.height = h
-    s.x = x; s.y = y
+export const IVisual = texture => {
+    let layer = RENDER_LAYER.GAME
+    const s = new PIXI.Sprite(window.resources.getTexture(texture))
     s.anchor.x = s.anchor.y = 0.5
 
-    return {
+    const self = {
+        setSize: (x, y) => { s.width = x; s.height = y; return self },
+        setAnchor: (x, y) => { s.anchor.x = x; s.anchor.y = y; return self },
+        setPosition: (x, y) => { s.x = x; s.y = y; return self },
+        setLayer: v => { layer = v; return self },
         get layer() { return layer || RENDER_LAYER.GAME },
-        get hasVisual() { return true },
         get visual() { return s }
     }
+
+    return self
+}
+
+export const IButton = (texture, onClick) => {
+    const button = IVisual(texture)
+
+    button.visual.interactive = true
+    button.visual.on('click', onClick)
+    button.visual.on('tap', onClick)
+
+    Object.assign(button, {
+        get interactive() { return button.visual.interactive },
+        set interactive(v) { button.visual.interactive = v },
+    })
+
+    return button
+}
+
+const TOGGLE_STATE = {NORMAL: 'NORMAL', TOGGLED: 'TOGGLED'}
+export const IToggleButton = (normal, toggled, onClick) => {
+    let current = TOGGLE_STATE.NORMAL
+    const button = IButton(normal, () => {
+        if (current === TOGGLE_STATE.NORMAL) {
+            current = TOGGLE_STATE.TOGGLED
+            button.visual.texture = window.resources.getTexture(toggled)
+            onClick(true)
+        } else {
+            current = TOGGLE_STATE.NORMAL
+            button.visual.texture = window.resources.getTexture(normal)
+            onClick(false)
+        }
+    })
+
+    return button
 }
 
 export const IUnimportantContent = () => {
@@ -59,7 +85,6 @@ export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefine
 
     return {
         get layer() { return RENDER_LAYER.UI },
-        get hasVisual() { return true },
         get visual() { return t }
     }
 }
@@ -78,7 +103,6 @@ export const IAnimated = (texture, x, y, w, h, layer = undefined) => {
 
     return {
         get layer() { return layer || RENDER_LAYER.UI },
-        get hasVisual() { return true },
         get visual() { return s }
     }
 }
@@ -186,6 +210,15 @@ export const IClickable = (self) => {
             const count = clicks
             clicks = 0
             return count
+        }
+    }
+}
+
+let UI_INSTANCE_COUNTER = 0
+export const INamedUIElement = (parent, type) => {
+    return {
+        get name() {
+            return `${type}_${parent}_${UI_INSTANCE_COUNTER++}`
         }
     }
 }

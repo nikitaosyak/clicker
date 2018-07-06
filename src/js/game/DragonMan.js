@@ -1,6 +1,6 @@
-import {Dragon} from "./go/Dragon";
-import {ObjectPool} from "../utils/ObjectPool";
-import {DragonProjectile} from "./go/DragonProjectile";
+import {Dragon} from "./Dragon";
+import {ObjectPool} from "./poolable/ObjectPool";
+import {DragonProjectile} from "./poolable/DragonProjectile";
 import {DAMAGE_SOURCE} from "./DamageSource";
 
 export const DragonMan = (renderer, clickDamage) => {

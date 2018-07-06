@@ -1,6 +1,6 @@
-import {IContainer} from "../../go/GameObjectBase";
-import {UIFactory} from "../../ui/UIFactory";
-import {MathUtil} from "../../../utils/MathUtil";
+import {IContainer} from "../behaviours/Base";
+import {UIFactory} from "./UIFactory";
+import {MathUtil} from "../utils/MathUtil";
 
 export const UpgradeListItem = (_, owner) => {
 

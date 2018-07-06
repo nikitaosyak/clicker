@@ -1,14 +1,8 @@
 import {
     IClickable,
-    INamedObject,
-    ISlotItem,
-    ISlotVisualItem,
-    IStageObject,
-    ITypedObject,
     IHealthBarOwner, IVisualNumericRep, ObjectType, IVisual
-} from "./GameObjectBase";
-import {IAdoptableBase, IAdoptableVisual} from "../stretching/AdoptableBase";
-import {RENDER_LAYER} from "../../Renderer";
+} from "../behaviours/Base";
+import {IAdoptable} from "../behaviours/IAdoptable";
 
 export class SlotItem {
 
@@ -24,14 +18,11 @@ export class SlotItem {
         this._shakeAnimation = []
         this._currentClick = 0
 
-        Object.assign(this, ITypedObject(type))
-        Object.assign(this, IStageObject(stage))
-        Object.assign(this, INamedObject(this))
-
-        Object.assign(this, IAdoptableVisual(type,
-            {x: window.GD.slots[slot].w, y: window.GD.slots[slot].h},
-            {x: 0.5, y: 0.5}, RENDER_LAYER.GAME))
-        this._adopter = IAdoptableBase(this.visual, window.GD.slots[slot].pivotRules)
+        Object.assign(this,
+            IVisual(type)
+                .setSize(window.GD.slots[slot].w, window.GD.slots[slot].h)
+        )
+        this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
 
         Object.assign(this, IHealthBarOwner(this))
         if (window.GD.config.MODE === 'development') {
@@ -57,6 +48,7 @@ export class SlotItem {
         this._enabled = true
     }
 
+    get stage() { return this._stage }
     get drop() { return this._drop }
     get health() { return this._currentHealth }
     get targetSlot() { return this._targetSlot }

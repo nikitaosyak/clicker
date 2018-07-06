@@ -1,4 +1,4 @@
-import {debugManager} from "./debugManager";
+import {debugManager} from "./debug/debugManager";
 
 export const RENDER_LAYER = {BACKGROUND: 'BACKGROUND', GAME: 'GAME', UI: 'UI'}
 
@@ -79,7 +79,7 @@ export const Renderer = () => {
         get vSize() { return vSize },
         get stage() { return stage },
         addObject: (go) => {
-            if (!go.hasVisual) return console.error(`object ${go} cannot be added for render`)
+            if (typeof go.visual === 'undefined') return console.error(`object ${go} cannot be added for render`)
             if (typeof go.adopt !== 'undefined') {
                 resizableObjects.push(go)
                 go.adopt(Math.min(currentAspectRatio, maximumWideAR), supposedAspectRatio, adjustedVSize, vSize, maximumWideAR)
@@ -92,7 +92,7 @@ export const Renderer = () => {
             }
         },
         removeObject: go => {
-            if (!go.hasVisual) return console.error(`object ${go} cannot be removed from render`)
+            if (typeof go.visual === 'undefined') return console.error(`object ${go} cannot be removed for render`)
             if (typeof go.adopt !== 'undefined') {
                 resizableObjects.splice(resizableObjects.indexOf(go), 1)
             }

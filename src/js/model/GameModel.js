@@ -1,6 +1,6 @@
-import {AB} from "./AB";
-import {URLParam} from "./utils/URLParam";
-import {GA} from "./utils/GA";
+import {AB} from "../tools/AB";
+import {URLParam} from "../utils/URLParam";
+import {GA} from "../debug/GA";
 
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0

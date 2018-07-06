@@ -12,7 +12,6 @@ export class BaseScreen {
         this._hiding = false
         this._content = []
         this._controls = []
-        this._originalLocationData = {}
         this._cachedViewportSize = {x: 0, y: 0, equal(vpSize){ return this.x === vpSize.x && this.y === vpSize.y }}
     }
 
@@ -48,8 +47,8 @@ export class BaseScreen {
         this.show()
         console.log('will animate', this._content)
         this._content.forEach((c, i) => {
-            let animateFrom = this._originalLocationData[c.name].x + from.x
-            let animateTo = this._originalLocationData[c.name].x
+            let animateFrom = c._originalLocationData.x + from.x
+            let animateTo = c._originalLocationData.x
             if (typeof c.adopt !== 'undefined') {
                 animateFrom = c.visual.x + from.x
                 animateTo = c.visual.x
@@ -88,10 +87,7 @@ export class BaseScreen {
         if (this._hiding && obj.unimportantContent) return
 
         this._content.push(obj)
-        this._originalLocationData[obj.name] = {
-            x: obj.visual.x,
-            y: obj.visual.y
-        }
+        obj._originalLocationData = {x: obj.visual.x, y: obj.visual.y}
         if (this._active && !this._hiding) {
             this._renderer.addObject(obj)
         }
@@ -101,7 +97,7 @@ export class BaseScreen {
         const index = this._content.indexOf(obj)
         if (index < 0) return
         this._content.splice(index, 1)
-        delete this._originalLocationData[obj.name]
+        delete obj._originalLocationData
         if (this._active) {
             this._renderer.removeObject(obj)
         }

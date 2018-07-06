@@ -1,11 +1,11 @@
-import {ObjectPool} from "../../../utils/ObjectPool";
+import {ObjectPool} from "../game/poolable/ObjectPool";
 import {UpgradeListItem} from "./UpgradeListItem";
-import {IVisual, IContainer} from "../../go/GameObjectBase";
-import {INamedUIElement} from "../../ui/UIElementBase";
-import {EmitterBehaviour} from "../../../utils/EmitterBehaviour";
-import {IAdoptableBase, IAdoptableVisual} from "../../stretching/AdoptableBase";
-import {RENDER_LAYER} from "../../../Renderer";
-import {MAX_DRAGON_LEVEL} from "../../../GameModel";
+import {IContainer} from "../behaviours/Base";
+import {INamedUIElement} from "../behaviours/Base";
+import {IEmitter} from "../behaviours/IEmitter";
+import {IAdoptable} from "../behaviours/IAdoptable";
+import {RENDER_LAYER} from "../Renderer";
+import {MAX_DRAGON_LEVEL} from "../model/GameModel";
 
 export const UpgradeList = (model, renderer) => {
 
@@ -109,8 +109,8 @@ export const UpgradeList = (model, renderer) => {
     Object.assign(self, INamedUIElement('upgrade', 'list'))
     Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
     self.visual.interactive = true
-    Object.assign(self, IAdoptableBase(self.visual, {x: 'left', y: 'bottom', yOffset: 170}))
-    Object.assign(self, EmitterBehaviour({}))
+    Object.assign(self, IAdoptable(self.visual, {x: 'left', y: 'bottom', yOffset: 170}))
+    Object.assign(self, IEmitter({}))
 
     const cachedPoint = new PIXI.Point()
     let dragging = false

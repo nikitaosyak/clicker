@@ -1,5 +1,5 @@
 import {SlotItem} from "./SlotItem";
-import {DAMAGE_SOURCE} from "../DamageSource";
+import {DAMAGE_SOURCE} from "./DamageSource";
 
 export class PaidSlotItem extends SlotItem {
     constructor(type, slot, stage, health, drop, targetSlot) {

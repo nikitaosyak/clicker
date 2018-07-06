@@ -1,5 +1,5 @@
-import {IContainer} from "../../go/GameObjectBase";
-import {RENDER_LAYER} from "../../../Renderer";
+import {IContainer} from "../behaviours/Base";
+import {RENDER_LAYER} from "../Renderer";
 
 export const CoinParticlesManager = (gameScreen, targetLocation) => {
 

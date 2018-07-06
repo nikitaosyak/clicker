@@ -1,5 +1,5 @@
-import {INamedObject, IText} from "../go/GameObjectBase";
-import {RENDER_LAYER} from "../../Renderer";
+import {IText} from "../behaviours/Base";
+import {RENDER_LAYER} from "../Renderer";
 
 export const DamagePercent = (pool, onComplete) => {
 
@@ -17,7 +17,6 @@ export const DamagePercent = (pool, onComplete) => {
             animation.restart(false, false)
         }
     }
-    Object.assign(self, INamedObject(self))
     Object.assign(self, IText('', 0, 0, {fontSize: 60, fill: '#CCCCCC'}, 0.5, 0.5, RENDER_LAYER.UI))
     animation = TweenLite.to(
         self.visual, 2.5,

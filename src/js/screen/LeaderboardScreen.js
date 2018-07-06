@@ -1,6 +1,6 @@
-import {SCREEN_TYPE} from "./screen/ScreenMan";
-import {BaseScreen} from "./screen/BaseScreen";
-import {UIFactory} from "./ui/UIFactory";
+import {SCREEN_TYPE} from "./ScreenMan";
+import {BaseScreen} from "./BaseScreen";
+import {UIFactory} from "../ui/UIFactory";
 
 export class LeaderboardScreen extends BaseScreen {
 

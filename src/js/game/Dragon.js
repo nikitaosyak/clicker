@@ -1,6 +1,6 @@
-import {ITypedObject, IVisual, IVisualNumericRep, ObjectType} from "./GameObjectBase";
-import {RENDER_LAYER} from "../../Renderer";
-import {MathUtil} from "../../utils/MathUtil";
+import {IVisual, IVisualNumericRep, ObjectType} from "../behaviours/Base";
+import {RENDER_LAYER} from "../Renderer";
+import {MathUtil} from "../utils/MathUtil";
 import {DragonMoveComponent} from "./DragonMoveComponent";
 
 const upgradeParticlesConfig = {
@@ -133,8 +133,12 @@ export const Dragon = (bounds, tier, level, x, y) => {
         }
     }
 
-    Object.assign(self, ITypedObject(ObjectType.DRAGON))
-    Object.assign(self, IVisual(`dragon_t${tier}`, x, y, 100, 100, RENDER_LAYER.BACKGROUND))
+    Object.assign(self,
+        IVisual(`dragon_t${tier}`)
+            .setSize(100, 100)
+            .setPosition(x, y)
+            .setLayer(RENDER_LAYER.BACKGROUND)
+    )
     if (window.GD.config.MODE === 'development') {
         Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.4))
         Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.4))

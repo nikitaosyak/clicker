@@ -1,8 +1,8 @@
-import {BaseScreen} from "./screen/BaseScreen";
-import {SCREEN_TYPE} from "./screen/ScreenMan";
-import {UIFactory} from "./ui/UIFactory";
-import {GoldCounter} from "./ui/GoldCounter";
-import {UpgradeList} from "./screen/upgrade/UpgradeList";
+import {BaseScreen} from "./BaseScreen";
+import {SCREEN_TYPE} from "./ScreenMan";
+import {UIFactory} from "../ui/UIFactory";
+import {GoldCounter} from "../ui/GoldCounter";
+import {UpgradeList} from "../ui/UpgradeList";
 
 export class UpgradeScreen extends BaseScreen {
 

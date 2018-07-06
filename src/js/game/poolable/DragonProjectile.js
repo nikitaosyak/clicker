@@ -1,5 +1,4 @@
-import {INamedObject, IUnimportantContent, IVisual} from "./GameObjectBase";
-import {RENDER_LAYER} from "../../Renderer";
+import {IUnimportantContent, IVisual} from "../../behaviours/Base";
 
 export const DragonProjectile = (pool, onComplete) => {
 
@@ -32,8 +31,7 @@ export const DragonProjectile = (pool, onComplete) => {
         }
     }
 
-    Object.assign(self, INamedObject(self))
-    Object.assign(self, IVisual('spec', 0, 0, 32, 32, RENDER_LAYER.GAME))
+    Object.assign(self, IVisual('spec').setSize(32, 32))
     Object.assign(self, IUnimportantContent())
 
     animation = TweenLite.to(
