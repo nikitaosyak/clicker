@@ -6,8 +6,8 @@ import {GameModel} from "./model/GameModel";
 import {GameData} from "./model/GameData";
 import {MathUtil} from "./utils/MathUtil";
 import {URLParam} from "./utils/URLParam";
-import {Plot} from "./debug/Plot";
-import {VirtualPlayThrough} from "./debug/VirtualPlayThrough";
+import {Plot} from "./tools/Plot";
+import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
 
 window.onload = () => {
