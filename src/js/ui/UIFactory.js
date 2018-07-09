@@ -78,7 +78,13 @@ export const UIFactory = {
             getCoinParticle: (x, y) => {
                 const c = {}
                 Object.assign(c, INamedUIElement(parent, 'coinParticle'))
-                Object.assign(c, IAnimated('anim_coin', x, y, 60, 60))
+                Object.assign(c,
+                    IAnimated('anim_coin')
+                        .setSize(60, 60)
+                        .setPosition(x, y)
+                        .setAnimationSpeed(0.7)
+                        .setLayer(RENDER_LAYER.UI)
+                )
                 return c
             },
 

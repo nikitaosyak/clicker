@@ -1,4 +1,4 @@
-import {IVisual, IVisualNumericRep, ObjectType} from "../behaviours/Base";
+import {IAnimated, IVisual, IVisualNumericRep, ObjectType} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 import {MathUtil} from "../utils/MathUtil";
 import {DragonMoveComponent} from "./DragonMoveComponent";
@@ -133,15 +133,24 @@ export const Dragon = (bounds, tier, level, x, y) => {
         }
     }
 
-    Object.assign(self,
-        IVisual(`dragon_t${tier}`)
-            .setSize(100, 100)
-            .setPosition(x, y)
-            .setLayer(RENDER_LAYER.BACKGROUND)
-    )
+    if (tier < 2) {
+        Object.assign(self,
+            IAnimated(`animated_dragon_t${tier}`)
+                .setSize(120, 120)
+                .setPosition(x, y)
+                .setLayer(RENDER_LAYER.BACKGROUND)
+                .setAnimationSpeed(0.4))
+    } else {
+        Object.assign(self,
+            IVisual(`dragon_t${tier}`)
+                .setSize(100, 100)
+                .setPosition(x, y)
+                .setLayer(RENDER_LAYER.BACKGROUND)
+        )
+    }
     if (window.GD.config.MODE === 'development') {
-        Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.4))
-        Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.4))
+        Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.25))
+        Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.25))
     }
     invalidateVisual()
 

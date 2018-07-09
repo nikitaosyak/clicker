@@ -89,22 +89,28 @@ export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefine
     }
 }
 
-export const IAnimated = (texture, x, y, w, h, layer = undefined) => {
+export const IAnimated = (texture) => {
+    let layer = RENDER_LAYER.GAME
+
     const textures = []
     Object.keys(window.resources.getAnimation(texture)).forEach(f => {
         textures.push(PIXI.Texture.fromFrame(f))
     })
     const s = new PIXI.extras.AnimatedSprite(textures)
-    s.x = x; s.y = y; s.width = w; s.height = h
     s.anchor.set(0.5)
     s.loop = true
-    s.animationSpeed = 0.7
     s.play()
 
-    return {
-        get layer() { return layer || RENDER_LAYER.UI },
+    const self = {
+        setSize: (x, y) => { s.width = x; s.height = y; return self },
+        setAnchor: (x, y) => { s.anchor.x = x; s.anchor.y = y; return self },
+        setPosition: (x, y) => { s.x = x; s.y = y; return self },
+        setLayer: v => { layer = v; return self },
+        setAnimationSpeed: v => { s.animationSpeed = v; return self },
+        get layer() { return layer },
         get visual() { return s }
     }
+    return self
 }
 
 export const IHealthBarOwner = self => {
@@ -180,7 +186,7 @@ export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size
     sprite.tint = color
     container.addChild(sprite)
     const text = new PIXI.Text(owner[property], new PIXI.TextStyle({
-        fontSize: 80, fontWeight: 'bold', fill: '#EEffff'
+        fontSize: 240 * size, fontWeight: 'bold', fill: '#EEffff'
     }))
     text.anchor.x = text.anchor.y = 0.5
     container.addChild(text)
