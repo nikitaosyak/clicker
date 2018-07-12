@@ -28,7 +28,7 @@ export const GameData = (model) => {
     const tierPriceMult = 50    //множитель след тира
     const tierMax = 6
     const packClicksNum = stageTimeSecs * clickPerSecs //расчётое количество кликов по паку сундуков
-    const packConfig = [1, 0.3, 2, 0.15, 4, 0.1] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
+    const packConfig = [2, 0.22, 3, 0.09, 4, 0.07] //части пака (один жирный, пара средних, много мелких) (1 штука 0.3 от общей массы хп, 2 штуки 0.15 от общей массы хп...)
     const packSlotOrder = [-1, 2, -1, 1, -1, 0]
     const tierSwitchThresholdMultiplier = 1.3
     const minGoldDrop = 500     //стартовый дроп золота
@@ -40,6 +40,7 @@ export const GameData = (model) => {
 	let moneyBoostCounter = 0
 
     const getUpgradePrice = (tier, level) => {
+		level = level * level;
         if (tier > 1) return basePrice * level * Math.pow(tierPriceMult, tier - 1)
         return basePrice * level
     };
@@ -50,7 +51,7 @@ export const GameData = (model) => {
     };
 
     const getTierDamage = (tier, level) => {
-        return Math.round(getTierBaseDamage(tier) * (Math.pow(1.26, 1.4 * level) + level) / 1.5)
+        return Math.round(getTierBaseDamage(tier) * (Math.pow(1.27, 2.3 * level) + level) / 1.5)
     };
 
     const self =  {

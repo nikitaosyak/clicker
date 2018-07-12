@@ -4,7 +4,7 @@ import {GA} from "../tools/GA";
 
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0
-export const MAX_DRAGON_LEVEL = 25
+export const MAX_DRAGON_LEVEL = 10
 
 export function makeid(len = 12) {
     let text = "";

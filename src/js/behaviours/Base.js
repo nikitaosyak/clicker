@@ -148,7 +148,7 @@ export const IHealthBarOwner = self => {
     const maxWidth = mainHp.width
     let lastValue = 1
 
-    const drainAnimation = TweenLite.to(drainedHp, 0.5, {width: 0, delay: 0.5})
+    const drainAnimation = TweenLite.to(drainedHp, 0.3, {width: 0, delay: 0.5})
     drainAnimation.pause()
 
     return {
