@@ -41,11 +41,10 @@ export const GameModel = () => {
 
     const self = {
         printCurrentState: () => {
-            return JSON.stringify(data, null)
+            return LZString.compressToEncodedURIComponent(JSON.stringify(data, null))
         },
-        loadState: jsonData => self.loadState2(JSON.parse(jsonData)),
-        loadState2: parsedData => {
-            data = parsedData
+        loadState: compressedData => {
+            data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData))
             self.synchronize().then(() => {
                 window.location.href = window.location.origin
             })
@@ -62,7 +61,7 @@ export const GameModel = () => {
                     reject("already connected")
                 }
                 connected = true
-                const loadData = JSON.parse(window.localStorage.dragon_clicker || null)
+                const loadData = JSON.parse(LZString.decompressFromEncodedURIComponent(window.localStorage.dragon_clicker || null))
                 if (loadData === null) {
                     initData()
                 } else {
@@ -84,7 +83,7 @@ export const GameModel = () => {
                 if (!connected) {
                     reject("not connected")
                 }
-                window.localStorage.dragon_clicker = JSON.stringify(data)
+                window.localStorage.dragon_clicker = self.printCurrentState()
                 resolve()
             })
         },
