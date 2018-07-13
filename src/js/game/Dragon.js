@@ -112,7 +112,6 @@ export const Dragon = (bounds, tier, level, x, y) => {
         levelUp: () => {
             level += 1
             if (window.GD.config.MODE === 'development') {
-                self.tierVisualRefresh()
                 self.levelVisualRefresh()
             }
 
@@ -133,9 +132,9 @@ export const Dragon = (bounds, tier, level, x, y) => {
         }
     }
 
-    if (tier < 2) {
+    if (tier < 4) {
         Object.assign(self,
-            IAnimated(`animated_dragon_t${tier}`)
+            IAnimated(`dragons_t${tier}_idle_animation`)
                 .setSize(120, 120)
                 .setPosition(x, y)
                 .setLayer(RENDER_LAYER.BACKGROUND)
@@ -148,18 +147,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
                 .setLayer(RENDER_LAYER.BACKGROUND)
         )
     }
-    if (window.GD.config.MODE === 'development') {
-        Object.assign(self, IVisualNumericRep(self, 'tier', -0.3, 0.3, 0xCCCC00, 0.25))
-        Object.assign(self, IVisualNumericRep(self, 'level', 0.3, 0.3, 0xCCCCCC, 0.25))
-    }
-    invalidateVisual()
 
     const cfg = Object.assign({}, upgradeParticlesConfig)
     const color = [
         -1,         // particle color:
         "#00AA00",  // tier 1
-        "#FF2222",  // tier 2
-        "#111111",  // tier 3
+        "#2222BB",  // tier 2
+        "#FF8c00",  // tier 3
         "#FF22FF",  // tier 4
         "#AAAA22",  // tier 5
         "#22AAAA"   // tier 6
@@ -171,6 +165,11 @@ export const Dragon = (bounds, tier, level, x, y) => {
         self.visual.parent,
         window.resources.getTexture('spec'),
         cfg)
+
+    if (window.GD.config.MODE === 'development') {
+        Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
+    }
+    invalidateVisual()
 
     return self
 }
