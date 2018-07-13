@@ -25,10 +25,8 @@ export class SlotItem {
         this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
 
         Object.assign(this, IHealthBarOwner(this))
-        if (window.GD.config.MODE === 'development') {
-            Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
-            Object.assign(this, IVisualNumericRep(this, 'targetSlot', 0.3, 0.25, 0xAA0000))
-        }
+        Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
+        // Object.assign(this, IVisualNumericRep(this, 'targetSlot', 0.3, 0.25, 0xAA0000))
         Object.assign(this, IClickable(this))
 
         const shakeTime = 0.25
@@ -99,10 +97,7 @@ export class SlotItem {
             self._shakeAnimation[1].kill()
 
             self.healthbarVisual.destroy()
-            if (window.GD.config.MODE === 'development') {
-                self.stageDestroy()
-                self.targetSlotDestroy()
-            }
+            self.stageDestroy()
 
             self.visual.interactive = false
             if (self._drop[ObjectType.PAID_EGG] || self._drop[ObjectType.EGG]) {

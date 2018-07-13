@@ -130,9 +130,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
         },
         levelUp: () => {
             level += 1
-            if (window.GD.config.MODE === 'development') {
-                self.levelVisualRefresh()
-            }
+            self.levelVisualRefresh()
 
             self.visual.parent.addChild(self.visual)
 
@@ -205,9 +203,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
         window.resources.getTexture('spec'),
         cfg)
 
-    if (window.GD.config.MODE === 'development') {
-        Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
-    }
+    Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
     invalidateVisual()
 
     return self

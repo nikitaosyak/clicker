@@ -53,7 +53,7 @@ export const UpgradeListItem = (_, owner) => {
         } else {
             upgradeBtn.visual.x = viewportSize.x / 2 - self.visual.x/2 - 30
         }
-        self.visual.hitArea = new PIXI.Rectangle(-80, -60, viewportSize.x, 120)
+        self.visual.hitArea = new PIXI.Rectangle(-70, -60, viewportSize.x - 140, 120)
         // console.log(self.visual.width, self.visual.height)
     }
 
