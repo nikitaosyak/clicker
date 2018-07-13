@@ -74,25 +74,35 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     const ANIM_IDLE = `dragons_t${tier}_idle_animation`
     const ANIM_IDLE_TEXTURES = []
-    Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
-        ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
-    })
+    if (tier < 4) {
+        Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
+            ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
+        })
+    }
     const ANIM_SPIT = `dragons_t${tier}_spit_animation`
     const ANIM_SPIT_TEXTURES = []
-    Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
-        ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
-    })
+    if (tier < 4) {
+        Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
+            ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
+        })
+    }
     const animationFireFrame = [-1, 9, 4, 6]
-    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}]
+    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}]
     let currentAnimation = ANIM_IDLE
 
     let scheduledShot = null
 
     const self = {
         scheduleAttack: () => {
-            return new Promise((resolve) => {
-                scheduledShot = resolve
-            })
+            if (tier < 4) {
+                return new Promise((resolve) => {
+                    scheduledShot = resolve
+                })
+            } else {
+                return new Promise((resolve) => {
+                    resolve(spitOffset[tier])
+                })
+            }
         },
         canAttack: (urgencyCoefficient=1) => {
             urgencyCoefficient = MathUtil.clamp(0.01, 10, urgencyCoefficient)
@@ -146,24 +156,26 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
-            if (scheduledShot) {
-                if (currentAnimation === ANIM_IDLE) {
-                    currentAnimation = ANIM_SPIT
-                    self.visual.textures = ANIM_SPIT_TEXTURES
-                    self.visual.gotoAndPlay(0)
-                } else {
-                    if (self.visual.currentFrame === animationFireFrame[tier]) {
-                        lastAttack = Date.now()
-                        scheduledShot({x: spitOffset[tier].x * movement.direction.x, y: spitOffset[tier].y })
-                        scheduledShot = null
+            if (tier < 4) {
+                if (scheduledShot) {
+                    if (currentAnimation === ANIM_IDLE) {
+                        currentAnimation = ANIM_SPIT
+                        self.visual.textures = ANIM_SPIT_TEXTURES
+                        self.visual.gotoAndPlay(0)
+                    } else {
+                        if (self.visual.currentFrame === animationFireFrame[tier]) {
+                            lastAttack = Date.now()
+                            scheduledShot({x: spitOffset[tier].x * movement.direction.x, y: spitOffset[tier].y })
+                            scheduledShot = null
+                        }
                     }
                 }
-            }
-            if (currentAnimation === ANIM_SPIT) {
-                if (self.visual.currentFrame === self.visual.totalFrames-1) {
-                    currentAnimation = ANIM_IDLE
-                    self.visual.textures = ANIM_IDLE_TEXTURES
-                    self.visual.gotoAndPlay(0)
+                if (currentAnimation === ANIM_SPIT) {
+                    if (self.visual.currentFrame === self.visual.totalFrames-1) {
+                        currentAnimation = ANIM_IDLE
+                        self.visual.textures = ANIM_IDLE_TEXTURES
+                        self.visual.gotoAndPlay(0)
+                    }
                 }
             }
         }
