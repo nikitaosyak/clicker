@@ -9,7 +9,7 @@ export const DestroyAnimation = pool => {
             }})
     animation.pause()
     const self = {
-        launch: (target, time, _onComplete) => {
+        initialize: (target, time, _onComplete) => {
             onComplete = _onComplete
 
             animation.target = target

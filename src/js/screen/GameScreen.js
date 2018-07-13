@@ -141,7 +141,7 @@ export class GameScreen extends BaseScreen {
                 if (window.GD.config.MODE === 'development') {
                     const dmgVis = this._clickDamageVisPool.getOne()
                     this.add(dmgVis)
-                    dmgVis.launch(`${Math.round((this._clickDamage / targetDmg) * 100)}%`, c.visual.x, c.visual.y)
+                    dmgVis.initialize(`${Math.round((this._clickDamage / targetDmg) * 100)}%`, c.visual.x, c.visual.y)
                 }
 
                 const totalDamage = clicks * this._clickDamage

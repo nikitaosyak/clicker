@@ -8,7 +8,6 @@ export const DragonProjectile = (pool, onComplete) => {
         get damage() { return currentDamage },
         get slotIdx() { return currentSlotIdx },
         launch: (damage, slotIdx, tier, fromX, fromY, toX, toY) => {
-
             const projSpeed = [-1, 500, 520, 550, 580, 600, 620, 650, 680, 700, 750][tier]
 
             currentDamage = damage

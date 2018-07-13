@@ -60,7 +60,6 @@ const upgradeParticlesConfig = {
     }
 
 export const Dragon = (bounds, tier, level, x, y) => {
-
     const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
         self.visual.scale.x = movement.direction.x > 0 ? Math.abs(self.visual.scale.x) : -Math.abs(self.visual.scale.x)
@@ -69,16 +68,36 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     //                    TIER:   1,    2,    3,    4,    5,   6,   7,     8,    9,   10
     const attackCooldown = [-1, 0.6, 0.58, 0.56, 0.54, 0.52, 0.5, 0.48, 0.46, 0.44, 0.42][tier]
-    let lastAttack = -1
+    let lastAttack = 0
 
     let emitter
 
+    const ANIM_IDLE = `dragons_t${tier}_idle_animation`
+    const ANIM_IDLE_TEXTURES = []
+    Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
+        ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
+    })
+    const ANIM_SPIT = `dragons_t${tier}_spit_animation`
+    const ANIM_SPIT_TEXTURES = []
+    Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
+        ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
+    })
+    const animationFireFrame = [-1, 9, 4, 6]
+    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}]
+    let currentAnimation = ANIM_IDLE
+
+    let scheduledShot = null
+
     const self = {
-        setAttackFlag: () => lastAttack = Date.now(),
+        scheduleAttack: () => {
+            return new Promise((resolve) => {
+                scheduledShot = resolve
+            })
+        },
         canAttack: (urgencyCoefficient=1) => {
             urgencyCoefficient = MathUtil.clamp(0.01, 10, urgencyCoefficient)
             const timeSinceLastAttack = (Date.now() - lastAttack) / 1000
-            return timeSinceLastAttack > (attackCooldown * urgencyCoefficient)
+            return !scheduledShot && timeSinceLastAttack > (attackCooldown * urgencyCoefficient)
         },
         get tier() { return tier },
         get level() { return level },
@@ -123,22 +142,42 @@ export const Dragon = (bounds, tier, level, x, y) => {
             emitter.playOnce()
         },
         update: dt => {
-
             emitter.updateSpawnPos(self.visual.x, self.visual.y)
             emitter.update(dt)
 
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
+
+            if (scheduledShot) {
+                if (currentAnimation === ANIM_IDLE) {
+                    currentAnimation = ANIM_SPIT
+                    self.visual.textures = ANIM_SPIT_TEXTURES
+                    self.visual.gotoAndPlay(0)
+                } else {
+                    if (self.visual.currentFrame === animationFireFrame[tier]) {
+                        lastAttack = Date.now()
+                        scheduledShot({x: spitOffset[tier].x * movement.direction.x, y: spitOffset[tier].y })
+                        scheduledShot = null
+                    }
+                }
+            }
+            if (currentAnimation === ANIM_SPIT) {
+                if (self.visual.currentFrame === self.visual.totalFrames-1) {
+                    currentAnimation = ANIM_IDLE
+                    self.visual.textures = ANIM_IDLE_TEXTURES
+                    self.visual.gotoAndPlay(0)
+                }
+            }
         }
     }
 
     if (tier < 4) {
         Object.assign(self,
-            IAnimated(`dragons_t${tier}_idle_animation`)
+            IAnimated(ANIM_IDLE)
                 .setSize(120, 120)
                 .setPosition(x, y)
                 .setLayer(RENDER_LAYER.BACKGROUND)
-                .setAnimationSpeed(0.4))
+                .setAnimationSpeed(0.35))
     } else {
         Object.assign(self,
             IVisual(`dragon_t${tier}`)

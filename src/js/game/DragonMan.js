@@ -82,14 +82,15 @@ export const DragonMan = (renderer, clickDamage) => {
                     const finalDamage = Math.min(damageToDistribute[j], damage)
                     damageToDistribute[j] = Math.max(0, damageToDistribute[j] - damage)
 
-                    const projectile = projectilePool.getOne()
-                    gameScreen.add(projectile)
-                    projectile.launch(finalDamage, j,
-                        singleAvailable.tier,
-                        singleAvailable.visual.x, singleAvailable.visual.y,
-                        gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
+                    singleAvailable.scheduleAttack().then((offset) => {
+                        const projectile = projectilePool.getOne()
+                        gameScreen.add(projectile)
 
-                    singleAvailable.setAttackFlag()
+                        projectile.launch(finalDamage, j,
+                            singleAvailable.tier,
+                            singleAvailable.visual.x + offset.x, singleAvailable.visual.y + offset.y,
+                            gameScreen._slotItems[j].visual.x, gameScreen._slotItems[j].visual.y)
+                    })
 
                     lastAttack = Date.now()
                     wasAttack = true

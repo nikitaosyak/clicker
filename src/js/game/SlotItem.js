@@ -107,12 +107,12 @@ export class SlotItem {
             self.visual.interactive = false
             if (self._drop[ObjectType.PAID_EGG] || self._drop[ObjectType.EGG]) {
                 self._drop = null
-                animation.launch(self.visual, 0.25, () => {
+                animation.initialize(self.visual, 0.25, () => {
                     self.visual.destroy()
                     resolve()
                 })
             } else {
-                animation.launch(self.visual, 0.4, () => {
+                animation.initialize(self.visual, 0.4, () => {
                     self.visual.destroy()
                     resolve()
                 })

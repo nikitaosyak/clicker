@@ -5,7 +5,7 @@ export const DamagePercent = (pool, onComplete) => {
 
     let animation = null
     const self = {
-        launch: (text, x, y) => {
+        initialize: (text, x, y) => {
 
             self.visual.text = text
             self.visual.x = x

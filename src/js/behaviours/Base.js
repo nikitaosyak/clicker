@@ -89,11 +89,11 @@ export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefine
     }
 }
 
-export const IAnimated = (texture) => {
+export const IAnimated = (descriptor) => {
     let layer = RENDER_LAYER.GAME
 
     const textures = []
-    Object.keys(window.resources.getAnimation(texture)).forEach(f => {
+    Object.keys(window.resources.getAnimation(descriptor)).forEach(f => {
         textures.push(PIXI.Texture.fromFrame(f))
     })
     const s = new PIXI.extras.AnimatedSprite(textures)
@@ -114,7 +114,6 @@ export const IAnimated = (texture) => {
 }
 
 export const IHealthBarOwner = self => {
-    const parent = self.visual
 
     const getChildSprite = (parent, size, anchor, tint, alpha) => {
         const pw = parent.width/parent.scale.x
