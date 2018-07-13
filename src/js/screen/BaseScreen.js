@@ -17,6 +17,7 @@ export class BaseScreen {
 
     get type() { return this._type }
     get _renderer() { return this._owner.renderer }
+    get active() { return this._active }
 
     animateHide(to, onComplete) {
         const self = this

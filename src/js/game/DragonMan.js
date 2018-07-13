@@ -5,6 +5,7 @@ import {DAMAGE_SOURCE} from "./DamageSource";
 
 export const DragonMan = (renderer, clickDamage) => {
 
+    /** @type {GameScreen} */
     let gameScreen = null
     const dragons = []
 
@@ -14,9 +15,8 @@ export const DragonMan = (renderer, clickDamage) => {
 
     let damageToDistribute = [0, 0, 0]
 	let lastFocusedSlot = 0
-	//todo: make damage available before first click 
 	let lastDamage = clickDamage
-    const GLOBAL_ATTACK_COOLDOWN = 1 //ms
+    const GLOBAL_ATTACK_COOLDOWN = 1 //ms, below 16 means attack every frame
     let lastAttack = -1
 
     const projectilePool = ObjectPool(DragonProjectile, [(self) => {
@@ -44,11 +44,13 @@ export const DragonMan = (renderer, clickDamage) => {
 
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
 
-			const autoDamageMult = 0.001;
-			damageToDistribute[0] += lastDamage * autoDamageMult
-			damageToDistribute[1] += lastDamage * autoDamageMult
-			damageToDistribute[2] += lastDamage * autoDamageMult
-			
+            if (gameScreen.active) {
+                const autoDamageMult = 0.001;
+                damageToDistribute[0] += lastDamage * autoDamageMult
+                damageToDistribute[1] += lastDamage * autoDamageMult
+                damageToDistribute[2] += lastDamage * autoDamageMult
+            }
+
 			//console.log("acc dmg:  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
 			
             const sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
