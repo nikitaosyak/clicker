@@ -60,6 +60,8 @@ const upgradeParticlesConfig = {
     }
 
 export const Dragon = (bounds, tier, level, x, y) => {
+    // tier = 5
+
     const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
         self.visual.scale.x = movement.direction.x > 0 ? Math.abs(self.visual.scale.x) : -Math.abs(self.visual.scale.x)
@@ -72,29 +74,30 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     let emitter
 
-    const ANIM_IDLE = `dragons_t${tier}_idle_animation`
+    const ANIM_IDLE = `dragons_t${tier}_idle`
     const ANIM_IDLE_TEXTURES = []
-    if (tier < 4) {
+    if (tier < 6) {
         Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
             ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
         })
     }
-    const ANIM_SPIT = `dragons_t${tier}_spit_animation`
+    const ANIM_SPIT = `dragons_t${tier}_spit`
     const ANIM_SPIT_TEXTURES = []
-    if (tier < 4) {
+    if (tier < 6) {
         Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
             ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
         })
     }
-    const animationFireFrame = [-1, 9, 4, 6]
-    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}]
+    const animationFireFrame = [-1, 9, 4, 6, 6, 6]
+    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}, {x: 50, y: -50}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}]
+    const sizes = [-1, {x: 120, y: 120}, {x: 120, y: 120}, {x: 120, y: 120}, {x: 145, y: 160}, {x: 120, y: 120}]
     let currentAnimation = ANIM_IDLE
 
     let scheduledShot = null
 
     const self = {
         scheduleAttack: () => {
-            if (tier < 4) {
+            if (tier < 6) {
                 return new Promise((resolve) => {
                     scheduledShot = resolve
                 })
@@ -156,7 +159,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
-            if (tier < 4) {
+            if (tier < 6) {
                 if (scheduledShot) {
                     if (currentAnimation === ANIM_IDLE) {
                         currentAnimation = ANIM_SPIT
@@ -181,10 +184,10 @@ export const Dragon = (bounds, tier, level, x, y) => {
         }
     }
 
-    if (tier < 4) {
+    if (tier < 6) {
         Object.assign(self,
             IAnimated(ANIM_IDLE)
-                .setSize(120, 120)
+                .setSize(sizes[tier].x, sizes[tier].y)
                 .setPosition(x, y)
                 .setLayer(RENDER_LAYER.BACKGROUND)
                 .setAnimationSpeed(0.35))
@@ -204,8 +207,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
         "#2222BB",  // tier 2
         "#FF8c00",  // tier 3
         "#FF22FF",  // tier 4
-        "#AAAA22",  // tier 5
-        "#22AAAA"   // tier 6
+        "#22AAAA",  // tier 5
+        "#AAAAAA"   // tier 6
     ][tier]
     cfg.color.start = color
     cfg.color.end = color

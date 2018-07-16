@@ -64,7 +64,7 @@ export const DragonMan = (renderer, clickDamage) => {
                 const damage = window.GD.getSingleDragonDamage(singleAvailable.tier, singleAvailable.level)
                 let wasAttack = false
                 for (let j = 0; j < damageToDistribute.length; j++) {
-					if (damageToDistribute[j] < damage) continue //dragon cant attack for half of his power
+					// if (damageToDistribute[j] < damage) continue //dragon cant attack for half of his power
                     if (!gameScreen.isSlotLive(j)) continue //no reason to attack empty slot
 					// here is the point of assigning some damage
 
