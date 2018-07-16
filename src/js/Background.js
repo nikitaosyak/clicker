@@ -37,6 +37,8 @@ export const Background = (renderer) => {
                     animateTo = [middle, middle, middle, middle, middle, middle]
                     break
                 case 2:
+                    const posLeft = renderer.size.x/2 - renderer.size.x
+                    animateTo = [posLeft * 0.5, posLeft * 0.6, posLeft * 0.7, posLeft * 0.8, posLeft * 0.9, posLeft]
                     break
             }
             layers.forEach((l, i) => {

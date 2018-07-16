@@ -1,6 +1,6 @@
 
-const ANIMATION_LENGTH = 0.8
-const EASING = Elastic.easeOut.config(0.9, 0.95)
+const ANIMATION_LENGTH = 0.7
+const EASING = Elastic.easeOut.config(0.98, 0.98)
 
 export class BaseScreen {
 

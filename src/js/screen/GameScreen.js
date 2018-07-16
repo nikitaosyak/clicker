@@ -19,13 +19,17 @@ export class GameScreen extends BaseScreen {
 
         const fs = this.uiCreator.getFullScreenButton(
             owner.renderer.dom,
-            {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40})
+            {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 160})
         fs && this.addControl(fs)
 
         if (this._owner.model.slotItems.length === 3) {
             this.addControl(this.uiCreator.getNavButton(
                 owner, SCREEN_TYPE.UPGRADE,
                 'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
+
+            this.addControl(this.uiCreator.getNavButton(
+                owner, SCREEN_TYPE.LEADERBOARD,
+                'ui_leaderboard', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
         }
 
         if (window.GD.config.MODE !== 'production') {
@@ -33,7 +37,7 @@ export class GameScreen extends BaseScreen {
                 if (window.confirm('прогресс будет сброшен. продолжить?')) {
                     this._owner.model.restart()
                 }
-            }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 160}))
+            }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 280}))
         }
 
         this._goldCounter = GoldCounter({x: 'center', xOffset: 10, y: 'bottom', yOffset: 400}, this._owner.model.gold)
