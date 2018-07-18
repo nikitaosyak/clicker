@@ -88,9 +88,16 @@ export const GameModel = () => {
             })
         },
         restart: () => {
+            self.reset()
+            window.location.reload(true)
+        },
+        reset: () => {
             initData()
             self.synchronize()
-            window.location.reload(true)
+        },
+        close: () => {
+            self.synchronize()
+            connected = false
         },
 
         get stage() { return data.currentStage },

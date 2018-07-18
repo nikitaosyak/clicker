@@ -9,6 +9,7 @@ import {URLParam} from "./utils/URLParam";
 import {Plot} from "./tools/Plot";
 import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
+import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
 
 window.onload = () => {
     debugManager.init()
@@ -18,9 +19,9 @@ window.onload = () => {
     const model = GameModel()
     window.GD = GameData(model)
 
-    const startGame = () => {
+    const startGame = (progress) => {
         model.connect().then(() => {
-            window.GD.progressToStage(model.stage)
+            progress && window.GD.progressToStage(model.stage)
             if (window.GD.config.MODE === 'development') {
                 window.GAMEMODEL = model
                 window.money = MathUtil
@@ -64,7 +65,18 @@ window.onload = () => {
                 digest.images.forEach(i => {
                     resources.add(i.alias, i.path)
                 })
-                resources.load(startGame)
+                resources.load(() => {
+                    if (URLParam.GET('stage')) {
+                        model.connect().then(() => {
+                            model.reset()
+                            SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
+                            model.close()
+                            startGame(false)
+                        })
+                    } else {
+                        startGame(true)
+                    }
+                })
             })
     }
 }
