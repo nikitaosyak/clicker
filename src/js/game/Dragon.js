@@ -60,7 +60,8 @@ const upgradeParticlesConfig = {
     }
 
 export const Dragon = (bounds, tier, level, x, y) => {
-    // tier = 5
+    // tier = Math.random() > 0.5 ? 1 : 5
+    // tier = Math.random() > 0.5 ? tier : 6
 
     const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
@@ -72,22 +73,18 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     const ANIM_IDLE = `dragons_t${tier}_idle`
     const ANIM_IDLE_TEXTURES = []
-    if (tier < 6) {
-        Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
-            ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
-        })
-    }
+    Object.keys(window.resources.getAnimation(ANIM_IDLE)).forEach(f => {
+        ANIM_IDLE_TEXTURES.push(PIXI.Texture.fromFrame(f))
+    })
     const ANIM_SPIT = `dragons_t${tier}_spit`
     const ANIM_SPIT_TEXTURES = []
-    if (tier < 6) {
-        Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
-            ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
-        })
-    }
+    Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
+        ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
+    })
     //                        TIER:                1,                2,                3,                4,                5,                6
     const attackCooldown =     [-1,              0.6,             0.58,             0.56,             0.54,             0.52,              0.5][tier]
-    const animationFireFrame = [-1,                9,                4,                6,                6,                6,                6][tier]
-    const spitOffset =         [-1,  {x: 30, y: -30},  {x: -5, y: -30},  {x: 40, y: -25},  {x: 50, y: -50},  {x: 30, y: -30},  {x: 30, y: -30}][tier]
+    const animationFireFrame = [-1,                9,                4,                6,                6,                6,                5][tier]
+    const spitOffset =         [-1,  {x: 30, y: -30},  {x: -5, y: -30},  {x: 40, y: -25},  {x: 50, y: -50},  {x: 30, y: -30},  {x: 60, y: -30}][tier]
     const size =               [-1, {x: 120, y: 120}, {x: 120, y: 120}, {x: 120, y: 120}, {x: 145, y: 160}, {x: 150, y: 150}, {x: 180, y: 180}][tier]
     let currentAnimation = ANIM_IDLE
     let lastAttack = 0
@@ -95,15 +92,9 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     const self = {
         scheduleAttack: () => {
-            if (tier < 6) {
-                return new Promise((resolve) => {
-                    scheduledShot = resolve
-                })
-            } else {
-                return new Promise((resolve) => {
-                    resolve(spitOffset)
-                })
-            }
+            return new Promise((resolve) => {
+                scheduledShot = resolve
+            })
         },
         canAttack: (urgencyCoefficient=1) => {
             urgencyCoefficient = MathUtil.clamp(0.01, 10, urgencyCoefficient)
@@ -157,46 +148,35 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
-            if (tier < 6) {
-                if (scheduledShot) {
-                    if (currentAnimation === ANIM_IDLE) {
-                        currentAnimation = ANIM_SPIT
-                        self.visual.textures = ANIM_SPIT_TEXTURES
-                        self.visual.gotoAndPlay(0)
-                    } else {
-                        if (self.visual.currentFrame === animationFireFrame) {
-                            lastAttack = Date.now()
-                            scheduledShot({x: spitOffset.x * movement.direction.x, y: spitOffset.y })
-                            scheduledShot = null
-                        }
+            if (scheduledShot) {
+                if (currentAnimation === ANIM_IDLE) {
+                    currentAnimation = ANIM_SPIT
+                    self.visual.textures = ANIM_SPIT_TEXTURES
+                    self.visual.gotoAndPlay(0)
+                } else {
+                    if (self.visual.currentFrame === animationFireFrame) {
+                        lastAttack = Date.now()
+                        scheduledShot({x: spitOffset.x * movement.direction.x, y: spitOffset.y })
+                        scheduledShot = null
                     }
                 }
-                if (currentAnimation === ANIM_SPIT) {
-                    if (self.visual.currentFrame === self.visual.totalFrames-1) {
-                        currentAnimation = ANIM_IDLE
-                        self.visual.textures = ANIM_IDLE_TEXTURES
-                        self.visual.gotoAndPlay(0)
-                    }
+            }
+            if (currentAnimation === ANIM_SPIT) {
+                if (self.visual.currentFrame === self.visual.totalFrames-1) {
+                    currentAnimation = ANIM_IDLE
+                    self.visual.textures = ANIM_IDLE_TEXTURES
+                    self.visual.gotoAndPlay(0)
                 }
             }
         }
     }
 
-    if (tier < 6) {
-        Object.assign(self,
-            IAnimated(ANIM_IDLE)
-                .setSize(size.x, size.y)
-                .setPosition(x, y)
-                .setLayer(RENDER_LAYER.BACKGROUND)
-                .setAnimationSpeed(0.35))
-    } else {
-        Object.assign(self,
-            IVisual(`dragon_t${tier}`)
-                .setSize(100, 100)
-                .setPosition(x, y)
-                .setLayer(RENDER_LAYER.BACKGROUND)
-        )
-    }
+    Object.assign(self,
+        IAnimated(ANIM_IDLE)
+            .setSize(size.x, size.y)
+            .setPosition(x, y)
+            .setLayer(RENDER_LAYER.BACKGROUND)
+            .setAnimationSpeed(0.35))
 
     const cfg = Object.assign({}, upgradeParticlesConfig)
     const color = [
@@ -206,7 +186,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
         "#FF8c00",  // tier 3
         "#FF22FF",  // tier 4
         "#22AAAA",  // tier 5
-        "#AAAAAA"   // tier 6
+        "#8b4513"   // tier 6
     ][tier]
     cfg.color.start = color
     cfg.color.end = color
