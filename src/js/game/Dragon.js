@@ -68,10 +68,6 @@ export const Dragon = (bounds, tier, level, x, y) => {
     }
     const localBounds = { left: 0, right: 0, top: 0, bottom: 0, active: false }
 
-    //                    TIER:   1,    2,    3,    4,    5,   6,   7,     8,    9,   10
-    const attackCooldown = [-1, 0.6, 0.58, 0.56, 0.54, 0.52, 0.5, 0.48, 0.46, 0.44, 0.42][tier]
-    let lastAttack = 0
-
     let emitter
 
     const ANIM_IDLE = `dragons_t${tier}_idle`
@@ -88,11 +84,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
             ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
         })
     }
-    const animationFireFrame = [-1, 9, 4, 6, 6, 6]
-    const spitOffset = [0, {x: 30, y: -30}, {x: -5, y: -30}, {x: 40, y: -25}, {x: 50, y: -50}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}, {x: 30, y: -30}]
-    const sizes = [-1, {x: 120, y: 120}, {x: 120, y: 120}, {x: 120, y: 120}, {x: 145, y: 160}, {x: 120, y: 120}]
+    //                        TIER:                1,                2,                3,                4,                5,                6
+    const attackCooldown =     [-1,              0.6,             0.58,             0.56,             0.54,             0.52,              0.5][tier]
+    const animationFireFrame = [-1,                9,                4,                6,                6,                6,                6][tier]
+    const spitOffset =         [-1,  {x: 30, y: -30},  {x: -5, y: -30},  {x: 40, y: -25},  {x: 50, y: -50},  {x: 30, y: -30},  {x: 30, y: -30}][tier]
+    const size =               [-1, {x: 120, y: 120}, {x: 120, y: 120}, {x: 120, y: 120}, {x: 145, y: 160}, {x: 150, y: 150}, {x: 180, y: 180}][tier]
     let currentAnimation = ANIM_IDLE
-
+    let lastAttack = 0
     let scheduledShot = null
 
     const self = {
@@ -103,7 +101,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
                 })
             } else {
                 return new Promise((resolve) => {
-                    resolve(spitOffset[tier])
+                    resolve(spitOffset)
                 })
             }
         },
@@ -166,9 +164,9 @@ export const Dragon = (bounds, tier, level, x, y) => {
                         self.visual.textures = ANIM_SPIT_TEXTURES
                         self.visual.gotoAndPlay(0)
                     } else {
-                        if (self.visual.currentFrame === animationFireFrame[tier]) {
+                        if (self.visual.currentFrame === animationFireFrame) {
                             lastAttack = Date.now()
-                            scheduledShot({x: spitOffset[tier].x * movement.direction.x, y: spitOffset[tier].y })
+                            scheduledShot({x: spitOffset.x * movement.direction.x, y: spitOffset.y })
                             scheduledShot = null
                         }
                     }
@@ -187,7 +185,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
     if (tier < 6) {
         Object.assign(self,
             IAnimated(ANIM_IDLE)
-                .setSize(sizes[tier].x, sizes[tier].y)
+                .setSize(size.x, size.y)
                 .setPosition(x, y)
                 .setLayer(RENDER_LAYER.BACKGROUND)
                 .setAnimationSpeed(0.35))
