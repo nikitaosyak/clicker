@@ -22,7 +22,7 @@ export const Renderer = () => {
 
     const canvas = document.getElementById('gameCanvas')
     const renderer = PIXI.autoDetectRenderer({
-        roundPixels: true,
+        roundPixels: false,
         width: vSize.x,
         height: vSize.y,
         view: canvas,

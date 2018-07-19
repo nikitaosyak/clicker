@@ -5,10 +5,12 @@ import {AB} from "../tools/AB";
 export const GameData = (model) => {
 
     const config = Config()
+    const slotW = 250, slotH = 300
+    const slotXOff = 0, slotYOff = 0
     const slots  = [
-        {w: 250, h: 300, pivotRules: {x: 'center', xOffsetMin: -260, xOffsetMax: -330, y: 'bottom', yOffset: 180}},
-        {w: 250, h: 300, pivotRules: {x: 'center', y: 'bottom', yOffset: 180}},
-        {w: 250, h: 300, pivotRules: {x: 'center', xOffsetMin: 260, xOffsetMax: 330, y: 'bottom', yOffset: 180}}
+        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffsetMin: -260 + slotXOff, xOffsetMax: -330 + slotXOff, y: 'bottom', yOffset: 180 + slotYOff}},
+        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffset: slotXOff, y: 'bottom', yOffset: 180 + slotYOff}},
+        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffsetMin: 260+ slotXOff, xOffsetMax: 330+ slotXOff, y: 'bottom', yOffset: 180+slotYOff}}
     ]
 
 	const contentTimeMins = 25;

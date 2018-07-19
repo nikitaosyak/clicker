@@ -152,6 +152,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
                 if (currentAnimation === ANIM_IDLE) {
                     currentAnimation = ANIM_SPIT
                     self.visual.textures = ANIM_SPIT_TEXTURES
+                    self.visual.animationSpeed = 0.35
                     self.visual.gotoAndPlay(0)
                 } else {
                     if (self.visual.currentFrame === animationFireFrame) {
@@ -165,6 +166,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
                 if (self.visual.currentFrame === self.visual.totalFrames-1) {
                     currentAnimation = ANIM_IDLE
                     self.visual.textures = ANIM_IDLE_TEXTURES
+                    self.visual.animationSpeed = 0.35
                     self.visual.gotoAndPlay(0)
                 }
             }

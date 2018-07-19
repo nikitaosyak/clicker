@@ -9,11 +9,13 @@ export const DestroyAnimation = pool => {
             }})
     animation.pause()
     const self = {
-        initialize: (target, time, _onComplete) => {
+        initialize: (target, time, delay, _onComplete) => {
+            console.log(time, delay)
             onComplete = _onComplete
 
             animation.target = target
             animation.vars.pixi = {
+                delay: delay,
                 scaleX: target.scale.x * 2,
                 scaleY: target.scale.y * 2,
                 alpha: 0,
@@ -21,8 +23,9 @@ export const DestroyAnimation = pool => {
                 rotation: Math.random() > 0.5 ? 120 : -120
             }
             animation.duration(time)
-            animation.invalidate()
-            animation.restart(false, false)
+                .delay(delay)
+                .invalidate()
+                .restart(true, false)
         }
     }
     return self

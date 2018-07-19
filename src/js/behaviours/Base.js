@@ -32,6 +32,8 @@ export const IVisual = texture => {
         setAnchor: (x, y) => { s.anchor.x = x; s.anchor.y = y; return self },
         setPosition: (x, y) => { s.x = x; s.y = y; return self },
         setLayer: v => { layer = v; return self },
+        setScale: (x, y) => { s.scale.x = x; s.scale.y = y; return self },
+        setPivot: (x, y) => { s.pivot.x = x; s.pivot.y = y; return self },
         get layer() { return layer || RENDER_LAYER.GAME },
         get visual() { return s }
     }
@@ -113,7 +115,7 @@ export const IAnimated = (descriptor) => {
     return self
 }
 
-export const IHealthBarOwner = self => {
+export const IHealthBarOwner = (self, pos = null) => {
 
     const getChildSprite = (parent, size, anchor, tint, alpha) => {
         const pw = parent.width/parent.scale.x
@@ -135,8 +137,12 @@ export const IHealthBarOwner = self => {
     }
 
     const background = getChildSprite(self.visual, {x:1,y:0.06}, {x:0,y:0.5}, 0x666666, 0.85)
-    background.x = -background.pw/2
-    background.y = -background.ph/2
+    if (pos === null) {
+        background.x = -background.pw/2
+        background.y = -background.ph/2
+    } else {
+        background.x = pos.x; background.y = pos.y
+    }
 
     const mainHp = getChildSprite(background, {x:0.98, y:0.9}, {x:0,y:0.5}, 0xAA0000, 0.9)
     mainHp.x = mainHp.pw * 0.01
@@ -198,11 +204,13 @@ export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size
     }
 }
 
-export const IClickable = (self) => {
-
+export const IClickable = (self, needHitArea = false) => {
     let clicks = 0
 
     self.visual.interactive = true
+    if (needHitArea) {
+        self.visual.hitArea = new PIXI.Rectangle(0, 0, self.visual.width, self.visual.height)
+    }
     self.visual.on('click', e => {
         clicks += 1
     })

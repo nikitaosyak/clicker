@@ -3,6 +3,7 @@ import {
     IHealthBarOwner, IVisualNumericRep, ObjectType, IVisual
 } from "../behaviours/Base";
 import {IAdoptable} from "../behaviours/IAdoptable";
+import {VisualChest} from "./VisualChest";
 
 export class SlotItem {
 
@@ -18,16 +19,21 @@ export class SlotItem {
         this._shakeAnimation = []
         this._currentClick = 0
 
-        Object.assign(this,
-            IVisual(type)
-                .setSize(window.GD.slots[slot].w, window.GD.slots[slot].h)
-        )
+        if (type === ObjectType.CHEST) {
+            Object.assign(this, VisualChest())
+            Object.assign(this, IHealthBarOwner(this, {x: 38, y: 50}))
+            Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
+            Object.assign(this, IClickable(this, true))
+        } else {
+            Object.assign(this,
+                IVisual(type)
+                    .setSize(window.GD.slots[slot].w, window.GD.slots[slot].h)
+            )
+            Object.assign(this, IHealthBarOwner(this))
+            Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
+            Object.assign(this, IClickable(this))
+        }
         this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
-
-        Object.assign(this, IHealthBarOwner(this))
-        Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
-        // Object.assign(this, IVisualNumericRep(this, 'targetSlot', 0.3, 0.25, 0xAA0000))
-        Object.assign(this, IClickable(this))
 
         const shakeTime = 0.25
         const easeConfig = RoughEase.ease.config({strength:10, points:40, template:Linear.easeNone, randomize:false})
@@ -89,25 +95,36 @@ export class SlotItem {
         return this._currentClick % 3 === 0 // reward with intermediate gold
     }
 
-    clear(animation) { // TODO: this here should be an animation
+    animateOpen() {
+        return new Promise(resolve => {
+            this.visual.interactive = false
+
+            this._shakeAnimation[0].kill()
+            this._shakeAnimation[1].kill()
+
+            this.healthbarVisual.destroy()
+            this.stageDestroy()
+
+            console.log(this.visual.play)
+            if (this.play) {
+                this.play().then(resolve)
+            } else {
+                resolve()
+            }
+        })
+    }
+
+    clear(animation) {
         const self = this
-        return new Promise((resolve, reject) => {
-
-            self._shakeAnimation[0].kill()
-            self._shakeAnimation[1].kill()
-
-            self.healthbarVisual.destroy()
-            self.stageDestroy()
-
-            self.visual.interactive = false
+        return new Promise(resolve => {
             if (self._drop[ObjectType.PAID_EGG] || self._drop[ObjectType.EGG]) {
                 self._drop = null
-                animation.initialize(self.visual, 0.25, () => {
+                animation.initialize(self.visual, 0.25, 0.7, () => {
                     self.visual.destroy()
                     resolve()
                 })
             } else {
-                animation.initialize(self.visual, 0.4, () => {
+                animation.initialize(self.visual, 0.4, 0.7, () => {
                     self.visual.destroy()
                     resolve()
                 })
