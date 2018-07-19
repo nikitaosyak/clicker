@@ -5,7 +5,7 @@ export const VisualChest = () => {
 
     const self = IContainer(100, 100, RENDER_LAYER.GAME)
 
-    const SX = 0.454, SY = 0.4701
+    const SX = 0.454 * 0.9, SY = 0.4701 * 0.9
     const top = IVisual('chests_top').setAnchor(0, 0).setPosition(44.7, 58.6).setScale(SX, SY)
     const base = IVisual('chests_base').setAnchor(0, 0).setPosition(50, 104).setScale(SX, SY)
     const topBehind = IVisual('chests_top_behind').setAnchor(0, 0.3).setPosition(18.9, 51.8).setScale(SX, SY)
