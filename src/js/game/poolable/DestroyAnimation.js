@@ -10,7 +10,6 @@ export const DestroyAnimation = pool => {
     animation.pause()
     const self = {
         initialize: (target, time, delay, _onComplete) => {
-            console.log(time, delay)
             onComplete = _onComplete
 
             animation.target = target

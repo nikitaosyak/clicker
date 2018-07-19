@@ -105,7 +105,6 @@ export class SlotItem {
             this.healthbarVisual.destroy()
             this.stageDestroy()
 
-            console.log(this.visual.play)
             if (this.play) {
                 this.play().then(resolve)
             } else {
