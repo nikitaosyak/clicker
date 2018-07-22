@@ -6,11 +6,11 @@ export const GameData = (model) => {
 
     const config = Config()
     const slotW = 260, slotH = 300
-    const slotXOff = 0, slotYOff = 220
+    const slotXOff = 0, slotYOff = 180
     const slots  = [
-        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffsetMin: -260 + slotXOff, xOffsetMax: -330 + slotXOff, y: 'bottom', yOffset: slotYOff}},
-        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffset: slotXOff, y: 'bottom', yOffset: slotYOff}},
-        {w: slotW, h: slotH, pivotRules: {x: 'right', xOffset: 160, y: 'bottom', yOffset: slotYOff}}
+        {w: slotW, h: slotH, pivotRules: {x: 'left', xOffset: 140, y: 'bottom', yOffset: 150}},
+        {w: slotW, h: slotH, pivotRules: {x: 'center', xOffset: -14, y: 'bottom', yOffset: 172}},
+        {w: slotW, h: slotH, pivotRules: {x: 'right', xOffset: 140, y: 'bottom', yOffset: 170}}
     ]
 
 	const contentTimeMins = 25;
@@ -82,7 +82,7 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            return (baseDamage + damage)// * 20
+            return (baseDamage + damage) * 10
         },
         getClickDamage2: flatDragons => {
             let damage = 0

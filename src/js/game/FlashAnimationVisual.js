@@ -1,21 +1,39 @@
-import {IContainer, IVisual} from "../behaviours/Base";
+import {IContainer, IVisual, ObjectType} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 
-export const VisualChest2 = (descriptor, baseImagePath, size) => {
+export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crutchStates = []) => {
+
+    crutchStates = crutchStates.map(t => {
+        return IVisual(t).setAnchor(0.5, 0.5)
+    })
+
+    let scale = 1
+    if (type.indexOf('egg') !== -1) {
+        scale = 0.51
+    } else if (type === ObjectType.CHEST) {
+        if (slot === 0) {
+            scale = 0.35
+        }
+        if (slot === 2) {
+            scale = 0.42
+        }
+    } else if (type === ObjectType.PAID_CHEST) {
+        scale = 0.42
+    }
 
     const animation = window.resources.getJSON(descriptor)
 
-    const self = IContainer(100, 100, RENDER_LAYER.GAME)
+    const self = IContainer(0, 0, RENDER_LAYER.GAME)
 
     const visuals = animation.map(layer => IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0))
     visuals.forEach(v => {
         self.visual.addChild(v.visual)
     })
 
-    self.visual.hitArea = new PIXI.Rectangle(0, 0, self.visual.width, self.visual.height)
-    self.visual.pivot.x = self.visual.width/2
-    self.visual.pivot.y = self.visual.height/2
-    self.visual.scale.x = self.visual.scale.y = size.w / self.visual.width
+    self.visual.hitArea = new PIXI.Rectangle(-self.visual.width/2, -self.visual.height/2, self.visual.width, self.visual.height)
+    // self.visual.pivot.x = self.visual.width/2
+    // self.visual.pivot.y = self.visual.height/2
+    self.visual.scale.x = self.visual.scale.y = scale
 
     let resolve = null
     let frame = 0
@@ -46,7 +64,21 @@ export const VisualChest2 = (descriptor, baseImagePath, size) => {
         })
     }
 
-    self.play = () => new Promise(_resolve => resolve = _resolve)
+    let currentState = -1
+    self.setCrutchState = state => {
+        if (currentState === state) return
+        currentState = state
+
+        visuals.forEach(v => v.visual.visible = false)
+        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
+
+        self.visual.addChild(crutchStates[state].visual)
+    }
+
+    self.play = () => {
+        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
+        return new Promise(_resolve => resolve = _resolve)
+    }
 
     self.update = dt => {
         if (resolve === null) return

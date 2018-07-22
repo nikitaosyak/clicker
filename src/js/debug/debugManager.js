@@ -2,7 +2,7 @@ export const debugManager = {
     _fps: new Stats(),
     init: () => {
         debugManager._fps.showPanel(0)
-        document.body.appendChild(debugManager._fps.dom)
+        // document.body.appendChild(debugManager._fps.dom)
     },
     frameStarted: () => {
         debugManager._fps.begin()

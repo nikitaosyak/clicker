@@ -4,11 +4,12 @@ import {
 } from "../behaviours/Base";
 import {IAdoptable} from "../behaviours/IAdoptable";
 import {VisualChest} from "./VisualChest";
-import {VisualChest2} from "./VisualChest2";
+import {FlashAnimationVisual} from "./FlashAnimationVisual";
 
 export class SlotItem {
 
     constructor(type, slot, stage, health, drop, targetSlot) {
+        this._type = type
         this._slot = slot
         this._stage = stage
         this._maxHealth = health
@@ -21,18 +22,41 @@ export class SlotItem {
         this._currentClick = 0
 
         if (type === ObjectType.CHEST) {
+            if (slot === 0) {
+                Object.assign(this, FlashAnimationVisual('animation_chest_small', 'chest_small', type, slot))
+                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
+                Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
+            } else
             if (slot === 2) {
-                Object.assign(this, VisualChest2('animation_chest_big', 'chest_big', window.GD.slots[slot]))
+                Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_big', type, slot))
+                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
+                Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
             } else {
                 Object.assign(this, VisualChest())
+                Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
+                Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
             }
-            Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
-            Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
+        }
+        else if (type === ObjectType.EGG) {
+            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', type, slot, [
+                'egg_regular_stage1', 'egg_regular_stage2'
+            ]))
+            Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
+            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
+            this.setCrutchState(0)
+        }
+        else if (type === ObjectType.PAID_EGG) {
+            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_premium', type, slot, [
+                'egg_premium_stage1', 'egg_premium_stage2'
+                ]))
+            Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
+            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
+            this.setCrutchState(0)
         }
         else if (type === ObjectType.PAID_CHEST) {
-            Object.assign(this, VisualChest2('animation_chest_big', 'chest_premium', window.GD.slots[slot]))
-            Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
-            Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
+            Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_premium', type, slot))
+            Object.assign(this, IHealthBarOwner(this, {x: -300, y: -300}))
+            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
         } else {
             Object.assign(this,
                 IVisual(type)
@@ -95,6 +119,10 @@ export class SlotItem {
     processDamage(value, source) {
         this._currentHealth = Math.max(0, this._currentHealth-value)
         this.setHealthBarValue(this._currentHealth/this._maxHealth)
+
+        if (this._type.indexOf('egg') > -1 && this._currentHealth / this._maxHealth < 0.5) {
+            this.setCrutchState(1)
+        }
 
         if (this._enabled) {
             this._shakeAnimation[this._animIdx].restart()
