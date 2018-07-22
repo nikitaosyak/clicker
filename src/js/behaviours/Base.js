@@ -208,9 +208,6 @@ export const IClickable = (self, needHitArea = false) => {
     let clicks = 0
 
     self.visual.interactive = true
-    if (needHitArea) {
-        self.visual.hitArea = new PIXI.Rectangle(0, 0, self.visual.width, self.visual.height)
-    }
     self.visual.on('click', e => {
         clicks += 1
     })

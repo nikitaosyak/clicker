@@ -133,6 +133,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 const relativePath = `${path}/${f}`.replace(process.cwd(), '').slice(1)
                 if (/(idle|spit)\.png/.test(relativePath)) return
                 if (/.*anim.*\.png/.test(relativePath)) return
+                if (/.*animation_source.*/.test(relativePath)) return
                 const loadPath = `assets/${relativePath}`
                 const alias = relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$)/, '')
                 digest.push({alias: alias, path: loadPath})
@@ -145,7 +146,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
     fs.mkdirSync('build/assets')
     fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: digest}, null, 2))
 
-    return gulp.src('assets/**/*').pipe(gulp.dest('build/assets'))
+    return gulp.src(['assets/**/*', '!assets/animation_source', '!assets/animation_source/**/*']).pipe(gulp.dest('build/assets'))
 })
 
 gulp.task('step5-process-tweenlite', ['step4-process-images'], () => {
@@ -233,4 +234,60 @@ gulp.task('buildbot-run', () => {
     fs.writeFileSync('./.env', 'MODE=production\nPLATFORM=standalone\nHOST=0.0.0.0\nPORT=8082')
     fs.writeFileSync('./bbprocess', process.pid.toString())
     gulp.start('default')
+})
+
+
+gulp.task('process-flash-animations', () => {
+    const fs = require('fs')
+    const rimraf = require('rimraf')
+    if (fs.existsSync('assets/animation')) {
+        rimraf.sync('assets/animation')
+    }
+    fs.mkdirSync('assets/animation')
+
+    process.chdir('./assets/animation_source')
+
+    const xmljs = new require('xml2js').Parser()
+    const iterateFolder = path => {
+        fs.readdirSync(path).forEach(f => {
+            if (fs.lstatSync(`${path}/${f}`).isDirectory()) {
+                iterateFolder(`${path}/${f}`)
+            } else {
+                const jsonObject = []
+                fs.readFile(`${path}/${f}`, (_, data) => {
+                    xmljs.parseString(data, (err, result) => {
+                        const layers = result.DOMSymbolItem.timeline[0].DOMTimeline[0].layers[0].DOMLayer
+                        layers.forEach((layer, i) => {
+                            jsonObject[i] = {visual: layer.$.name, frames: {}}
+                            layer.frames[0].DOMFrame.forEach(frame => {
+                                if (typeof frame.elements[0] === 'string') return // if elements absent to the frame, it considered empty
+
+                                const frameIndex = Number.parseInt(frame.$.index)
+                                const frameDuration = Number.parseInt(frame.$.duration || 1)
+                                const frameMatrix = Object.assign({}, frame.elements[0].DOMSymbolInstance[0].matrix[0].Matrix[0].$)
+                                for (let sameFrame = frameIndex; sameFrame < frameIndex + frameDuration; sameFrame++) {
+                                    jsonObject[i].frames[sameFrame] = frameMatrix
+                                }
+                            })
+                            // console.log('-----------')
+                        })
+                    })
+
+                    // console.log(jsonObject)
+                    if (!fs.existsSync(path.replace('animation_source', 'animation'))) {
+                        fs.mkdirSync(path.replace('animation_source', 'animation'))
+                    }
+                    fs.writeFileSync(`${path.replace('animation_source', 'animation')}/${f.replace('.xml', '.json')}`, JSON.stringify(jsonObject.reverse(), null, 2))
+                })
+                // if (/.*animation_srouce.*/.test(relativePath)) return
+                // const loadPath = `assets/${relativePath}`
+                // const alias = relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$)/, '')
+                // digest.push({alias: alias, path: loadPath})
+            }
+        })
+    }
+
+    iterateFolder(process.cwd())
+
+    process.chdir('../..')
 })

@@ -10,6 +10,7 @@ import {Plot} from "./tools/Plot";
 import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
 import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
+import {VisualChest2} from "./game/VisualChest2";
 
 window.onload = () => {
     debugManager.init()
@@ -30,6 +31,9 @@ window.onload = () => {
 
             const dragons = DragonMan(renderer, window.GD.getClickDamage(model.dragons))
 
+            // const at = AnimationTest('animation_chest_big', 'chest_big')
+            // renderer.addObject(at)
+
             const screens = ScreenMan(dragons, renderer, model)
             screens.instantTransit(SCREEN_TYPE.GAME)
             // screens.instantTransit(SCREEN_TYPE.UPGRADE)
@@ -45,6 +49,7 @@ window.onload = () => {
                 dragons.update(dt)
                 screens.update(dt)
                 renderer.update(dt)
+                // at.update(dt)
 
                 requestAnimationFrame(gameLoop)
 

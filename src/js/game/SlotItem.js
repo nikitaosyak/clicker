@@ -4,6 +4,7 @@ import {
 } from "../behaviours/Base";
 import {IAdoptable} from "../behaviours/IAdoptable";
 import {VisualChest} from "./VisualChest";
+import {VisualChest2} from "./VisualChest2";
 
 export class SlotItem {
 
@@ -20,10 +21,14 @@ export class SlotItem {
         this._currentClick = 0
 
         if (type === ObjectType.CHEST) {
-            Object.assign(this, VisualChest())
-            Object.assign(this, IHealthBarOwner(this, {x: 38, y: 50}))
+            if (slot === 2) {
+                Object.assign(this, VisualChest2('animation_chest_big', 'chest_big', window.GD.slots[slot]))
+            } else {
+                Object.assign(this, VisualChest())
+            }
+            console.log(this.visual.width, this.visual.height)
+            Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
             Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
-            Object.assign(this, IClickable(this, true))
         } else {
             Object.assign(this,
                 IVisual(type)
@@ -31,8 +36,9 @@ export class SlotItem {
             )
             Object.assign(this, IHealthBarOwner(this))
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
-            Object.assign(this, IClickable(this))
         }
+
+        Object.assign(this, IClickable(this))
         this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
 
         const shakeTime = 0.25
