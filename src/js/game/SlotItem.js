@@ -26,7 +26,11 @@ export class SlotItem {
             } else {
                 Object.assign(this, VisualChest())
             }
-            console.log(this.visual.width, this.visual.height)
+            Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
+            Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
+        }
+        else if (type === ObjectType.PAID_CHEST) {
+            Object.assign(this, VisualChest2('animation_chest_big', 'chest_premium', window.GD.slots[slot]))
             Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
             Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
         } else {
