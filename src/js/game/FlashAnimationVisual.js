@@ -5,7 +5,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
 
     crutchStates = crutchStates.map(t => {
         return IVisual(t).setAnchor(0.5, 0.5)
-    })
+    }).reverse()
 
     let scale = 1
     if (type.indexOf('egg') !== -1) {
@@ -64,15 +64,21 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
         })
     }
 
-    let currentState = -1
     self.setCrutchState = state => {
-        if (currentState === state) return
-        currentState = state
+        const singleState = 1 / (crutchStates.length-1)
+        const stateSlot = Math.floor(state / singleState)
+        const visualIndexes = [stateSlot, stateSlot+1]
+        const lerp1 = (state - singleState * stateSlot)/singleState
+        const lerp0 = 1 - lerp1
+        // console.log(state, stateSlot, visualIndexes, lerp1, lerp0)
 
         visuals.forEach(v => v.visual.visible = false)
-        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
 
-        self.visual.addChild(crutchStates[state].visual)
+        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
+        self.visual.addChild(crutchStates[stateSlot].visual)
+        crutchStates[stateSlot].visual.alpha = 1
+        self.visual.addChild(crutchStates[stateSlot+1].visual)
+        crutchStates[stateSlot+1].visual.alpha = lerp1
     }
 
     self.play = () => {

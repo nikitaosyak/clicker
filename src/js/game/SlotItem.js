@@ -39,11 +39,11 @@ export class SlotItem {
         }
         else if (type === ObjectType.EGG) {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', type, slot, [
-                'egg_regular_stage1', 'egg_regular_stage2'
+                'egg_regular_stage0', 'egg_regular_stage1', 'egg_regular_stage2'
             ]))
             Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
-            this.setCrutchState(0)
+            this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_EGG) {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_premium', type, slot, [
@@ -51,7 +51,7 @@ export class SlotItem {
                 ]))
             Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
-            this.setCrutchState(0)
+            this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_CHEST) {
             Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_premium', type, slot))
@@ -120,8 +120,8 @@ export class SlotItem {
         this._currentHealth = Math.max(0, this._currentHealth-value)
         this.setHealthBarValue(this._currentHealth/this._maxHealth)
 
-        if (this._type.indexOf('egg') > -1 && this._currentHealth / this._maxHealth < 0.5) {
-            this.setCrutchState(1)
+        if (this._type.indexOf('egg') > -1) {
+            this.setCrutchState(this._currentHealth / this._maxHealth)
         }
 
         if (this._enabled) {
