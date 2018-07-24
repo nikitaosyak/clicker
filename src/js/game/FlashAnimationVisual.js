@@ -7,6 +7,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
         return IVisual(t).setAnchor(0.5, 0.5)
     }).reverse()
 
+    const frameRate = type.indexOf('egg') !== 1 ? 2 : 3
     let scale = 1
     if (type.indexOf('egg') !== -1) {
         scale = 0.51
@@ -37,7 +38,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
 
     let resolve = null
     let frame = 0
-    let currentDt = 0
+    let appFrame = 0
 
     const getMatrix = (transform, descriptor) => {
         const a = descriptor.a ? Number.parseFloat(descriptor.a) : transform.a
@@ -86,12 +87,12 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
         return new Promise(_resolve => resolve = _resolve)
     }
 
-    self.update = dt => {
+    self.update = () => {
         if (resolve === null) return
 
-        currentDt += dt
-        if (currentDt < 0.05) return
-        currentDt = 0
+        appFrame += 1
+        appFrame = appFrame % frameRate
+        if (appFrame !== 0) return
 
         applyFrame(frame)
         frame += 1
