@@ -1,7 +1,8 @@
-import {IAnimated, IVisual, IVisualNumericRep, ObjectType} from "../behaviours/Base";
+import {IAnimated, IVisualNumericRep} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 import {MathUtil} from "../utils/MathUtil";
 import {DragonMoveComponent} from "./DragonMoveComponent";
+import {FlashAnimationVisual2} from "./FlashAnimationVisual2";
 
 const upgradeParticlesConfig = {
         "alpha": {
@@ -90,6 +91,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
     let lastAttack = 0
     let scheduledShot = null
 
+    // const numberr = FlashAnimationVisual2('animation_dragon_level', level)
+
     const self = {
         scheduleAttack: () => {
             return new Promise((resolve) => {
@@ -148,6 +151,10 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
+            if (currentAnimation === ANIM_IDLE) {
+                // numberr.applyFrame(self.visual.currentFrame);
+            }
+
             if (scheduledShot) {
                 if (currentAnimation === ANIM_IDLE) {
                     currentAnimation = ANIM_SPIT
@@ -200,6 +207,10 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
     invalidateVisual()
+
+    if (tier === 6) {
+        // self.visual.addChild(numberr.visual)
+    }
 
     return self
 }
