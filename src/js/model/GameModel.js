@@ -61,10 +61,11 @@ export const GameModel = () => {
                     reject("already connected")
                 }
                 connected = true
-                const loadData = JSON.parse(LZString.decompressFromEncodedURIComponent(window.localStorage.dragon_clicker || null))
-                if (loadData === null) {
+                const anyData = window.localStorage.dragon_clicker || null
+                if (anyData === null) {
                     initData()
                 } else {
+                    const loadData = JSON.parse(LZString.decompressFromEncodedURIComponent(anyData))
                     data.userid = loadData.userid
                     data.currentStage = loadData.currentStage
                     data.currentGold = loadData.currentGold
