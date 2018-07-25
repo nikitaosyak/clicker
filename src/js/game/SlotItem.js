@@ -70,7 +70,6 @@ export class SlotItem {
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
         }
 
-        Object.assign(this, IClickable(this))
         this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
 
         const shakeTime = 0.25
@@ -87,7 +86,7 @@ export class SlotItem {
         ]
         this._shakeAnimation[0].pause()
         this._shakeAnimation[1].pause()
-        this._enabled = true
+        this._enabled = false
     }
 
     get stage() { return this._stage }
@@ -122,11 +121,13 @@ export class SlotItem {
 		if (this._showAnimation == null) {
 			this._showAnimation = TweenLite.fromTo(
 					this.visual, 1,
-					{alpha:0.4, y:this.visual.y - 400, scaleX:this.visual.scale.x * 0.3, scaleY:this.visual.scale.y * 0.3},
-					{alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y, ease:Bounce.easeOut})
-		}
-				
-		this._showAnimation.restart()
+					{pixi: {alpha:0.4, y:this.visual.y - 400, scaleX:this.visual.scale.x * 0.3, scaleY:this.visual.scale.y * 0.3}, onComplete: () => {
+                            Object.assign(this, IClickable(this))
+                            this._enabled = true
+                        }},
+					{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut})
+            this._showAnimation.restart()
+        }
     }
 
     processDamage(value, source) {
