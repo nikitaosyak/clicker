@@ -19,6 +19,7 @@ export class SlotItem {
 
         this._animIdx = 0
         this._shakeAnimation = []
+		this._showAnimation = null
         this._currentClick = 0
 
         if (type === ObjectType.CHEST) {
@@ -36,6 +37,7 @@ export class SlotItem {
                 Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
                 Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
             }
+			
         }
         else if (type === ObjectType.EGG) {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', type, slot, [
@@ -114,6 +116,15 @@ export class SlotItem {
 
         this._shakeAnimation[1].vars.startAt.y = this.visual.y - shakeOffset
         this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
+		
+		if (this._showAnimation == null) {
+			this._showAnimation = TweenLite.fromTo(
+					this.visual, 1,
+					{alpha:0.4, y:this.visual.y - 400, scaleX:this.visual.scale.x * 0.3, scaleY:this.visual.scale.y * 0.3},
+					{alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y, ease:Bounce.easeOut})
+		}
+				
+		this._showAnimation.restart()
     }
 
     processDamage(value, source) {

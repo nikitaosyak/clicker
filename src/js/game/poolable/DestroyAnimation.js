@@ -15,11 +15,11 @@ export const DestroyAnimation = pool => {
             animation.target = target
             animation.vars.pixi = {
                 delay: delay,
-                scaleX: target.scale.x * 2,
-                scaleY: target.scale.y * 2,
-                alpha: 0,
+                y: target.y + target.height,
+				scaleX: target.scale.x * 1.5,
+                scaleY: target.scale.y * 1.5,
+                alpha: 0.5,
                 hue: 180,
-                rotation: Math.random() > 0.5 ? 120 : -120
             }
             animation.duration(time)
                 .delay(delay)
