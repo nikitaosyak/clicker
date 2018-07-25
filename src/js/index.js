@@ -1,6 +1,6 @@
 import {debugManager} from "./debug/debugManager";
 import {Renderer} from "./Renderer";
-import {Resources} from "./Resrouces";
+import {Resources} from "./Resources";
 import {SCREEN_TYPE, ScreenMan} from "./screen/ScreenMan";
 import {GameModel} from "./model/GameModel";
 import {GameData} from "./model/GameData";

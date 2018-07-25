@@ -135,7 +135,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 if (/.*anim.*\.png/.test(relativePath)) return
                 if (/.*animation_source.*/.test(relativePath)) return
                 const loadPath = `assets/${relativePath}`
-                const alias = relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$)/, '')
+                const alias = relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$|\.frag$)/, '')
                 digest.push({alias: alias, path: loadPath})
             }
         })

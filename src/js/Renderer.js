@@ -67,6 +67,7 @@ export const Renderer = () => {
         // console.log(canvasW, canvasH, stage.scale, window.innerWidth, document.documentElement.clientWidth)
     }
     resizeCanvas()
+    console.log(renderer)
 
     // debug.on('visibility', _ => resizeCanvas())
 

@@ -1,16 +1,23 @@
 import {IContainer, IVisual, ObjectType} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 
-export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slot, crutchStates = []) => {
+export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slot, crutchStates = [], tier = NaN) => {
 
-    crutchStates = crutchStates.map(t => {
-        return IVisual(t).setAnchor(0.5, 0.5)
-    }).reverse()
+
 
     const frameRate = type.indexOf('egg') !== 1 ? 2 : 3
     let scale = 1
+    let filter = null
     if (type.indexOf('egg') !== -1) {
         scale = 0.51
+        if (type === ObjectType.EGG) {
+            const gradients = window.resources.getJSON(`${baseImagePath}_gradients`)[`tier${tier}`]
+            filter = new PIXI.Filter(null, window.resources.getText('shader_gradient_map'))
+            Object.keys(gradients).forEach(gK => {
+                filter.uniforms[gK] = gradients[gK].map((g, i) => i < 3 ? g/255 : g)
+            })
+            // console.log(filter.uniforms)
+        }
     } else if (type === ObjectType.CHEST) {
         if (slot === 0) {
             scale = 0.35
@@ -22,9 +29,20 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
         scale = 0.42
     }
 
+    crutchStates = crutchStates.map(t => {
+        const v = IVisual(t).setAnchor(0.5, 0.5)
+
+        return v
+    }).reverse()
+
     const animation = window.resources.getJSON(descriptor)
 
-    const self = IContainer(0, 0, RENDER_LAYER.GAME)
+    const root = IContainer(0, 0, RENDER_LAYER.GAME)
+    const filteredContainer = IContainer(0, 0)
+    root.visual.addChild(filteredContainer.visual)
+    if (filter) {
+        filteredContainer.visual.filters = [filter]
+    }
 
     const visuals = animation.map(layer => {
         if (layer.visual === 'number') {
@@ -49,17 +67,19 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
             }
             return numberVisual
         } else {
-            return IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0)
+            const v = IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0)
+            // if (filter) v.visual.filters = [filter]
+            return v
         }
     })
     visuals.forEach(v => {
-        self.visual.addChild(v.visual)
+        filteredContainer.visual.addChild(v.visual)
     })
 
-    self.visual.hitArea = new PIXI.Rectangle(-self.visual.width/2, -self.visual.height/2, self.visual.width, self.visual.height)
+    root.visual.hitArea = new PIXI.Rectangle(-root.visual.width/2, -root.visual.height/2, root.visual.width, root.visual.height)
     // self.visual.pivot.x = self.visual.width/2
     // self.visual.pivot.y = self.visual.height/2
-    self.visual.scale.x = self.visual.scale.y = scale
+    root.visual.scale.x = root.visual.scale.y = scale
 
     let resolve = null
     let frame = 0
@@ -90,7 +110,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
         })
     }
 
-    self.setCrutchState = state => {
+    root.setCrutchState = state => {
         const singleState = 1 / (crutchStates.length-1)
         const stateSlot = Math.floor(state / singleState)
         const visualIndexes = [stateSlot, stateSlot+1]
@@ -100,19 +120,19 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
 
         visuals.forEach(v => v.visual.visible = false)
 
-        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
-        self.visual.addChild(crutchStates[stateSlot].visual)
+        crutchStates.forEach(cs => root.visual.removeChild(cs.visual))
+        filteredContainer.visual.addChild(crutchStates[stateSlot].visual)
         crutchStates[stateSlot].visual.alpha = 1
-        self.visual.addChild(crutchStates[stateSlot+1].visual)
+        filteredContainer.visual.addChild(crutchStates[stateSlot+1].visual)
         crutchStates[stateSlot+1].visual.alpha = lerp1
     }
 
-    self.play = () => {
-        crutchStates.forEach(cs => self.visual.removeChild(cs.visual))
+    root.play = () => {
+        crutchStates.forEach(cs => filteredContainer.visual.removeChild(cs.visual))
         return new Promise(_resolve => resolve = _resolve)
     }
 
-    self.update = () => {
+    root.update = () => {
         if (resolve === null) return
 
         appFrame += 1
@@ -131,5 +151,5 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
 
     applyFrame(0)
 
-    return self
+    return root
 }

@@ -43,7 +43,7 @@ export class SlotItem {
         else if (type === ObjectType.EGG) {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', stage, type, slot, [
                 'egg_regular_stage0', 'egg_regular_stage1', 'egg_regular_stage2'
-            ]))
+            ], drop.dragon.tier))
             Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
             // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
             this.setCrutchState(0.999)
