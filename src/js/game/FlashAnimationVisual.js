@@ -1,7 +1,7 @@
 import {IContainer, IVisual, ObjectType} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 
-export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crutchStates = []) => {
+export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slot, crutchStates = []) => {
 
     crutchStates = crutchStates.map(t => {
         return IVisual(t).setAnchor(0.5, 0.5)
@@ -26,7 +26,32 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, type, slot, crut
 
     const self = IContainer(0, 0, RENDER_LAYER.GAME)
 
-    const visuals = animation.map(layer => IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0))
+    const visuals = animation.map(layer => {
+        if (layer.visual === 'number') {
+
+            const numberVisual = IContainer(0, 0)
+            if (stage < 10) {
+                const anchorX = slot === 2 ? 0.9 : 1
+                const anchorY = slot === 2? 0.55 : 0.65
+                numberVisual.visual.addChild(IVisual(`numbers_arabic_${stage}`).setAnchor(anchorX, anchorY).visual)
+            } else {
+                const anchorX = slot === 2 ? 0.8 : 0.93
+                const anchorY = slot === 2? 0.55 : 0.68
+                const digit1 = IVisual(`numbers_arabic_${Math.floor(stage / 10)}`)
+                    .setAnchor(0, 0).setScale(0.7, 0.9)
+                const digit0 = IVisual(`numbers_arabic_${stage % 10}`)
+                    .setAnchor(0, 0).setScale(0.7, 0.9).setPosition(digit1.visual.width, 0)
+                numberVisual.visual.addChild(digit1.visual)
+                numberVisual.visual.addChild(digit0.visual)
+                numberVisual.visual.pivot.x = numberVisual.visual.width * anchorX
+                numberVisual.visual.pivot.y = numberVisual.visual.height * anchorY
+                // console.log(numberVisual.visual.pivot)
+            }
+            return numberVisual
+        } else {
+            return IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0)
+        }
+    })
     visuals.forEach(v => {
         self.visual.addChild(v.visual)
     })

@@ -1,8 +1,72 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="CHEST_MAIN" itemID="5b50a67d-00000092" lastModified="1532267210" lastUniqueIdentifier="3">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="CHEST_MAIN" itemID="5b50a67d-00000092" lastModified="1532435968" lastUniqueIdentifier="3">
   <timeline>
-    <DOMTimeline name="CHEST_MAIN" currentFrame="14">
+    <DOMTimeline name="CHEST_MAIN">
       <layers>
-        <DOMLayer name="lid" color="#FF800A" current="true" isSelected="true" autoNamed="false">
+        <DOMLayer name="NUMBER_layer" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL">
+                  <matrix>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.3" ty="88.05"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="-0.9" y="0.15"/>
+                  </transformationPoint>
+                  <filters>
+                    <AdjustColorFilter brightness="4" contrast="21" saturation="19"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="1" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" centerPoint3DX="51.45" centerPoint3DY="93.55">
+                  <matrix>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.8" ty="93.55"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="-0.9" y="0.15"/>
+                  </transformationPoint>
+                  <filters>
+                    <AdjustColorFilter brightness="4" contrast="21" saturation="19"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="2" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" centerPoint3DX="50.95" centerPoint3DY="86.55">
+                  <matrix>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.3" ty="86.55"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="-0.9" y="0.15"/>
+                  </transformationPoint>
+                  <filters>
+                    <AdjustColorFilter brightness="4" contrast="21" saturation="19"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="3" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" centerPoint3DX="48.95" centerPoint3DY="-1">
+                  <matrix>
+                    <Matrix a="0.331253051757813" d="0.288070678710938" tx="49.3" ty="-1"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point x="-0.9" y="0.15"/>
+                  </transformationPoint>
+                  <filters>
+                    <AdjustColorFilter brightness="4" contrast="21" saturation="19"/>
+                  </filters>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+        <DOMLayer name="lid" color="#FF800A" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
@@ -54,7 +118,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="base" color="#00FFFF" autoNamed="false">
+        <DOMLayer name="base" color="#00FFFF" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="5" keyMode="9728">
               <elements>
@@ -154,7 +218,7 @@
             </DOMFrame>
           </frames>
         </DOMLayer>
-        <DOMLayer name="lid_open" color="#9933CC" autoNamed="false">
+        <DOMLayer name="lid_open" color="#9933CC" locked="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" duration="4" keyMode="9728">
               <elements/>

@@ -24,42 +24,44 @@ export class SlotItem {
 
         if (type === ObjectType.CHEST) {
             if (slot === 0) {
-                Object.assign(this, FlashAnimationVisual('animation_chest_small', 'chest_small', type, slot))
+                Object.assign(this, FlashAnimationVisual('animation_chest_small', 'chest_small', stage, type, slot))
                 Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
-                Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
+                // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
             } else
-            if (slot === 2) {
-                Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_big', type, slot))
-                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
-                Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
-            } else {
+            if (slot === 1) {
                 Object.assign(this, VisualChest())
                 Object.assign(this, IHealthBarOwner(this, {x: 35, y: 50}))
                 Object.assign(this, IVisualNumericRep(this, 'stage', 0.2, 1, 0xCCCC00, 0.25))
+            } else
+            if (slot === 2) {
+                Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_big', stage, type, slot))
+                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
+                // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.25, 0xCCCC00, 0.25))
             }
 			
         }
         else if (type === ObjectType.EGG) {
-            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', type, slot, [
+            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', stage, type, slot, [
                 'egg_regular_stage0', 'egg_regular_stage1', 'egg_regular_stage2'
             ]))
             Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
-            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
+            // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
             this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_EGG) {
-            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_premium', type, slot, [
+            Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_premium', stage, type, slot, [
                 'egg_premium_stage1', 'egg_premium_stage2'
                 ]))
             Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
-            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
+            // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
             this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_CHEST) {
-            Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_premium', type, slot))
+            Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_premium', stage, type, slot))
             Object.assign(this, IHealthBarOwner(this, {x: -300, y: -300}))
-            Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
+            // Object.assign(this, IVisualNumericRep(this, 'stage', -0.4, 0.3, 0xCCCC00, 0.25))
         } else {
+            console.warn('FALLBACK TYPE?! ', type)
             Object.assign(this,
                 IVisual(type)
                     .setSize(window.GD.slots[slot].w, window.GD.slots[slot].h)
@@ -152,7 +154,7 @@ export class SlotItem {
             this._shakeAnimation[1].kill()
 
             this.healthbarVisual.destroy()
-            this.stageDestroy()
+            this.stageDestroy && this.stageDestroy()
 
             if (this.play) {
                 this.play().then(resolve)
