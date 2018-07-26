@@ -19,7 +19,7 @@ export const DestroyAnimation = pool => {
 				scaleX: target.scale.x * 1.5,
                 scaleY: target.scale.y * 1.5,
                 alpha: 0.5,
-                hue: 180,
+                //hue: 180,
             }
             animation.duration(time)
                 .delay(delay)

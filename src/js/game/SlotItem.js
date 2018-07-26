@@ -112,21 +112,23 @@ export class SlotItem {
         this._adopter.adopt(currentAr, virtualAr, canvasSize, virtualCanvasSize, maxAr)
 
         const shakeOffset = 1
-        this._shakeAnimation[0].vars.startAt.x = this.visual.x - shakeOffset
-        this._shakeAnimation[0].vars.x = this.visual.x + shakeOffset
+		
+		this._shakeAnimation[0].vars.startAt.x = this.visual.x - shakeOffset
+		this._shakeAnimation[0].vars.x = this.visual.x + shakeOffset
 
-        this._shakeAnimation[1].vars.startAt.y = this.visual.y - shakeOffset
-        this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
+		this._shakeAnimation[1].vars.startAt.y = this.visual.y - shakeOffset
+		this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
 		
 		if (this._showAnimation == null) {
-			this._showAnimation = TweenLite.fromTo(
-					this.visual, 1,
-					{pixi: {alpha:0.4, y:this.visual.y - 400, scaleX:this.visual.scale.x * 0.3, scaleY:this.visual.scale.y * 0.3}, onComplete: () => {
-                            Object.assign(this, IClickable(this))
-                            this._enabled = true
-                        }},
-					{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut})
-            this._showAnimation.restart()
+			//if (this._type === ObjectType.CHEST) {
+				this._showAnimation = TweenLite.fromTo(
+						this.visual, 1,
+						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}, onComplete: () => {
+								Object.assign(this, IClickable(this))
+								this._enabled = true
+							}},
+						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut})
+			//}
         }
     }
 
