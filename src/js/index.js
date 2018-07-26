@@ -71,6 +71,9 @@ window.onload = () => {
                 digest.images.forEach(i => {
                     resources.add(i.alias, i.path)
                 })
+                digest.audio.forEach(a => {
+                    PIXI.sound.add(a.alias, a.path + '.mp3')
+                })
                 resources.load(() => {
                     if (URLParam.GET('stage')) {
                         model.connect().then(() => {

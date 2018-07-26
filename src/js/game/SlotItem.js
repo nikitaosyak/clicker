@@ -90,6 +90,7 @@ export class SlotItem {
         this._enabled = false
     }
 
+    get type() { return this._type }
     get stage() { return this._stage }
     get drop() { return this._drop }
     get health() { return this._currentHealth }

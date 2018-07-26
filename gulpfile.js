@@ -124,7 +124,8 @@ gulp.task('step3-webpack-lib', ['step2-webpack'], () => {
 gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
     process.chdir('./assets')
     const fs = require('fs')
-    let digest = []
+    let imageDigest = []
+    let audioDigest = []
     const iterateFolder = path => {
         fs.readdirSync(path).forEach(f => {
             if (fs.lstatSync(`${path}/${f}`).isDirectory()) {
@@ -134,9 +135,26 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 if (/(idle|spit)\.png/.test(relativePath)) return
                 if (/.*anim.*\.png/.test(relativePath)) return
                 if (/.*animation_source.*/.test(relativePath)) return
-                const loadPath = `assets/${relativePath}`
-                const alias = relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$|\.frag$)/, '')
-                digest.push({alias: alias, path: loadPath})
+
+                if (relativePath.indexOf('sound') > -1) {
+                    const alias = relativePath.replace(/\//g, '_').replace(/(\.mp3$|\.ogg$)/, '')
+                    let matchingAlias = false
+                    audioDigest.forEach(adItem => {
+                        if (adItem.alias === alias) {
+                            matchingAlias = true
+                        }
+                    })
+                    if (matchingAlias) return
+                    audioDigest.push({
+                        alias: alias,
+                        path: `assets/${relativePath.replace(/(\.mp3$|\.ogg$)/, '')}`,
+                    })
+                } else {
+                    imageDigest.push({
+                        alias: relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$|\.frag$)/, ''),
+                        path: `assets/${relativePath}`
+                    })
+                }
             }
         })
     }
@@ -144,7 +162,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
     process.chdir('..')
     if (!fs.existsSync('build/')) fs.mkdirSync('build/')
     fs.mkdirSync('build/assets')
-    fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: digest}, null, 2))
+    fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: imageDigest, audio: audioDigest}, null, 2))
 
     return gulp.src(['assets/**/*', '!assets/animation_source', '!assets/animation_source/**/*']).pipe(gulp.dest('build/assets'))
 })
@@ -180,6 +198,7 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
             'src/lib/stats.lib.js',
             'src/lib/pixi.lib.js',
             'src/lib/pixi-particles.lib.js',
+            'src/lib/pixi-sound.js',
             'src/lib/tweenlite-gen.lib.js',
             'src/lib/plotly.lib.js',
             'src/lib/lz-string.js'
@@ -194,6 +213,7 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
             'src/lib/fullscreen-api-polyfill.lib.min.js',
             'src/lib/pixi.lib.min.js',
             'src/lib/pixi-particles.lib.min.js',
+            'src/lib/pixi-sound.js',
             'src/lib/tweenlite-gen.lib.min.js',
             'src/lib/lz-string.min.js'
         ])
