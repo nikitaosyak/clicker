@@ -5,6 +5,7 @@ import {
 import {IAdoptable} from "../behaviours/IAdoptable";
 import {VisualChest} from "./VisualChest";
 import {FlashAnimationVisual} from "./FlashAnimationVisual";
+import {DAMAGE_SOURCE} from "./DamageSource";
 
 export class SlotItem {
 
@@ -90,7 +91,7 @@ export class SlotItem {
         this._enabled = false
     }
 
-    get type() { return this._type }
+	get type() { return this._type }
     get stage() { return this._stage }
     get drop() { return this._drop }
     get health() { return this._currentHealth }
@@ -154,6 +155,14 @@ export class SlotItem {
 
         if (this._enabled) {
             this._shakeAnimation[this._animIdx].restart()
+			
+			var soundNum = 1;
+			var soundDamage = value / this._maxHealth
+			if (soundDamage > 0.1) soundNum = Math.random() > 0.5 ? 1 : 2
+			else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
+			else soundNum = Math.random() > 0.3 ? 6 : 5
+			var sound = PIXI.sound.play('sound_dmg' + soundNum)
+			sound.volume = source == DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
         }
         this._animIdx = this._animIdx === 0 ? 1 : 0
 

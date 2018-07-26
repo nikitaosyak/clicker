@@ -198,7 +198,7 @@ export class GameScreen extends BaseScreen {
                         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
                         this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, this._slotItems[slotIdx].visual)
-                        PIXI.sound.play('sound_egg1')
+                        PIXI.sound.play(Math.random() > 0.5 ? 'sound_egg1' : 'sound_egg2')
                     }
                     if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
                         PIXI.sound.play('sound_chest')
