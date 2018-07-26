@@ -117,8 +117,8 @@ export const Renderer = () => {
     }
 	
 	
-	//var music = PIXI.sound.play('sound_music')
-	//music.volume = 0.2
+	PIXI.sound.play('sound_music', {loop: true})
+	PIXI.sound.volume('sound_music', 0.1)
 	
     return self
 }

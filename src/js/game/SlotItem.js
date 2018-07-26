@@ -162,7 +162,7 @@ export class SlotItem {
 			else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
 			else soundNum = Math.random() > 0.3 ? 6 : 5
 			var sound = PIXI.sound.play('sound_dmg' + soundNum)
-			sound.volume = source == DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
+			sound.volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
         }
         this._animIdx = this._animIdx === 0 ? 1 : 0
 
