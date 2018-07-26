@@ -9,7 +9,7 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "end": 1
         },
         "scale": {
-            "start": 0.6,
+            "start": 0.3,
             "end": 0.6,
             "minimumScaleMultiplier": 1
         },
@@ -24,7 +24,7 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
         },
         "acceleration": {
             "x": 0,
-            "y": 0
+            "y": 300
         },
         "maxSpeed": 0,
         "startRotation": {

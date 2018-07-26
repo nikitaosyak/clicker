@@ -121,11 +121,19 @@ export class SlotItem {
 		this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
 		
 		if (this._showAnimation == null) {
-			if (this._type === ObjectType.CHEST) {
+			if (this._type === ObjectType.CHEST || this._type === ObjectType.PAID_CHEST) {
 				this._showAnimation = TweenLite.fromTo(
 						this.visual, 1,
 						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}},
 						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut, onComplete: () => {
+                                this._enabled = true
+                                this.visual.interactive = true
+                            }})
+			} else if (this._type === ObjectType.EGG || this._type === ObjectType.PAID_EGG) {
+				this._showAnimation = TweenLite.fromTo(
+						this.visual, 0.5,
+						{pixi: {y:this.visual.y - 100, scaleX:this.visual.scale.x * 0.8, scaleY:this.visual.scale.y * 0.8}},
+						{pixi: {y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Back.easeIn.config(5.7), onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
                             }})
