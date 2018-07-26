@@ -69,7 +69,8 @@ export class SlotItem {
             Object.assign(this, IHealthBarOwner(this))
             Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
         }
-
+        Object.assign(this, IClickable(this))
+        this.visual.interactive = false
         this._adopter = IAdoptable(this.visual, window.GD.slots[slot].pivotRules)
 
         const shakeTime = 0.25
@@ -123,13 +124,13 @@ export class SlotItem {
 			if (this._type === ObjectType.CHEST) {
 				this._showAnimation = TweenLite.fromTo(
 						this.visual, 1,
-						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}, onComplete: () => {
-								Object.assign(this, IClickable(this))
-								this._enabled = true
-							}},
-						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut})
+						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}},
+						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut, onComplete: () => {
+                                this._enabled = true
+                                this.visual.interactive = true
+                            }})
 			} else {
-                Object.assign(this, IClickable(this))
+                this.visual.interactive = true
             }
         }
     }
