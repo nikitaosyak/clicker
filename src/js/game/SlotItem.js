@@ -120,7 +120,7 @@ export class SlotItem {
 		this._shakeAnimation[1].vars.y = this.visual.y + shakeOffset
 		
 		if (this._showAnimation == null) {
-			//if (this._type === ObjectType.CHEST) {
+			if (this._type === ObjectType.CHEST) {
 				this._showAnimation = TweenLite.fromTo(
 						this.visual, 1,
 						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}, onComplete: () => {
@@ -128,7 +128,9 @@ export class SlotItem {
 								this._enabled = true
 							}},
 						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut})
-			//}
+			} else {
+                Object.assign(this, IClickable(this))
+            }
         }
     }
 
