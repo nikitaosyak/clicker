@@ -1,4 +1,4 @@
-import {IUnimportantContent, IVisual} from "../../behaviours/Base";
+import {IAnimated, IUnimportantContent} from "../../behaviours/Base";
 
 export const DragonProjectile = (pool, onComplete) => {
 
@@ -30,7 +30,7 @@ export const DragonProjectile = (pool, onComplete) => {
         }
     }
 
-    Object.assign(self, IVisual('spec').setSize(32, 32))
+    Object.assign(self, IAnimated('dragons_projectile_fireball').setSize(32, 32))
     Object.assign(self, IUnimportantContent())
 
     animation = TweenLite.to(

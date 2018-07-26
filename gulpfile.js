@@ -132,7 +132,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 iterateFolder(`${path}/${f}`)
             } else {
                 const relativePath = `${path}/${f}`.replace(process.cwd(), '').slice(1)
-                if (/(idle|spit)\.png/.test(relativePath)) return
+                if (/(idle|spit|fireball)\.png/.test(relativePath)) return
                 if (/.*anim.*\.png/.test(relativePath)) return
                 if (/.*animation_source.*/.test(relativePath)) return
 
