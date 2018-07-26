@@ -15,7 +15,7 @@ export const DragonProjectile = (pool, onComplete) => {
 
             self.visual.x = fromX
             self.visual.y = fromY
-            self.visual.tint = [-1, 0x00AA00, 0x2222BB, 0xff8c00, 0xAA00AA, 0x22AAAA, 0x8b4513][tier]
+            self.visual.tint = [-1, 0x28984a, 0x7835dd, 0xd52622, 0xd5226a, 0x3478dd, 0x612e5a][tier]
 
             const w = Math.abs(toX - fromX)
             const h = Math.abs(toY - fromY)
