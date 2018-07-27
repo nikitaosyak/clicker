@@ -88,6 +88,10 @@ export class GameScreen extends BaseScreen {
         self._particles.dropCoin(i, visualCoins)
         self._goldCounter.setValue(this._owner.model.gold)
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
+		
+		
+		var sound = PIXI.sound.play('sound_coin' + (Math.random() > 0.5 ? 1 : 2))
+		sound.volume = 0.25 + Math.random() * 0.1
     }
 
     _updateBounds() {
@@ -185,6 +189,10 @@ export class GameScreen extends BaseScreen {
                     })
                     if (dropsGold) {
                         this._dropGold(slotIdx, drop, drop[ObjectType.GOLD])
+						
+						var sound = PIXI.sound.play('sound_coins')
+						sound.volume = 0.5 
+						
                     }
                     if (dropsDragon) {
                         if (this._owner.model.dragonsCount === 0) {
@@ -201,7 +209,8 @@ export class GameScreen extends BaseScreen {
                         PIXI.sound.play(Math.random() > 0.5 ? 'sound_egg1' : 'sound_egg2')
                     }
                     if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
-                        PIXI.sound.play('sound_chest')
+                        var sound = PIXI.sound.play('sound_chest')
+						sound.volume = 0.45 
                     }
                 })
             }

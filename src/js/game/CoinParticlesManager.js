@@ -81,7 +81,8 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
         },
         dropCoin: (fromSlot, value) => {
             // console.log(`drop ${value} coins from ${fromSlot}`)
-
+			
+			
             const spawnPos = gameScreen._slotItems[fromSlot].visual
             currentParticleToSpawn[fromSlot] = value
             emitters[fromSlot].emitterLifetime = [0.3, 0.45, 0.7][fromSlot]

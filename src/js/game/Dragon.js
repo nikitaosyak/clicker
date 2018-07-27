@@ -43,7 +43,7 @@ const upgradeParticlesConfig = {
         },
         "blendMode": "add",
         "frequency": 0.01,
-        "emitterLifetime": 2,
+        "emitterLifetime": 1,
         "maxParticles": 100,
         "pos": {
             "x": 0,
@@ -175,6 +175,9 @@ export const Dragon = (bounds, tier, level, x, y) => {
                     self.visual.textures = ANIM_IDLE_TEXTURES
                     self.visual.animationSpeed = 0.35
                     self.visual.gotoAndPlay(0)
+					
+					//var sound = PIXI.sound.play('sound_dragon' + (Math.random() > 0.5 ? 1 : 2))
+					//sound.volume = 0.45 + Math.random() * 0.1
                 }
             }
         }

@@ -125,12 +125,16 @@ export class SlotItem {
 		if (this._showAnimation == null) {
 			if (this._type === ObjectType.CHEST || this._type === ObjectType.PAID_CHEST) {
 				this._showAnimation = TweenLite.fromTo(
-						this.visual, 1,
+						this.visual, 1.1,
 						{pixi: {alpha:0.4, y:this.visual.y - 600, scaleX:this.visual.scale.x * 0.6, scaleY:this.visual.scale.y * 0.6}},
 						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut, onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
                             }})
+							
+				var sound = PIXI.sound.play('sound_chestDrop')
+				sound.volume = 0.25
+							
 			} else if (this._type === ObjectType.EGG || this._type === ObjectType.PAID_EGG) {
 				this._showAnimation = TweenLite.fromTo(
 						this.visual, 0.5,
@@ -152,17 +156,18 @@ export class SlotItem {
         if (this._type.indexOf('egg') > -1) {
             this.setCrutchState(this._currentHealth / this._maxHealth)
         }
-
+		
+		var soundNum = 1;
+		var soundDamage = value / this._maxHealth
+		if (soundDamage > 0.1) soundNum = Math.random() > 0.5 ? 1 : 2
+		else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
+		else if (soundDamage > 0.02) soundNum = Math.random() > 0.3 ? 6 : 5
+		else soundNum = 7
+		var sound = PIXI.sound.play('sound_dmg' + soundNum)
+		sound.volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
+		
         if (this._enabled) {
             this._shakeAnimation[this._animIdx].restart()
-			
-			var soundNum = 1;
-			var soundDamage = value / this._maxHealth
-			if (soundDamage > 0.1) soundNum = Math.random() > 0.5 ? 1 : 2
-			else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
-			else soundNum = Math.random() > 0.3 ? 6 : 5
-			var sound = PIXI.sound.play('sound_dmg' + soundNum)
-			sound.volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
         }
         this._animIdx = this._animIdx === 0 ? 1 : 0
 
