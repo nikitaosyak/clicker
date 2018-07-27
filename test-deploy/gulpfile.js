@@ -12,8 +12,8 @@ gulp.task('connect', () => {
         root: 'build/',
         port: process.env.PORT,
         https: {
-            key: fs.readFileSync(process.env.SSL_KEY),
-            cert: fs.readFileSync(process.env.SSL_CERT)
+            key: require('fs').readFileSync(process.env.SSL_KEY),
+            cert: require('fs').readFileSync(process.env.SSL_CERT)
         }
     })
 })
@@ -87,47 +87,12 @@ gulp.task('step2-webpack', ['step1-prepare-files'], () => {
         config.mode = 'production'
     }
 
-    return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
+    return gulp.src(process.env.MODE === 'development' ? './src/js/**/*' : './inter/**/*')
         .pipe(stream(config, webpack2))
         .pipe(gulp.dest('build/'))
 })
 
-gulp.task('step3-webpack-lib', ['step2-webpack'], () => {
-    const stream = require('webpack-stream')
-    const webpack2 = require('webpack')
-
-    const config = {
-        entry: __dirname + (process.env.MODE === 'development' ? '/src/js/index.js' : '/inter/index.js'),
-        module: {
-            rules: [
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                    query: { presets: ['env']}
-                }
-            ]
-        },
-        output: {
-            libraryTarget: 'var',
-            library: 'game',
-            filename: 'bundle-lib.js'
-        },
-        mode: 'development'
-    }
-
-    if (process.env.MODE === 'development') {
-        config.mode = 'development'
-        config.devtool = 'source-map'
-    } else {
-        config.mode = 'production'
-    }
-
-    return gulp.src(process.env.MODE === 'development' ? 'src/js/**/*' : 'inter/**/*')
-        .pipe(stream(config, webpack2))
-        .pipe(gulp.dest('clicker-stats/static/'))
-})
-
-gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
+gulp.task('step4-process-images', ['step2-webpack'], () => {
     process.chdir('./assets')
     const fs = require('fs')
     let imageDigest = []
