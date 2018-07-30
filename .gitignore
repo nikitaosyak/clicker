@@ -7,3 +7,4 @@ Config.js
 tweenlite-gen.lib*
 bbprocess
 clicker-stats/static/*.js*
+*.sublime-workspace

@@ -157,7 +157,17 @@ gulp.task('step5-process-tweenlite', ['step4-process-images'], () => {
 
 gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
 
-    require('fs').copyFileSync('src/index.html', 'build/index.html')
+    const fs = require('fs')
+    let indexFile = fs.readFileSync('src/index.html', {encoding: 'utf-8'})
+    const regEx = /^.*<%platform_sdk%>.*$/gm
+    const pl = process.env.PLATFORM
+    if (pl === 'standalone') {
+        indexFile = indexFile.replace(regEx, '')
+    } else {
+        indexFile = indexFile.replace(regEx, `<script src="${pl}.js"></script>`)
+        fs.copyFileSync(`src/platform/${pl}.js`, `build/${pl}.js`)
+    }
+    fs.writeFileSync('build/index.html', indexFile)
 
     //
     // concat and put libraries

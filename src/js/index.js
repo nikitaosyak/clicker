@@ -10,12 +10,14 @@ import {Plot} from "./tools/Plot";
 import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
 import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
-import {FlashAnimationVisual} from "./game/FlashAnimationVisual";
+import {Config} from './Config'
+import {Platform} from './platform/Platform'
 
 window.onload = () => {
     debugManager.init()
 
     PIXI.settings.MIPMAP_TEXTURES = false
+    window.config = Config()
     const resources = window.resources = Resources()
     const model = GameModel()
     window.GD = GameData(model)
@@ -64,7 +66,10 @@ window.onload = () => {
         window.GD.config.MODE === 'development') {
         Plot(window.GD)
     } else {
-        resources
+        window.platform = Platform()
+        window.platform.init()
+        .then(() => {
+            resources
             .add('digest', 'assets/digest.json')
             .load(() => {
                 const digest = resources.getJSON('digest')
@@ -87,6 +92,10 @@ window.onload = () => {
                     }
                 })
             })
+        })
+        .catch(e => {
+            console.error(e)
+        })
     }
 }
 

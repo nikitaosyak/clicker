@@ -1,10 +1,8 @@
-import {Config} from "../Config";
 import {ObjectType} from "../behaviours/Base";
 import {AB} from "../tools/AB";
 
 export const GameData = (model) => {
 
-    const config = Config()
     const slotW = 260, slotH = 300
     const slotXOff = 0, slotYOff = 180
     const slots  = [
@@ -60,7 +58,6 @@ export const GameData = (model) => {
         get clickSourceDamage() { return 0.2 },
         get dragonSourceDamage() { return 1 - self.clickSourceDamage },
         get baseDamage() { return baseDamage },
-        get config() { return config },
         get slots() { return slots },
 		get clickPerSecs() { return clickPerSecs },
         getShiftKoef: stage => {
