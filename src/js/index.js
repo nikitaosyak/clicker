@@ -25,7 +25,7 @@ window.onload = () => {
     const startGame = (progress) => {
         model.connect().then(() => {
             progress && window.GD.progressToStage(model.stage)
-            if (window.GD.config.MODE === 'development') {
+            if (window.config.MODE === 'development') {
                 window.GAMEMODEL = model
                 window.money = MathUtil
             }
@@ -63,7 +63,7 @@ window.onload = () => {
     }
 
     if (URLParam.GET('plot') === 'true' &&
-        window.GD.config.MODE === 'development') {
+        window.config.MODE === 'development') {
         Plot(window.GD)
     } else {
         window.platform = Platform()

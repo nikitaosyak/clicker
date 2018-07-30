@@ -32,7 +32,7 @@ export class GameScreen extends BaseScreen {
                 'ui_leaderboard', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
         }
 
-        if (window.GD.config.MODE !== 'production') {
+        if (window.config.MODE !== 'production') {
             this.addControl(this.uiCreator.getButton2('ui_restart', () => {
                 if (window.confirm('прогресс будет сброшен. продолжить?')) {
                     this._owner.model.restart()
@@ -67,7 +67,7 @@ export class GameScreen extends BaseScreen {
 
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
         this._itemDestroyAnimPool = ObjectPool(DestroyAnimation, [], 3)
-        if (window.GD.config.MODE === 'development') {
+        if (window.config.MODE === 'development') {
             this._clickDamageVisPool = ObjectPool(DamagePercent, [_self => {
                 self.remove(_self)
             }], 10)
@@ -147,7 +147,7 @@ export class GameScreen extends BaseScreen {
                 this._canUseCommonBounds = false
                 window.GA.accumulate('clicks', {num: clicks, stage: item.stage})
                 const targetDmg = window.GD.getTargetDamage(item.stage)
-                if (window.GD.config.MODE === 'development') {
+                if (window.config.MODE === 'development') {
                     const dmgVis = this._clickDamageVisPool.getOne()
                     this.add(dmgVis)
                     dmgVis.initialize(`${Math.round((this._clickDamage / targetDmg) * 100)}%`, item.visual.x, item.visual.y)

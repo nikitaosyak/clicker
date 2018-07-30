@@ -12,7 +12,7 @@ export const UIFactory = {
         const self = {
             getFullScreenButton: (fsElement, anchor, pivotRules) => {
                 if (typeof document.fullscreenEnabled !== undefined &&
-                    window.GD.config.PLATFORM === 'standalone') {
+                    window.config.PLATFORM === 'standalone') {
                     const button = {}
                     Object.assign(button, INamedUIElement(parent, 'full_screen'))
                     Object.assign(button, IToggleButton(
