@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+            "folder_exclude_patterns": [".idea", "node_modules"],
+            "binary_file_patterns": ["intermidiate/*", "build/*"]
+		}
+	]
+}
