@@ -12,9 +12,11 @@ export const UpgradeListItem = (_, owner) => {
     const damageWidget = uiCreator.getDamagePercentWidget()
     const upgradeBtn = uiCreator.getUpgradeButton(() => {
         owner.emit('upgrade', dragonUpgrade)
-		
-		var sound = PIXI.sound.play('sound_upgrade' + (Math.random() > 0.5 ? 1 : 2))
-		sound.volume = 0.65 + Math.random() * 0.1
+        window.soundman.play(
+            'sound_sfx', 
+            `upgrade${Math.random() > 0.5 ? 1 : 2}`,
+             0.65 + Math.random() * 0.1
+        )
     })
 
     self.setupWithDragons = (dragonList, totalDamage) => {

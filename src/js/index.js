@@ -12,6 +12,7 @@ import {DragonMan} from "./game/DragonMan";
 import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
 import {Config} from './Config'
 import {Platform} from './platform/Platform'
+import {SoundMan} from './SoundMan'
 
 window.onload = () => {
     debugManager.init()
@@ -24,6 +25,7 @@ window.onload = () => {
 
     const startGame = (progress) => {
         model.connect().then(() => {
+            window.soundman.play2('sound_music', 0.05, true)
             progress && window.GD.progressToStage(model.stage)
             if (window.config.MODE === 'development') {
                 window.GAMEMODEL = model
@@ -32,10 +34,6 @@ window.onload = () => {
             const renderer = Renderer()
 
             const dragons = DragonMan(renderer, window.GD.getClickDamage(model.dragons))
-
-            // const at = VisualChest2('animation_egg', 'egg_regular', {w: 250, h: 250})
-            // at.play()
-            // renderer.addObject(at)
 
             const screens = ScreenMan(dragons, renderer, model)
             screens.instantTransit(SCREEN_TYPE.GAME)
@@ -52,7 +50,6 @@ window.onload = () => {
                 dragons.update(dt)
                 screens.update(dt)
                 renderer.update(dt)
-                // at.update(dt)
 
                 requestAnimationFrame(gameLoop)
 
@@ -76,9 +73,6 @@ window.onload = () => {
                 digest.images.forEach(i => {
                     resources.add(i.alias, i.path)
                 })
-                digest.audio.forEach(a => {
-                    PIXI.sound.add(a.alias, a.path + '.mp3')
-                })
                 resources.load(() => {
                     if (URLParam.GET('stage')) {
                         model.connect().then(() => {
@@ -88,6 +82,7 @@ window.onload = () => {
                             startGame(false)
                         })
                     } else {
+                        window.soundman = SoundMan(digest.audio)
                         startGame(true)
                     }
                 })

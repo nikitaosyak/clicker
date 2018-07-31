@@ -136,7 +136,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 if (/.*anim.*\.png/.test(relativePath)) return
                 if (/.*animation_source.*/.test(relativePath)) return
 
-                if (relativePath.indexOf('sound') > -1) {
+                if (relativePath.indexOf('sound') > -1 && relativePath.indexOf('csv') === -1) {
                     const alias = relativePath.replace(/\//g, '_').replace(/(\.mp3$|\.ogg$)/, '')
                     let matchingAlias = false
                     audioDigest.forEach(adItem => {
@@ -151,7 +151,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                     })
                 } else {
                     imageDigest.push({
-                        alias: relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$|\.frag$)/, ''),
+                        alias: relativePath.replace(/\//g, '_').replace(/(\.jpg$|\.png$|\.json$|\.frag$|\.csv$)/, ''),
                         path: `assets/${relativePath}`
                     })
                 }

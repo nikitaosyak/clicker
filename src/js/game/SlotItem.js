@@ -132,9 +132,8 @@ export class SlotItem {
                                 this.visual.interactive = true
                             }})
 							
-				var sound = PIXI.sound.play('sound_chestDrop')
-				sound.volume = 0.25
-							
+                window.soundman.play('sound_sfx', 'chestDrop', 0.5)
+
 			} else if (this._type === ObjectType.EGG || this._type === ObjectType.PAID_EGG) {
 				this._showAnimation = TweenLite.fromTo(
 						this.visual, 0.5,
@@ -163,8 +162,8 @@ export class SlotItem {
 		else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
 		else if (soundDamage > 0.02) soundNum = Math.random() > 0.3 ? 6 : 5
 		else soundNum = 7
-		var sound = PIXI.sound.play('sound_dmg' + soundNum)
-		sound.volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15;
+        const volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15
+        window.soundman.play('sound_sfx', `dmg${soundNum}`, volume)
 		
         if (this._enabled) {
             this._shakeAnimation[this._animIdx].restart()
@@ -172,7 +171,7 @@ export class SlotItem {
         this._animIdx = this._animIdx === 0 ? 1 : 0
 
         this._currentClick += 1
-        return this._currentClick % 3 === 0 // reward with intermediate gold
+        return this._currentClick % 2 === 0 // reward with intermediate gold
     }
 
     animateOpen() {

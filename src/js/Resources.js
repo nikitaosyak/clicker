@@ -14,6 +14,7 @@ export const Resources = () => {
             loader.load(onComplete)
             return self
         },
+        hasResource: alias => alias in res,
         getTexture: (alias) => {
             if (alias in res) return res[alias].texture
             console.warn('texture', alias, 'was replaced with default texture')

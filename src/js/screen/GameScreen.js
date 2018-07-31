@@ -89,9 +89,11 @@ export class GameScreen extends BaseScreen {
         self._goldCounter.setValue(this._owner.model.gold)
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
 		
-		
-		var sound = PIXI.sound.play('sound_coin' + (Math.random() > 0.5 ? 1 : 2))
-		sound.volume = 0.25 + Math.random() * 0.1
+        window.soundman.play(
+            'sound_sfx', 
+            'coin' + (Math.random() > 0.5 ? 1 : 2), 
+            0.25 + Math.random() * 0.1
+        )
     }
 
     _updateBounds() {
@@ -189,10 +191,7 @@ export class GameScreen extends BaseScreen {
                     })
                     if (dropsGold) {
                         this._dropGold(slotIdx, drop, drop[ObjectType.GOLD])
-						
-						var sound = PIXI.sound.play('sound_coins')
-						sound.volume = 0.5 
-						
+						window.soundman.play('sound_sfx', 'coins', 0.5)
                     }
                     if (dropsDragon) {
                         if (this._owner.model.dragonsCount === 0) {
@@ -206,11 +205,14 @@ export class GameScreen extends BaseScreen {
                         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
                         this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, this._slotItems[slotIdx].visual)
-                        PIXI.sound.play(Math.random() > 0.5 ? 'sound_egg1' : 'sound_egg2')
+                        window.soundman.play(
+                            'sound_sfx', 
+                            `egg${Math.random() > 0.5 ? 1 : 2}`, 
+                            0.5
+                        )
                     }
                     if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
-                        var sound = PIXI.sound.play('sound_chest')
-						sound.volume = 0.45 
+                        window.soundman.play('sound_sfx', 'chest', 0.45)
                     }
                 })
             }

@@ -68,7 +68,6 @@ export const Renderer = () => {
 		
     }
     resizeCanvas()
-    console.log(renderer)
 
     // debug.on('visibility', _ => resizeCanvas())
 
@@ -115,10 +114,6 @@ export const Renderer = () => {
             renderer.render(stage)
         }
     }
-	
-	
-	PIXI.sound.play('sound_music', {loop: true})
-	PIXI.sound.volume('sound_music', 0.1)
-	
+
     return self
 }
