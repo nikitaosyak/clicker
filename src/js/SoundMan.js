@@ -10,7 +10,6 @@ export const SoundMan = audioDigest => {
                 end:    parseFloat(column[1])
             }
         })
-        console.log(JSON.stringify(result))
         return result
     }
 
@@ -46,7 +45,6 @@ export const SoundMan = audioDigest => {
     audioDigest.forEach(a => {
         if (window.resources.hasResource(`${a.alias}_descriptor`)) {
             const spriteMap = parseDescriptor(window.resources.getText(`${a.alias}_descriptor`))
-            console.log(spriteMap)
             atlases[a.alias] = PIXI.sound.Sound.from({
                 url: a.path + '.mp3',
                 sprites: spriteMap,
@@ -65,7 +63,6 @@ export const SoundMan = audioDigest => {
                 state[atlas][alias] = fxState
             }
 
-            console.log(alias)
             if ((Date.now() - fxState.launchTime) > config[alias].timeout && 
                 fxState.instances < config[alias].instances) {
                 const fx = atlases[atlas].play({
