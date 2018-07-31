@@ -74,6 +74,7 @@ window.onload = () => {
                     resources.add(i.alias, i.path)
                 })
                 resources.load(() => {
+                    window.soundman = SoundMan(digest.audio)
                     if (URLParam.GET('stage')) {
                         model.connect().then(() => {
                             model.reset()
@@ -82,7 +83,6 @@ window.onload = () => {
                             startGame(false)
                         })
                     } else {
-                        window.soundman = SoundMan(digest.audio)
                         startGame(true)
                     }
                 })
