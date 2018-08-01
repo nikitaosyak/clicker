@@ -66,17 +66,32 @@ export const IButton = (texture, onClick) => {
 const TOGGLE_STATE = {NORMAL: 'NORMAL', TOGGLED: 'TOGGLED'}
 export const IToggleButton = (normal, toggled, onClick) => {
     let current = TOGGLE_STATE.NORMAL
+
     const button = IButton(normal, () => {
         if (current === TOGGLE_STATE.NORMAL) {
             current = TOGGLE_STATE.TOGGLED
             button.visual.texture = window.resources.getTexture(toggled)
-            onClick(true)
+            button.toggleState = true
+            onClick&&onClick(true)
         } else {
             current = TOGGLE_STATE.NORMAL
             button.visual.texture = window.resources.getTexture(normal)
-            onClick(false)
+            button.toggleState = false
+            onClick&&onClick(false)
         }
     })
+
+    button.setToggleState = v => {
+        if (v) {
+            current = TOGGLE_STATE.TOGGLED
+            button.visual.texture = window.resources.getTexture(toggled)
+            button.toggleState = true
+        } else {
+            current = TOGGLE_STATE.NORMAL
+            button.visual.texture = window.resources.getTexture(normal)
+            button.toggleState = false
+        }
+    }
 
     return button
 }
@@ -90,7 +105,8 @@ export const IUnimportantContent = () => {
 export const IText = (text, x, y, style, anchorX = undefined, anchorY = undefined, layer = undefined) => {
     const t = new PIXI.Text(text, new PIXI.TextStyle(style))
     t.x = x; t.y = y;
-    t.anchor.x = anchorX || 0.5; t.anchor.y = anchorY || 0.5
+    t.anchor.x = typeof anchorX === 'undefined' ? 0.5 : anchorX
+    t.anchor.y = typeof anchorY === 'undefined' ? 0.5 : anchorY
 
     return {
         get layer() { return RENDER_LAYER.UI },
