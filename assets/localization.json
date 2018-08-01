@@ -1,0 +1,15 @@
+{
+  "unlock_premium_item_text_chest": {
+    "ru": "Посмотреть рекламу чтобы открыть сундук?",
+    "en": "Watch ad to quickly unlock chest?"
+  },
+  "unlock_premium_item_text_egg": {
+    "ru": "Посмотреть рекламу, чтобы разбить яйцо?",
+    "en": "Watch ad to quickly break egg?"
+  },
+
+  "unlock_premium_item_hide_premium_reminder": {
+    "ru": "Не напоминать",
+    "en": "Don't remind me"
+  }
+}

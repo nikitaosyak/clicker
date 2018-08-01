@@ -14,6 +14,7 @@ import {Config} from './Config'
 import {Platform} from './platform/Platform'
 import {SoundMan} from './SoundMan'
 import {DialogMan} from "./screen/modal/DialogMan";
+import {Localization} from "./Localization";
 
 window.onload = () => {
     debugManager.init()
@@ -77,6 +78,7 @@ window.onload = () => {
                 })
                 resources.load(() => {
                     window.soundman = SoundMan(digest.audio)
+                    window.localization = Localization(URLParam.GET('locale')||'en')
                     if (URLParam.GET('stage')) {
                         model.connect().then(() => {
                             model.reset()
