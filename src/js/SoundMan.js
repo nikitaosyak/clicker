@@ -41,6 +41,8 @@ export const SoundMan = audioDigest => {
 
     const atlases = {}
     const state = {}
+    let canMusic = true
+    let canSfx = true
 
     audioDigest.forEach(a => {
         if (window.resources.hasResource(`${a.alias}_descriptor`)) {
@@ -59,6 +61,7 @@ export const SoundMan = audioDigest => {
 
     const self = {
         play: (atlas, alias, volume) => {
+            if (!canSfx) return
             // console.log(PIXI.sound.exists(atlas))
             // console.log(atlases[atlas])
             let fxState = state[atlas][alias]
@@ -90,8 +93,22 @@ export const SoundMan = audioDigest => {
             }
         },
         play2: (alias, volume) => {
-            PIXI.sound.play(alias, {loop: true})
+            PIXI.sound.play(alias, {loop: true, loaded: () => {
+                if (!canMusic) {
+                    PIXI.sound.pause(alias)
+                }
+            }})
             PIXI.sound.volume(alias, volume)
+        },
+        applySettings: (settings) => {
+            if (settings.music) {
+                PIXI.sound.resume('sound_music')
+            } else {
+                PIXI.sound.pause('sound_music')
+            }
+
+            canMusic = settings.music
+            canSfx = settings.sfx
         }
     }
 

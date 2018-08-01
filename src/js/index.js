@@ -27,7 +27,8 @@ window.onload = () => {
 
     const startGame = (progress) => {
         model.connect().then(() => {
-            window.soundman.play2('sound_music', 0.05, true)
+            window.soundman.play2('sound_music', 0.05)
+            window.soundman.applySettings(model.settings)
             progress && window.GD.progressToStage(model.stage)
             if (window.config.MODE === 'development') {
                 window.GAMEMODEL = model

@@ -5,6 +5,12 @@ import {GA} from "../tools/GA";
 export const MIN_STAGE = 0
 export const MIN_GOLD = 0
 export const MAX_DRAGON_LEVEL = 10
+export const DEFAULT_SETTINGS = {
+    music: true,
+    musicVolume: 0.5,
+    sfx: true,
+    sfxVolume: 0.5
+}
 
 export function makeid(len = 12) {
     let text = "";
@@ -30,6 +36,7 @@ export const GameModel = () => {
         data.currentDragons = {}
         data.currentSlotItems = []
         data.currentStageItems = []
+        data.settings = DEFAULT_SETTINGS
 
         if (typeof URLParam.GET('ab') !== 'undefined' && URLParam.GET('ab') !== null) {
             data.ab = Number.parseInt(URLParam.GET('ab'))
@@ -72,6 +79,7 @@ export const GameModel = () => {
                     data.currentDragons = loadData.currentDragons
                     data.currentSlotItems = loadData.currentSlotItems
                     data.currentStageItems = loadData.currentStageItems
+                    data.settings = loadData.settings || DEFAULT_SETTINGS
                 }
                 console.log('user', data.userid, 'monetizing with: ', AB.strValue(data.ab))
                 console.log(data)
@@ -173,7 +181,13 @@ export const GameModel = () => {
             self.synchronize()
         },
 
-        get ab() { return data.ab }
+        get ab() { return data.ab },
+
+        get settings() { return data.settings },
+        updateSettings : (v) => {
+            data.settings = v
+            self.synchronize()
+        }
     }
 
     return self

@@ -3,12 +3,13 @@ import {UIFactory} from "../ui/UIFactory";
 import {SlotItemGenerator} from "../game/SlotItemGenerator";
 import {BaseScreen} from "./BaseScreen";
 import {GoldCounter} from "../ui/GoldCounter";
-import {ObjectType} from "../behaviours/Base";
+import {IButton, ObjectType} from "../behaviours/Base";
 import {CoinParticlesManager} from "../game/CoinParticlesManager";
 import {ObjectPool} from "../game/poolable/ObjectPool";
 import {DamagePercent} from "../debug/debugDamagePercent";
 import {DestroyAnimation} from "../game/poolable/DestroyAnimation";
 import {DAMAGE_SOURCE} from "../game/DamageSource";
+import {IAdoptable} from "../behaviours/IAdoptable";
 
 export class GameScreen extends BaseScreen {
 
@@ -27,18 +28,26 @@ export class GameScreen extends BaseScreen {
                 owner, SCREEN_TYPE.UPGRADE,
                 'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
 
-            this.addControl(this.uiCreator.getNavButton(
-                owner, SCREEN_TYPE.LEADERBOARD,
-                'ui_leaderboard', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
+            // this.addControl(this.uiCreator.getNavButton(
+            //     owner, SCREEN_TYPE.LEADERBOARD,
+            //     'ui_leaderboard', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
         }
 
-        if (window.config.MODE !== 'production') {
-            this.addControl(this.uiCreator.getButton2('ui_restart', () => {
-                if (window.confirm('прогресс будет сброшен. продолжить?')) {
-                    this._owner.model.restart()
-                }
-            }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 280}))
-        }
+        const settingsBtn = IButton('ui_settings', () =>
+            window.dialogs.showSettings(owner.model.settings).then(changedSettings => {
+                owner.model.updateSettings(changedSettings)
+            })
+        ).setAnchor(1, 0).setSize(90, 90)
+        Object.assign(settingsBtn, IAdoptable(settingsBtn.visual, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
+        this.addControl(settingsBtn)
+
+        // if (window.config.MODE !== 'production') {
+        //     this.addControl(this.uiCreator.getButton2('ui_restart', () => {
+        //         if (window.confirm('прогресс будет сброшен. продолжить?')) {
+        //             this._owner.model.restart()
+        //         }
+        //     }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 280}))
+        // }
 
         this._goldCounter = GoldCounter({x: 'center', xOffset: 10, y: 'bottom', yOffset: 400}, this._owner.model.gold)
         this.add(this._goldCounter)

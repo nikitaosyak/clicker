@@ -11,5 +11,15 @@
   "unlock_premium_item_hide_premium_reminder": {
     "ru": "Не напоминать",
     "en": "Don't remind me"
+  },
+
+  "settings_music": {
+    "ru": "Музыка",
+    "en": "Music"
+  },
+
+  "settings_sfx": {
+    "ru": "Эффекты",
+    "en": "SFX"
   }
 }
