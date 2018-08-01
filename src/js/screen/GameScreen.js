@@ -116,7 +116,8 @@ export class GameScreen extends BaseScreen {
         this._updateBounds()
 
         while(this._savedRewards.length) {
-            this._savedRewards.shift()()
+            const reward = this._savedRewards.shift()
+            reward.executor.apply(this, reward.item)
         }
     }
 
@@ -164,6 +165,58 @@ export class GameScreen extends BaseScreen {
         })
     }
 
+    openItem(slotItem) {
+        const slotIdx = slotItem.slot
+        const drop = slotItem.drop
+        const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
+        const dropsDragon = typeof drop[ObjectType.DRAGON] !== "undefined"
+        const dropsEgg = typeof drop[ObjectType.EGG] !== "undefined"
+
+        slotItem.animateOpen().then(()=> {
+            slotItem.clear(this._itemDestroyAnimPool.getOne()).then(() => {
+                this.remove(slotItem)
+                this._slotItems[slotIdx] = null
+                if (dropsEgg) {
+                    this._generator.populateConcrete(
+                        this._slotItems, slotIdx, drop[ObjectType.EGG]
+                    )
+                } else {
+                    this._generator.populate(this._slotItems)
+                }
+            })
+            if (dropsGold) {
+                this._dropGold(slotIdx, drop, drop[ObjectType.GOLD])
+                window.soundman.play('sound_sfx', 'coins', 0.5)
+            }
+            if (dropsDragon) {
+                if (this._owner.model.dragonsCount === 0) {
+                    this.addControl(this.uiCreator.getNavButton(
+                        this._owner, SCREEN_TYPE.UPGRADE,
+                        'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
+                    TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
+                }
+                const dragonData = drop[ObjectType.DRAGON]
+                this._owner.model.addDragon(dragonData.tier, dragonData.level)
+                this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
+
+                this._owner.dragonManager.addVisualDragon(
+                    dragonData.tier,
+                    dragonData.level,
+                    this._slotItems[slotIdx].visual
+                )
+
+                window.soundman.play(
+                    'sound_sfx',
+                    `egg${Math.random() > 0.5 ? 1 : 2}`,
+                    0.5
+                )
+            }
+            if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
+                window.soundman.play('sound_sfx', 'chest', 0.45)
+            }
+        })
+    }
+
     processSlotDamage(slotIdx, source, damage) {
         const slotItem = this._slotItems[slotIdx]
         if (slotItem.health <= 0) {
@@ -171,65 +224,16 @@ export class GameScreen extends BaseScreen {
             return
         }
         const rewardingClick = slotItem.processDamage(damage, source)
-        const drop = slotItem.drop
-        const dropsGold = typeof drop[ObjectType.GOLD] !== "undefined"
-        const dropsDragon = typeof drop[ObjectType.DRAGON] !== "undefined"
-        const dropsEgg = typeof drop[ObjectType.EGG] !== "undefined"
         if (slotItem.health <= 0) {
-            const reward = () => {
-                slotItem.animateOpen().then(()=> {
-                    slotItem.clear(this._itemDestroyAnimPool.getOne()).then(() => {
-                        this.remove(slotItem)
-                        this._slotItems[slotIdx] = null
-                        if (dropsEgg) {
-                            this._generator.populateConcrete(
-                                this._slotItems, slotIdx, drop[ObjectType.EGG]
-                            )
-                        } else {
-                            this._generator.populate(this._slotItems)
-                        }
-                    })
-                    if (dropsGold) {
-                        this._dropGold(slotIdx, drop, drop[ObjectType.GOLD])
-						window.soundman.play('sound_sfx', 'coins', 0.5)
-                    }
-                    if (dropsDragon) {
-                        if (this._owner.model.dragonsCount === 0) {
-                            this.addControl(this.uiCreator.getNavButton(
-                                this._owner, SCREEN_TYPE.UPGRADE,
-                                'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
-                            TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
-                        }
-                        const dragonData = drop[ObjectType.DRAGON]
-                        this._owner.model.addDragon(dragonData.tier, dragonData.level)
-                        this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
-
-                        this._owner.dragonManager.addVisualDragon(dragonData.tier, dragonData.level, this._slotItems[slotIdx].visual)
-                        window.soundman.play(
-                            'sound_sfx', 
-                            `egg${Math.random() > 0.5 ? 1 : 2}`, 
-                            0.5
-                        )
-                    }
-                    if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
-                        window.soundman.play('sound_sfx', 'chest', 0.45)
-                    }
-                })
-            }
             if (this._active && !this._hiding) {
-                reward()
+                this.openItem(slotItem)
             } else {
-                this._savedRewards.push(reward)
+                this._savedRewards.push({item: slotItem, executor: this.openItem})
             }
-        } else if (rewardingClick && dropsGold) {
-            const reward = () => {
-                const intermediateGold = Math.max(1, Math.floor(drop[ObjectType.GOLD] * 0.002))
-                this._dropGold(slotIdx, drop, intermediateGold)
-            }
+        } else if (rewardingClick && typeof slotItem.drop[ObjectType.GOLD] !== "undefined") {
             if (this._active && !this._hiding) {
-               reward()
-            } else {
-
+                const intermediateGold = Math.max(1, Math.floor(slotItem.drop[ObjectType.GOLD] * 0.002))
+                this._dropGold(slotIdx, slotItem.drop, intermediateGold)
             }
         }
     }

@@ -13,6 +13,7 @@ import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
 import {Config} from './Config'
 import {Platform} from './platform/Platform'
 import {SoundMan} from './SoundMan'
+import {DialogMan} from "./screen/modal/DialogMan";
 
 window.onload = () => {
     debugManager.init()
@@ -32,6 +33,7 @@ window.onload = () => {
                 window.money = MathUtil
             }
             const renderer = Renderer()
+            window.dialogs = DialogMan(renderer)
 
             const dragons = DragonMan(renderer, window.GD.getClickDamage(model.dragons))
 

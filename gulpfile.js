@@ -213,7 +213,7 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
             'src/lib/plotly.lib.js',
             'src/lib/lz-string.js'
         ])
-            .pipe(sourcemaps.init())
+            .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(concat('libraries.js'))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('build'))

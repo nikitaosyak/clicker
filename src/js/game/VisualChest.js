@@ -3,7 +3,7 @@ import {RENDER_LAYER} from "../Renderer";
 
 export const VisualChest = () => {
 
-    const self = IContainer(100, 100, RENDER_LAYER.GAME)
+    const self = IContainer().setLayer(RENDER_LAYER.GAME)
 
     const SX = 0.454 * 0.87, SY = 0.4701 * 0.87
     const top = IVisual('chest_top').setAnchor(0, 0).setPosition(44.7, 58.6).setScale(SX, SY)

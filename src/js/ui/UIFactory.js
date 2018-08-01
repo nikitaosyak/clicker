@@ -71,7 +71,7 @@ export const UIFactory = {
             getContainer: (x, y) => {
                 const pc = {}
                 Object.assign(pc, INamedUIElement(parent, 'particleContainer'))
-                Object.assign(pc, IContainer(x, y, RENDER_LAYER.UI))
+                Object.assign(pc, IContainer().setPosition(x, y).setLayer(RENDER_LAYER.UI))
                 return pc
             },
 
@@ -139,7 +139,7 @@ export const UIFactory = {
                     },
                 }
 
-                Object.assign(w, IContainer(0, 0))
+                Object.assign(w, IContainer())
                 w.visual.addChild(damage.visual)
                 w.visual.addChild(icon.visual)
 

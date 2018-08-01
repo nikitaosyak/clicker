@@ -5,11 +5,14 @@ export const ObjectType = {
     CHEST: 'chest', EGG: 'egg', DRAGON: 'dragon', GOLD: 'gold'
 }
 
-export const IContainer = (x, y, layer) => {
+export const IContainer = () => {
+    let layer = RENDER_LAYER.GAME
     const c = new PIXI.Container()
-    c.x = x; c.y = y;
 
-    return {
+    const self = {
+        setPivot: (x, y) => { c.pivot.x = x; c.pivot.y = y; return self },
+        setLayer: v => { layer = v; return self },
+        setPosition: (x, y) => { c.x = x; c.y = y; return self },
         destroy: () => {
             c.children.forEach(ch => ch.destroy())
             c.destroy()
@@ -20,6 +23,8 @@ export const IContainer = (x, y, layer) => {
         get layer() { return layer },
         get visual() { return c }
     }
+
+    return self
 }
 
 export const IVisual = texture => {
@@ -34,6 +39,8 @@ export const IVisual = texture => {
         setLayer: v => { layer = v; return self },
         setScale: (x, y) => { s.scale.x = x; s.scale.y = y; return self },
         setPivot: (x, y) => { s.pivot.x = x; s.pivot.y = y; return self },
+        setTint: v => { s.tint = v; return self },
+        setAlpha: v => { s.alpha = v; return self },
         get layer() { return layer || RENDER_LAYER.GAME },
         get visual() { return s }
     }

@@ -107,7 +107,7 @@ export const UpgradeList = (model, renderer) => {
     poolArgs.push(self)
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))
-    Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
+    Object.assign(self, IContainer().setLayer(RENDER_LAYER.UI))
     self.visual.interactive = true
     Object.assign(self, IAdoptable(self.visual, {x: 'left', y: 'bottom', yOffset: 170}))
     Object.assign(self, IEmitter({}))

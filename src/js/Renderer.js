@@ -1,6 +1,6 @@
 import {debugManager} from "./debug/debugManager";
 
-export const RENDER_LAYER = {BACKGROUND: 'BACKGROUND', GAME: 'GAME', UI: 'UI'}
+export const RENDER_LAYER = {BACKGROUND: 'BACKGROUND', GAME: 'GAME', UI: 'UI', DIALOG: 'DIALOG'}
 
 export const Renderer = () => {
     let dMenuVisible = false
@@ -72,6 +72,8 @@ export const Renderer = () => {
     // debug.on('visibility', _ => resizeCanvas())
 
     const self =  {
+        get canvasW() { return canvasW },
+        get canvasH() { return canvasH },
         get ar() { return currentAspectRatio },
         get var() { return supposedAspectRatio },
         get maximumWideAR() { return maximumWideAR },

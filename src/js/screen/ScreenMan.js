@@ -3,12 +3,15 @@ import {UpgradeScreen} from "./UpgradeScreen";
 import {LeaderboardScreen} from "./LeaderboardScreen";
 import {Background} from "../Background";
 
-export const SCREEN_TYPE = {GAME: 'GAME', UPGRADE: 'UPGRADE', LEADERBOARD: 'LEADERBOARD'}
+export const SCREEN_TYPE = {
+    GAME: 'GAME',
+    UPGRADE: 'UPGRADE',
+    LEADERBOARD: 'LEADERBOARD'
+}
 
 export const ScreenMan = (dragonMan, renderer, model) => {
 
     const background = Background(renderer)
-    // renderer.addObject(background)
     let currentScreen = null
 
     const self =  {

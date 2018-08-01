@@ -6,10 +6,11 @@ import {IAdoptable} from "../behaviours/IAdoptable";
 import {VisualChest} from "./VisualChest";
 import {FlashAnimationVisual} from "./FlashAnimationVisual";
 import {DAMAGE_SOURCE} from "./DamageSource";
+import {IEmitter} from "../behaviours/IEmitter";
 
 export class SlotItem {
 
-    constructor(type, slot, stage, health, drop, targetSlot) {
+    constructor(type, slot, stage, health, drop, targetSlot, opener) {
         this._type = type
         this._slot = slot
         this._stage = stage
@@ -17,6 +18,7 @@ export class SlotItem {
         this._currentHealth = health
         this._drop = drop
         this._targetSlot = targetSlot
+        this._opener = opener
 
         this._animIdx = 0
         this._shakeAnimation = []
@@ -92,6 +94,7 @@ export class SlotItem {
     }
 
 	get type() { return this._type }
+	get slot() { return this._slot }
     get stage() { return this._stage }
     get drop() { return this._drop }
     get health() { return this._currentHealth }
@@ -175,17 +178,18 @@ export class SlotItem {
     }
 
     animateOpen() {
+        const self = this
         return new Promise(resolve => {
-            this.visual.interactive = false
+            self.visual.interactive = false
 
-            this._shakeAnimation[0].kill()
-            this._shakeAnimation[1].kill()
+            self._shakeAnimation[0].kill()
+            self._shakeAnimation[1].kill()
 
-            this.healthbarVisual.destroy()
-            this.stageDestroy && this.stageDestroy()
+            self.healthbarVisual.destroy()
+            self.stageDestroy && self.stageDestroy()
 
-            if (this.play) {
-                this.play().then(resolve)
+            if (self.play) {
+                self.play().then(resolve)
             } else {
                 resolve()
             }

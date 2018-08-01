@@ -90,7 +90,7 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             emitters[fromSlot].emit = true
         }
     }
-    Object.assign(self, IContainer(0, 0, RENDER_LAYER.UI))
+    Object.assign(self, IContainer().setLayer(RENDER_LAYER.UI))
 
     for (let i = 0; i < 3; i++) {
         emitters.push(new PIXI.particles.Emitter(

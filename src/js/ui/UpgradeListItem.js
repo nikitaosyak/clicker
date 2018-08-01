@@ -62,7 +62,7 @@ export const UpgradeListItem = (_, owner) => {
         // console.log(self.visual.width, self.visual.height)
     }
 
-    Object.assign(self, IContainer(0, 0))
+    Object.assign(self, IContainer())
 
     return self
 }

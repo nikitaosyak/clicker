@@ -37,8 +37,8 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
 
     const animation = window.resources.getJSON(descriptor)
 
-    const root = IContainer(0, 0, RENDER_LAYER.GAME)
-    const filteredContainer = IContainer(0, 0)
+    const root = IContainer().setLayer(RENDER_LAYER.GAME)
+    const filteredContainer = IContainer()
     root.visual.addChild(filteredContainer.visual)
     if (filter) {
         filteredContainer.visual.filters = [filter]
@@ -47,7 +47,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
     const visuals = animation.map(layer => {
         if (layer.visual === 'number') {
 
-            const numberVisual = IContainer(0, 0)
+            const numberVisual = IContainer()
             if (stage < 10) {
                 const anchorX = slot === 2 ? 0.9 : 1
                 const anchorY = slot === 2? 0.55 : 0.65

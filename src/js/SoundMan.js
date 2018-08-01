@@ -48,15 +48,19 @@ export const SoundMan = audioDigest => {
             atlases[a.alias] = PIXI.sound.Sound.from({
                 url: a.path + '.mp3',
                 sprites: spriteMap,
-                preload: true
+                preload: true,
+                autoPlay: false
             })
             state[a.alias] = {}
         } else {
             PIXI.sound.add(a.alias, a.path + '.mp3')
         }
     })
+
     const self = {
         play: (atlas, alias, volume) => {
+            // console.log(PIXI.sound.exists(atlas))
+            // console.log(atlases[atlas])
             let fxState = state[atlas][alias]
             if (!fxState) {
                 fxState = { launchTime: 0, instances: 0 }
@@ -65,13 +69,22 @@ export const SoundMan = audioDigest => {
 
             if ((Date.now() - fxState.launchTime) > config[alias].timeout && 
                 fxState.instances < config[alias].instances) {
-                const fx = atlases[atlas].play({
-                    sprite: alias,
-                    volume: volume,
-                    complete: () => {
-                        state[atlas][alias].instances -= 1
-                    }
-                })
+
+                try {
+                    const fx = atlases[atlas].play({
+                        sprite: alias,
+                        volume: volume,
+                        complete: () => {
+                            state[atlas][alias].instances -= 1
+                        }
+                    })
+                    fx.catch && fx.catch(e => {
+                        // console.log(e)
+                    })
+                } catch (e) {
+                    // console.log(e)
+                }
+
                 fxState.launchTime = Date.now()
                 fxState.instances += 1
             }
