@@ -119,7 +119,7 @@ export const GameModel = () => {
 
         get gold() { return data.currentGold },
         addGold: (v) => {
-            v *= 20
+            // v *= 20
             data.currentGold += v
             self.synchronize()
             ga.diff('gold', data.currentGold)
