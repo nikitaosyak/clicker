@@ -48,14 +48,10 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
 
             const numberVisual = IContainer()
             if (stage < 10) {
-                const anchorX = slot === 0 ? 0.16 : 0
-                const anchorY = slot === 0? 0.07 : 0
                 numberVisual.visual.addChild(IVisual(`numbers_arabic_${stage}`)
-                    .setAnchor(anchorX, anchorY)
+                    .setAnchor(0, 0)
                     .setTint(0xFF9e48).visual)
             } else {
-                const anchorX = 0//slot === 2 ? 0.8 : 0.93
-                const anchorY = 0//slot === 2? 0.55 : 0.68
                 const digit1 = IVisual(`numbers_arabic_${Math.floor(stage / 10)}`)
                     .setAnchor(1, 0).setScale(0.7, 0.9).setTint(0xFF9e48)
                 const digit0 = IVisual(`numbers_arabic_${stage % 10}`)
@@ -67,9 +63,7 @@ export const FlashAnimationVisual = (descriptor, baseImagePath, stage, type, slo
             }
             return numberVisual
         } else {
-            const v = IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0)
-            // if (filter) v.visual.filters = [filter]
-            return v
+            return IVisual(`${baseImagePath}_${layer.visual}`).setAnchor(0, 0)
         }
     })
     visuals.forEach(v => {
