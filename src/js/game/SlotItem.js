@@ -1,16 +1,14 @@
 import {
     IClickable,
-    IHealthBarOwner, IVisualNumericRep, ObjectType, IVisual
+    ObjectType
 } from "../behaviours/Base";
 import {IAdoptable} from "../behaviours/IAdoptable";
-import {VisualChest} from "./VisualChest";
 import {FlashAnimationVisual} from "./FlashAnimationVisual";
 import {DAMAGE_SOURCE} from "./DamageSource";
-import {IEmitter} from "../behaviours/IEmitter";
 
 export class SlotItem {
 
-    constructor(type, slot, stage, health, drop, targetSlot, opener) {
+    constructor(type, slot, stage, health, drop, targetSlot, opener, healthbar) {
         this._type = type
         this._slot = slot
         this._stage = stage
@@ -19,6 +17,8 @@ export class SlotItem {
         this._drop = drop
         this._targetSlot = targetSlot
         this._opener = opener
+        this._healthbar = healthbar
+        healthbar.visual.visible = false
 
         this._animIdx = 0
         this._shakeAnimation = []
@@ -28,15 +28,12 @@ export class SlotItem {
         if (type === ObjectType.CHEST) {
             if (slot === 0) {
                 Object.assign(this, FlashAnimationVisual('animation_chest_small', 'chest_small', stage, type, slot))
-                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
             } else
             if (slot === 1) {
                 Object.assign(this, FlashAnimationVisual('animation_chest_medium', 'chest_medium', stage, type, slot))
-                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
             } else
             if (slot === 2) {
                 Object.assign(this, FlashAnimationVisual('animation_chest_big', 'chest_big', stage, type, slot))
-                Object.assign(this, IHealthBarOwner(this, {x: -330, y: -365}))
             }
 			
         }
@@ -44,27 +41,18 @@ export class SlotItem {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_regular', stage, type, slot, [
                 'egg_regular_stage0', 'egg_regular_stage1', 'egg_regular_stage2'
             ], drop.dragon.tier))
-            Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
             this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_EGG) {
             Object.assign(this, FlashAnimationVisual('animation_egg', 'egg_premium', stage, type, slot, [
                 'egg_premium_stage1', 'egg_premium_stage2'
                 ]))
-            Object.assign(this, IHealthBarOwner(this, {x: -200, y: -300}))
             this.setCrutchState(0.999)
         }
         else if (type === ObjectType.PAID_CHEST) {
             Object.assign(this, FlashAnimationVisual('animation_chest_premium', 'chest_premium', stage, type, slot))
-            Object.assign(this, IHealthBarOwner(this, {x: -300, y: -300}))
         } else {
-            console.warn('FALLBACK TYPE?! ', type)
-            Object.assign(this,
-                IVisual(type)
-                    .setSize(window.GD.slots[slot].w, window.GD.slots[slot].h)
-            )
-            Object.assign(this, IHealthBarOwner(this))
-            Object.assign(this, IVisualNumericRep(this, 'stage', -0.3, 0.25, 0xCCCC00))
+            throw 'Fallback type? not possibru'
         }
         Object.assign(this, IClickable(this))
         this.visual.interactive = false
@@ -127,6 +115,8 @@ export class SlotItem {
 						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut, onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
+                                this._healthbar.setHealthBarValue(1)
+                                this._healthbar.visual.visible = true
                             }})
 							
                 window.soundman.play('sound_sfx', 'chestDrop', 0.5)
@@ -138,6 +128,8 @@ export class SlotItem {
 						{pixi: {y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Back.easeIn.config(5.7), onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
+                                this._healthbar.setHealthBarValue(1)
+                                this._healthbar.visual.visible = true
                             }})
 			} else {
                 this.visual.interactive = true
@@ -147,7 +139,7 @@ export class SlotItem {
 
     processDamage(value, source) {
         this._currentHealth = Math.max(0, this._currentHealth-value)
-        this.setHealthBarValue(this._currentHealth/this._maxHealth)
+        this._healthbar.setHealthBarValue(this._currentHealth/this._maxHealth)
 
         if (this._type.indexOf('egg') > -1) {
             this.setCrutchState(this._currentHealth / this._maxHealth)
@@ -172,6 +164,8 @@ export class SlotItem {
     }
 
     animateOpen() {
+        this._healthbar.visual.visible = false
+        this._healthbar = null
         const self = this
         return new Promise(resolve => {
             self.visual.interactive = false
@@ -179,7 +173,7 @@ export class SlotItem {
             self._shakeAnimation[0].kill()
             self._shakeAnimation[1].kill()
 
-            self.healthbarVisual.destroy()
+            // self.healthbarVisual.destroy()
             self.stageDestroy && self.stageDestroy()
 
             if (self.play) {

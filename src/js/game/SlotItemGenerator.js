@@ -2,7 +2,7 @@ import {SlotItem} from "./SlotItem";
 import {ObjectType} from "../behaviours/Base";
 import {PaidSlotItem} from "./PaidSlotItem";
 
-export const SlotItemGenerator = (owner, model, savedStageItems) => {
+export const SlotItemGenerator = (owner, model, savedStageItems, healthbars) => {
 
     let gameData = window.GD
     let currentStageItems = savedStageItems.length > 0 ? savedStageItems : gameData.generateStageItems(model.stage)
@@ -31,7 +31,7 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
         populateConcrete: (slots, slotIdx, data) => {
             // console.log(`populating slot ${slotIdx} with ${data.type}:`, data)
             model.updateSlotItem(slotIdx, data)
-            let item = new typeConstructor[data.type](data.type, slotIdx, data.stage, data.health, data.drops, data.slot, owner)
+            let item = new typeConstructor[data.type](data.type, slotIdx, data.stage, data.health, data.drops, data.slot, owner, healthbars[data.slot])
             owner.add(item)
             slots[slotIdx] = item
         },

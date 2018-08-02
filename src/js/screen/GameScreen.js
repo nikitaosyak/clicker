@@ -10,6 +10,7 @@ import {DamagePercent} from "../debug/debugDamagePercent";
 import {DestroyAnimation} from "../game/poolable/DestroyAnimation";
 import {DAMAGE_SOURCE} from "../game/DamageSource";
 import {IAdoptable} from "../behaviours/IAdoptable";
+import {SlotItemHpBar} from "../game/SlotItemHpBar";
 
 export class GameScreen extends BaseScreen {
 
@@ -55,7 +56,15 @@ export class GameScreen extends BaseScreen {
         this._particles = CoinParticlesManager(this, this._goldCounter.visual)
         this.add(this._particles)
 
-        this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems)
+        this._slotHealthBars = [
+            SlotItemHpBar(0, 200, 12),
+            SlotItemHpBar(1, 220, 12),
+            SlotItemHpBar(2, 260, 12)
+        ]
+        this._slotHealthBars.forEach(hpbar => {
+            this.add(hpbar)
+        })
+        this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems, this._slotHealthBars)
         this._slotItems = [null, null, null]
         if (this._owner.model.slotItems.length > 0) {
             this._owner.model.slotItems.forEach((dataItem, i) => {

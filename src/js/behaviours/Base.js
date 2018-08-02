@@ -138,62 +138,6 @@ export const IAnimated = (descriptor) => {
     return self
 }
 
-export const IHealthBarOwner = (self, pos = null) => {
-
-    const getChildSprite = (parent, size, anchor, tint, alpha) => {
-        const pw = parent.width/parent.scale.x
-        const ph = parent.height/parent.scale.y
-
-        const child = new PIXI.Sprite(window.resources.getTexture('pixel'))
-
-        child.width = pw*size.x; child.height = ph*size.y
-        child.anchor.x = anchor.x; child.anchor.y = anchor.y
-        child.tint = tint; child.alpha = alpha
-        parent.addChild(child)
-
-        Object.assign(child, {
-            get pw() {return parent.width/parent.scale.x},
-            get ph() {return parent.height/parent.scale.y}
-        })
-
-        return child
-    }
-
-    const background = getChildSprite(self.visual, {x:1,y:0.06}, {x:0,y:0.5}, 0x666666, 0.85)
-    if (pos === null) {
-        background.x = -background.pw/2
-        background.y = -background.ph/2
-    } else {
-        background.x = pos.x; background.y = pos.y
-    }
-
-    const mainHp = getChildSprite(background, {x:0.98, y:0.9}, {x:0,y:0.5}, 0xAA0000, 0.9)
-    mainHp.x = mainHp.pw * 0.01
-
-    const drainedHp = getChildSprite(background, {x:0, y:0.9}, {x:0,y:0.5}, 0xAACC00, 0.9)
-    drainedHp.x = mainHp.x + mainHp.width
-
-    const maxWidth = mainHp.width
-    let lastValue = 1
-
-    const drainAnimation = TweenLite.to(drainedHp, 0.3, {width: 0, delay: 0.5})
-    drainAnimation.pause()
-
-    return {
-        get healthbarVisual() { return background },
-        setHealthBarValue(v) {
-            mainHp.width = Math.max(0, maxWidth * v)
-
-            const diff = lastValue - v
-            lastValue = v
-
-            drainedHp.x = mainHp.x + mainHp.width
-            drainedHp.width += maxWidth * diff
-            drainAnimation.invalidate().restart(true)
-        }
-    }
-}
-
 export const IVisualNumericRep = (owner, property, offsetX, offsetY, color, size = 0.3) => {
     if (typeof owner[property] === `undefined`) {
         return {
