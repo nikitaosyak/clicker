@@ -103,25 +103,27 @@ export const UIFactory = {
             },
 
             getUpgradeButton: (onClick) => {
-                const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 100)
+                const root = IContainer()
+                const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 120)
                 const icon = IVisual('ui_upgrade_dragon').setPosition(0, 4).setSize(80, 80).setAnchor(0, 0.5)
                 icon.interactive = false
-                btn.visual.addChild(icon.visual)
+                root.visual.addChild(btn.visual)
+                root.visual.addChild(icon.visual)
 
                 const price = UIFactory.forParent('upgrade_button').getText('', 0, 0, {
                     fontSize: 30, fill: '#000000'
                 }, {x: 0, y: 0.5})
                 price.interactive = false
-                btn.visual.addChild(price.visual)
+                root.visual.addChild(price.visual)
 
-                btn.setPrice = v => {
+                root.setPrice = v => {
                     price.visual.text =  MathUtil.convert(v)
                     const totalW = icon.visual.width + price.visual.width + 20
                     icon.visual.x = -totalW/2
                     price.visual.x = icon.visual.x + icon.visual.width + 20
                 }
 
-                return btn
+                return root
             },
 
             getDamagePercentWidget: () => {
