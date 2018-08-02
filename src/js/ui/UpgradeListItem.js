@@ -36,14 +36,7 @@ export const UpgradeListItem = (_, owner) => {
         self.visual.removeChild(damageWidget.visual)
         self.visual.addChild(upgradeBtn.visual)
         upgradeBtn.setPrice(price)
-
-        if (owner.model.gold >= price) {
-            upgradeBtn.visual.tint = 0xFFFFFF
-            upgradeBtn.visual.interactive = true
-        } else {
-            upgradeBtn.visual.tint = 0xAAAAAA
-            upgradeBtn.visual.interactive = false
-        }
+        upgradeBtn.setInteractive(owner.model.gold >= price)
     }
 
     self.updateLayout = (viewportSize, dragonManager, itemIndex) => {

@@ -123,6 +123,15 @@ export const UIFactory = {
                     price.visual.x = icon.visual.x + icon.visual.width + 20
                 }
 
+                root.setInteractive = v => {
+                    btn.visual.interactive = v
+                    if (v) {
+                        btn.visual.tint = 0xFFFFFF
+                    } else {
+                        btn.visual.tint = 0xAAAAAA
+                    }
+                }
+
                 return root
             },
 
