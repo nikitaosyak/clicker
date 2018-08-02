@@ -11,7 +11,7 @@ export class DialogUnlockPremiumSlot extends DialogBase {
 
         const size = {x: 700, y: 800}
 
-        this.visual.addChild(IVisual('pixel').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
 
         this._body = IText('something', 0, -190, {
             fontSize: 80, fill: '#BF5F2F',

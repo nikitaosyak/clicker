@@ -11,7 +11,7 @@ export class DialogSettings extends DialogBase {
         this._settings = null
         const size = {x: 500, y: 400}
 
-        this.visual.addChild(IVisual('pixel').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
 
         this._musicCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
             {x: -size.x/2 * 0.4, y: -100}, 'ui_unmute', 'ui_mute', state => {
