@@ -1,66 +1,54 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="CHEST_MAIN" itemID="5b50a67d-00000092" lastModified="1532435814" lastUniqueIdentifier="3">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="CHEST_MAIN" itemID="5b50a67d-00000092" lastModified="1532709113" lastUniqueIdentifier="3">
   <timeline>
-    <DOMTimeline name="CHEST_MAIN">
+    <DOMTimeline name="CHEST_MAIN" currentFrame="3">
       <layers>
-        <DOMLayer name="NUMBER_layer" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+        <DOMLayer name="NUMBER" color="#9933CC" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER" selected="true">
                   <matrix>
-                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.3" ty="88.05"/>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="19.25" ty="50"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="-0.9" y="0.15"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="100" contrast="61" saturation="79"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="1" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" selected="true" centerPoint3DX="51.45" centerPoint3DY="93.55">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER" selected="true" centerPoint3DX="19.4" centerPoint3DY="55.5">
                   <matrix>
-                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.8" ty="93.55"/>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="19.75" ty="55.5"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="-0.9" y="0.15"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="100" contrast="61" saturation="79"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="2" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" selected="true" centerPoint3DX="50.95" centerPoint3DY="86.55">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER" selected="true" centerPoint3DX="18.9" centerPoint3DY="48.5">
                   <matrix>
-                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="51.3" ty="86.55"/>
+                    <Matrix a="0.331253051757813" d="0.331253051757813" tx="19.25" ty="48.5"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="-0.9" y="0.15"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="100" contrast="61" saturation="79"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="3" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER_SYMBOL" centerPoint3DX="48.95" centerPoint3DY="-1">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/NUMBER" selected="true" centerPoint3DX="16.9" centerPoint3DY="-39.05">
                   <matrix>
-                    <Matrix a="0.331253051757813" d="0.288070678710938" tx="49.3" ty="-1"/>
+                    <Matrix a="0.331253051757813" d="0.288070678710938" tx="17.25" ty="-39.05"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="-0.9" y="0.15"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="100" contrast="61" saturation="79"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
@@ -72,46 +60,46 @@
               <elements>
                 <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol">
                   <matrix>
-                    <Matrix d="0.9921875" tx="-327.7" ty="-341.9"/>
+                    <Matrix a="0.999557495117188" b="-0.0297393798828125" c="0.0294952392578125" d="0.991744995117188" tx="-317" ty="-314.05"/>
                   </matrix>
                   <transformationPoint>
-                    <Point x="259.5" y="1.2"/>
+                    <Point x="259.45" y="1.15"/>
                   </transformationPoint>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="1" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-68.2" centerPoint3DY="-340.7">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-57.65" centerPoint3DY="-320.6">
                   <matrix>
-                    <Matrix d="1.01222229003906" tx="-327.7" ty="-341.95"/>
+                    <Matrix a="0.999557495117188" b="-0.0297393798828125" c="0.03009033203125" d="1.01174926757813" tx="-317" ty="-314.1"/>
                   </matrix>
                   <transformationPoint>
-                    <Point x="259.5" y="1.25"/>
+                    <Point x="259.45" y="1.2"/>
                   </transformationPoint>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="2" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-68.2" centerPoint3DY="-340.7">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-57.65" centerPoint3DY="-320.6">
                   <matrix>
-                    <Matrix d="0.984970092773438" tx="-327.7" ty="-341.95"/>
+                    <Matrix a="0.999557495117188" b="-0.0297393798828125" c="0.0292816162109375" d="0.984527587890625" tx="-317" ty="-314.1"/>
                   </matrix>
                   <transformationPoint>
-                    <Point x="259.5" y="1.25"/>
+                    <Point x="259.45" y="1.25"/>
                   </transformationPoint>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="3" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-68.2" centerPoint3DY="-340.65">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_symbol" centerPoint3DX="-57.65" centerPoint3DY="-320.55">
                   <matrix>
-                    <Matrix d="0.78997802734375" tx="-327.7" ty="-341.65"/>
+                    <Matrix a="0.999557495117188" b="-0.0297393798828125" c="0.0234832763671875" d="0.789627075195313" tx="-317" ty="-313.8"/>
                   </matrix>
                   <transformationPoint>
-                    <Point x="259.5" y="1.25"/>
+                    <Point x="259.45" y="1.2"/>
                   </transformationPoint>
                 </DOMSymbolInstance>
               </elements>
@@ -158,7 +146,7 @@
             </DOMFrame>
             <DOMFrame index="7" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" selected="true" centerPoint3DX="-13.6" centerPoint3DY="18.9">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" centerPoint3DX="-13.6" centerPoint3DY="18.9">
                   <matrix>
                     <Matrix a="0.99981689453125" b="-0.0002899169921875" c="0.000274658203125" d="1.00836181640625" tx="-281.25" ty="-222.95"/>
                   </matrix>
@@ -170,7 +158,7 @@
             </DOMFrame>
             <DOMFrame index="8" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" selected="true" centerPoint3DX="-13.95" centerPoint3DY="20.55">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" centerPoint3DX="-13.95" centerPoint3DY="20.55">
                   <matrix>
                     <Matrix a="0.999649047851563" b="0.0180206298828125" c="-0.01812744140625" d="1.00535583496094" tx="-277.15" ty="-225.4"/>
                   </matrix>
@@ -194,7 +182,7 @@
             </DOMFrame>
             <DOMFrame index="10" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" selected="true" centerPoint3DX="-14.7" centerPoint3DY="24.1">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Base_symbol" centerPoint3DX="-14.7" centerPoint3DY="24.1">
                   <matrix>
                     <Matrix a="0.999984741210938" d="0.999984741210938" tx="-282.35" ty="-215.8"/>
                   </matrix>
@@ -261,7 +249,7 @@
             </DOMFrame>
             <DOMFrame index="7" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-128.35" centerPoint3DY="-195">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-128.35" centerPoint3DY="-195">
                   <matrix>
                     <Matrix a="0.974960327148438" b="0.111434936523438" c="-0.12677001953125" d="1.10903930664063" tx="-336.2" ty="-342.1"/>
                   </matrix>
@@ -273,7 +261,7 @@
             </DOMFrame>
             <DOMFrame index="8" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-130.15" centerPoint3DY="-194.3">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-130.15" centerPoint3DY="-194.3">
                   <matrix>
                     <Matrix a="0.976791381835938" b="0.094512939453125" c="-0.103378295898438" d="1.06797790527344" tx="-340.95" ty="-333.05"/>
                   </matrix>
@@ -297,7 +285,7 @@
             </DOMFrame>
             <DOMFrame index="10" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-133.55" centerPoint3DY="-192.9">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-133.55" centerPoint3DY="-192.9">
                   <matrix>
                     <Matrix a="0.979598999023438" b="0.0606689453125" c="-0.0628509521484375" d="1.01434326171875" tx="-349.45" ty="-318.05"/>
                   </matrix>
@@ -309,7 +297,7 @@
             </DOMFrame>
             <DOMFrame index="11" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-135.3" centerPoint3DY="-192.2">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-135.3" centerPoint3DY="-192.2">
                   <matrix>
                     <Matrix a="0.980545043945313" b="0.043731689453125" c="-0.0453338623046875" d="1.01570129394531" tx="-353.3" ty="-313.7"/>
                   </matrix>
@@ -321,7 +309,7 @@
             </DOMFrame>
             <DOMFrame index="12" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-137.1" centerPoint3DY="-191.5">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-137.1" centerPoint3DY="-191.5">
                   <matrix>
                     <Matrix a="0.981231689453125" b="0.0267333984375" c="-0.026580810546875" d="0.975296020507813" tx="-357.3" ty="-304.7"/>
                   </matrix>
@@ -333,7 +321,7 @@
             </DOMFrame>
             <DOMFrame index="13" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" selected="true" centerPoint3DX="-138.8" centerPoint3DY="-190.8">
+                <DOMSymbolInstance libraryItemName="SYMBOLS (of chest)/Lid_open_symbol" centerPoint3DX="-138.8" centerPoint3DY="-190.8">
                   <matrix>
                     <Matrix a="0.981552124023438" b="0.0129547119140625" c="-0.012115478515625" d="0.917007446289063" tx="-360.7" ty="-294.45"/>
                   </matrix>
