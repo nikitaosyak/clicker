@@ -44,14 +44,14 @@ export const DragonMan = (renderer, clickDamage) => {
 
             if (Date.now() - lastAttack < GLOBAL_ATTACK_COOLDOWN) return
 
-            if (gameScreen.active) {
-                const autoDamageMult = 0.001;
-                damageToDistribute[0] += lastDamage * autoDamageMult
-                damageToDistribute[1] += lastDamage * autoDamageMult
-                damageToDistribute[2] += lastDamage * autoDamageMult
-            }
+            if (!gameScreen.active) return
 
-			//console.log("acc dmg:  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
+            const autoDamageMult = 0.001;
+            damageToDistribute[0] += lastDamage * autoDamageMult
+            damageToDistribute[1] += lastDamage * autoDamageMult
+            damageToDistribute[2] += lastDamage * autoDamageMult
+
+			// console.log("acc dmg:  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
 			
             const sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
             if (sumDmg <= 0) return

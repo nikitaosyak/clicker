@@ -1,5 +1,6 @@
 import {ObjectType} from "../behaviours/Base";
 import {AB} from "../tools/AB";
+import {MAX_STAGE} from "./GameModel";
 
 export const GameData = (model) => {
 
@@ -110,8 +111,8 @@ export const GameData = (model) => {
             }
 
             //сколько дропать яиц и каких
-            let currentTierEggNumInPack = eggDropPattern[currentTierDropStage];
-            let lastTierEggNumInPack = 2 - currentTierEggNumInPack
+            let currentTierEggNumInPack = stage === MAX_STAGE ? 0 : eggDropPattern[currentTierDropStage];
+            let lastTierEggNumInPack = stage === MAX_STAGE ? 0 : 2 - currentTierEggNumInPack
             currentTierDropStage++
 			
 			let moneyDrop = minGoldDrop

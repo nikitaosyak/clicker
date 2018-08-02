@@ -82,7 +82,6 @@ export class GameScreen extends BaseScreen {
             }], 10)
         }
 
-        this._savedRewards = []
         this._canUseCommonBounds = true
     }
 
@@ -123,11 +122,6 @@ export class GameScreen extends BaseScreen {
         this._clickDamage = window.GD.getClickDamage(this._owner.model.dragons)
 
         this._updateBounds()
-
-        while(this._savedRewards.length) {
-            const reward = this._savedRewards.shift()
-            reward.executor.apply(this, reward.item)
-        }
     }
 
     animateHide(to, onComplete) {
@@ -227,6 +221,8 @@ export class GameScreen extends BaseScreen {
     }
 
     processSlotDamage(slotIdx, source, damage) {
+        if (!this._active || this._hiding) return
+
         const slotItem = this._slotItems[slotIdx]
         if (slotItem.health <= 0) {
             // console.log('slot item already destroying, but got damage from source ', source)
@@ -234,11 +230,7 @@ export class GameScreen extends BaseScreen {
         }
         const rewardingClick = slotItem.processDamage(damage, source)
         if (slotItem.health <= 0) {
-            if (this._active && !this._hiding) {
-                this.openItem(slotItem)
-            } else {
-                this._savedRewards.push({item: slotItem, executor: this.openItem})
-            }
+            this.openItem(slotItem)
         } else if (rewardingClick && typeof slotItem.drop[ObjectType.GOLD] !== "undefined") {
             if (this._active && !this._hiding) {
                 const intermediateGold = Math.max(1, Math.floor(slotItem.drop[ObjectType.GOLD] * 0.002))

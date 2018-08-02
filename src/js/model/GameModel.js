@@ -3,6 +3,7 @@ import {URLParam} from "../utils/URLParam";
 import {GA} from "../tools/GA";
 
 export const MIN_STAGE = 0
+export const MAX_STAGE = 42
 export const MIN_GOLD = 0
 export const MAX_DRAGON_LEVEL = 10
 export const DEFAULT_SETTINGS = {
@@ -111,8 +112,7 @@ export const GameModel = () => {
 
         get stage() { return data.currentStage },
         increaseStage: () => {
-            data.currentStage++
-            console.log('current stage: ', data.currentStage)
+            data.currentStage = Math.min(data.currentStage+1, MAX_STAGE)
             self.synchronize()
             ga.accumulate('stage', 1)
         },

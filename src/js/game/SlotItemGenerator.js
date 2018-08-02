@@ -29,7 +29,7 @@ export const SlotItemGenerator = (owner, model, savedStageItems) => {
 
     const self = {
         populateConcrete: (slots, slotIdx, data) => {
-            console.log(`populating slot ${slotIdx} with ${data.type}:`, data)
+            // console.log(`populating slot ${slotIdx} with ${data.type}:`, data)
             model.updateSlotItem(slotIdx, data)
             let item = new typeConstructor[data.type](data.type, slotIdx, data.stage, data.health, data.drops, data.slot, owner)
             owner.add(item)
