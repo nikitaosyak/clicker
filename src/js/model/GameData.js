@@ -1,6 +1,7 @@
 import {ObjectType} from "../behaviours/Base";
 import {AB} from "../tools/AB";
 import {MAX_STAGE} from "./GameModel";
+import {URLParam} from "../utils/URLParam";
 
 export const GameData = (model) => {
 
@@ -80,7 +81,8 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            return (baseDamage + damage) * 10
+            console.log(parseInt(URLParam.GET('dmgMult')) || 1)
+            return (baseDamage + damage) * (parseInt(URLParam.GET('dmgMult')) || 1)// * 10
         },
         getClickDamage2: flatDragons => {
             let damage = 0
