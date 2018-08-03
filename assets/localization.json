@@ -1,4 +1,9 @@
 {
+  "common_reminder_checkbox_text": {
+    "ru": "Не напоминать",
+    "en": "Don't remind me"
+  },
+
   "unlock_premium_item_text_chest": {
     "ru": "Посмотреть рекламу чтобы открыть сундук?",
     "en": "Watch ad to quickly unlock chest?"
@@ -6,11 +11,6 @@
   "unlock_premium_item_text_egg": {
     "ru": "Посмотреть рекламу, чтобы разбить яйцо?",
     "en": "Watch ad to quickly break egg?"
-  },
-
-  "unlock_premium_item_hide_premium_reminder": {
-    "ru": "Не напоминать",
-    "en": "Don't remind me"
   },
 
   "settings_music": {
@@ -21,5 +21,25 @@
   "settings_sfx": {
     "ru": "Эффекты",
     "en": "SFX"
+  },
+
+  "restart_dialog_title": {
+    "ru": "Ты победил!",
+    "en": "You win!"
+  },
+
+  "restart_dialog_body": {
+    "ru": "Со взломом этого сундука, нить вашей судьы обрывается. Но вы можете продолжить играть в проклятом мире, который создали",
+    "en": "With this chest broken, the thread of prophecy is severed. You can continue to play in a cursed world you created yourself"
+  },
+
+  "restart_dialog_cancel": {
+    "ru": "Продолжить страдать",
+    "en": "Continue to suffer"
+  },
+
+  "restart_dialog_ok": {
+    "ru": "Начать заново",
+    "en": "Begin life anew"
   }
 }

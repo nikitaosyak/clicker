@@ -65,6 +65,19 @@ export class GameScreen extends BaseScreen {
             this.add(hpbar)
         })
         this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems, this._slotHealthBars)
+        let proposeRestart = true
+        let firstReminder = true
+        this._generator.on('game_ended', () => {
+            if (!proposeRestart) return
+            window.dialogs.showRestartGame(firstReminder).then(result => {
+                firstReminder = false
+                if (result.allowRestart) {
+                    owner.model.restart()
+                } else {
+                    proposeRestart = result.remind
+                }
+            })
+        })
         this._slotItems = [null, null, null]
         if (this._owner.model.slotItems.length > 0) {
             this._owner.model.slotItems.forEach((dataItem, i) => {

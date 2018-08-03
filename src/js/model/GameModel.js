@@ -38,6 +38,7 @@ export const GameModel = () => {
         data.currentSlotItems = []
         data.currentStageItems = []
         data.settings = DEFAULT_SETTINGS
+        data.restarts = 0
 
         if (typeof URLParam.GET('ab') !== 'undefined' && URLParam.GET('ab') !== null) {
             data.ab = Number.parseInt(URLParam.GET('ab'))
@@ -81,6 +82,7 @@ export const GameModel = () => {
                     data.currentSlotItems = loadData.currentSlotItems
                     data.currentStageItems = loadData.currentStageItems
                     data.settings = loadData.settings || DEFAULT_SETTINGS
+                    data.restarts = loadData.restarts || 0
                 }
                 console.log('user', data.userid, 'monetizing with: ', AB.strValue(data.ab))
                 console.log(data)
@@ -98,8 +100,12 @@ export const GameModel = () => {
             })
         },
         restart: () => {
+            const restarts = data.restarts
             self.reset()
-            window.location.reload(true)
+            data.restarts = restarts + 1
+            self.synchronize().then(() => {
+                window.location.reload(true)
+            })
         },
         reset: () => {
             initData()

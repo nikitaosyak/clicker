@@ -1,5 +1,5 @@
 import {DialogBase} from "./DialogBase";
-import {IButton, IContainer, IText, IToggleButton, IVisual} from "../../behaviours/Base";
+import {IButton, IText, IVisual} from "../../behaviours/Base";
 import {UIFactory} from "../../ui/UIFactory";
 
 
@@ -28,6 +28,7 @@ export class DialogUnlockPremiumSlot extends DialogBase {
                 dropShadow: true, dropShadowBlur: 1, dropShadowAlpha: 0.5, dropShadowDistance: 2
             }
         )
+        this._reminder.text.visual.text = window.localization.get("common_reminder_checkbox_text")
         this.visual.addChild(this._reminder.visual)
 
         this.visual.addChild(IButton('ui_cancel', () => {
@@ -46,7 +47,6 @@ export class DialogUnlockPremiumSlot extends DialogBase {
 
         this._reminder.button.setToggleState(false)
         this._reminder.visual.visible = !isFirstReminder
-        this._reminder.text.visual.text = window.localization.get("unlock_premium_item_hide_premium_reminder")
 
         return new Promise(resolve => {
             super.show().then(() => {

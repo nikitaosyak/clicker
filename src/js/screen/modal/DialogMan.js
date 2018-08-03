@@ -1,5 +1,6 @@
 import {DialogSettings} from "./DialogSettings";
 import {DialogUnlockPremiumSlot} from "./DialogUnlockPremiumSlot";
+import {DialogRestartGame} from "./DialogRestartGame";
 
 const DIALOG_TYPE = {
     SETTINGS : 'Settings',
@@ -23,7 +24,8 @@ export const DialogMan = (renderer) => {
 
     const dialogs = {
         [DIALOG_TYPE.SETTINGS]: new DialogSettings(self),
-        [DIALOG_TYPE.UNLOCK_PREMIUM_SLOT]: new DialogUnlockPremiumSlot(self)
+        [DIALOG_TYPE.UNLOCK_PREMIUM_SLOT]: new DialogUnlockPremiumSlot(self),
+        [DIALOG_TYPE.RESTART_GAME]: new DialogRestartGame(self)
     }
 
     return self

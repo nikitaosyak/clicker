@@ -1,6 +1,8 @@
 import {SlotItem} from "./SlotItem";
 import {ObjectType} from "../behaviours/Base";
 import {PaidSlotItem} from "./PaidSlotItem";
+import {IEmitter} from "../behaviours/IEmitter";
+import {MAX_STAGE} from "../model/GameModel";
 
 export const SlotItemGenerator = (owner, model, savedStageItems, healthbars) => {
 
@@ -23,6 +25,9 @@ export const SlotItemGenerator = (owner, model, savedStageItems, healthbars) => 
         // lazy update game model here
         model.increaseStage()
         currentStageItems = currentStageItems.concat(gameData.generateStageItems(model.stage))
+        if (model.stage === MAX_STAGE) {
+            self.emit('game_ended')
+        }
         model.updateStageItems(currentStageItems)
         return getChestForSlot(slotIdx)
     }
@@ -50,5 +55,7 @@ export const SlotItemGenerator = (owner, model, savedStageItems, healthbars) => 
             }
         }
     }
+
+    Object.assign(self, IEmitter({}))
     return self
 }

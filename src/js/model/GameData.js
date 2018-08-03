@@ -80,7 +80,7 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            return (baseDamage + damage)// * 10
+            return (baseDamage + damage) * 100
         },
         getClickDamage2: flatDragons => {
             let damage = 0
