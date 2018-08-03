@@ -31,7 +31,7 @@ export class UpgradeScreen extends BaseScreen {
 
             this._list.invalidate(this._owner.model.dragons)
             this._list.updateElements(this._cachedViewportSize, this._owner.dragonManager)
-            this._list.adjustShortList()
+            // this._list.adjustShortList()
         })
     }
 
