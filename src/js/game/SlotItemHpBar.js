@@ -28,26 +28,26 @@ export const SlotItemHpBar = (slot, width, height) => {
     const drainAnimation = TweenLite.to(drainedHp.visual, 0.3, {width: 0, delay: 0.5})
     drainAnimation.pause()
 
-    const maxWidth = mainHp.visual.width
+    const maxWidth = width - 4
     let lastValue = -1
 
     self.setHealthBarValue = (v) => {
-        if (v > maxWidth * lastValue) {
-            mainHp.visual.width = Math.min(maxWidth, maxWidth * v)
-            drainedHp.visual.width = 0
-            drainAnimation.invalidate().pause()
+        mainHp.visual.width = Math.max(0, maxWidth * v)
 
-            lastValue = v
-        } else {
-            mainHp.visual.width = Math.max(0, maxWidth * v)
+        const diff = lastValue - v
+        lastValue = v
 
-            const diff = lastValue - v
-            lastValue = v
+        drainedHp.visual.x = mainHp.visual.x + mainHp.visual.width
+        drainedHp.visual.width += maxWidth * diff
+        drainAnimation.invalidate().restart(true)
+    }
 
-            drainedHp.visual.x = mainHp.visual.x + mainHp.visual.width
-            drainedHp.visual.width += maxWidth * diff
-            drainAnimation.invalidate().restart(true)
-        }
+    self.resetHealthBarValue = () => {
+        mainHp.visual.width = width - 4
+        drainedHp.visual.width = 0
+        drainAnimation.invalidate()
+
+        lastValue = 1
     }
 
     return self

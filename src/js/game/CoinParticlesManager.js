@@ -41,7 +41,7 @@ export const CoinParticlesManager = (gameScreen, targetLocation) => {
             "max": 1.2
         },
         "blendMode": "normal",
-        "frequency": 0.01,
+        "frequency": 0.025,
         "emitterLifetime": 0,
         "maxParticles": 500,
         "pos": {

@@ -13,11 +13,13 @@ export class SlotItem {
         this._slot = slot
         this._stage = stage
         this._maxHealth = health
+        this._depletedHealthPiece = 0
         this._currentHealth = health
         this._drop = drop
         this._targetSlot = targetSlot
         this._opener = opener
         this._healthbar = healthbar
+        console.log(healthbar)
         healthbar.visual.visible = false
 
         this._animIdx = 0
@@ -115,7 +117,7 @@ export class SlotItem {
 						{pixi: {alpha:1, y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Bounce.easeOut, onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
-                                this._healthbar.setHealthBarValue(1)
+                                this._healthbar.resetHealthBarValue()
                                 this._healthbar.visual.visible = true
                             }})
 							
@@ -128,7 +130,7 @@ export class SlotItem {
 						{pixi: {y:this.visual.y, scaleX:this.visual.scale.x, scaleY:this.visual.scale.y}, ease:Back.easeIn.config(5.7), onComplete: () => {
                                 this._enabled = true
                                 this.visual.interactive = true
-                                this._healthbar.setHealthBarValue(1)
+                                this._healthbar.resetHealthBarValue()
                                 this._healthbar.visual.visible = true
                             }})
 			} else {
@@ -138,6 +140,7 @@ export class SlotItem {
     }
 
     processDamage(value, source) {
+        this._depletedHealthPiece += value
         this._currentHealth = Math.max(0, this._currentHealth-value)
         this._healthbar.setHealthBarValue(this._currentHealth/this._maxHealth)
 
@@ -159,8 +162,12 @@ export class SlotItem {
         }
         this._animIdx = this._animIdx === 0 ? 1 : 0
 
-        this._currentClick += 1
-        return this._currentClick % 2 === 0 // reward with intermediate gold
+        if (this._depletedHealthPiece/this._maxHealth > 0.1) { // reward with intermediate gold every 10% hp
+		    this._depletedHealthPiece = 0
+            return true
+        } else {
+		    return false
+        }
     }
 
     animateOpen() {

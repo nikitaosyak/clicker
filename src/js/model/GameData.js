@@ -143,6 +143,7 @@ export const GameData = (model) => {
                                 type: ObjectType.PAID_EGG,
                                 stage: stage,
                                 health: packHP * 2,
+                                slot: packSlotOrder[p+1],
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
                             }
                         } else {
@@ -150,6 +151,7 @@ export const GameData = (model) => {
                                 type: ObjectType.EGG,
                                 stage: stage,
                                 health: singleChest.health/2,
+                                slot: packSlotOrder[p+1],
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier, level: 1}}
                             }
                         }
@@ -159,6 +161,7 @@ export const GameData = (model) => {
                                 type: ObjectType.EGG,
                                 stage: stage,
                                 health: singleChest.health/3,
+                                slot: packSlotOrder[p+1],
                                 drops: {[ObjectType.DRAGON]: {tier: currentTier-1, level: 1}}
                             }
                         }

@@ -96,12 +96,11 @@ export class GameScreen extends BaseScreen {
 
     _dropGold(i, dropData, value) {
         const self = this
-        // console.log(this._slotItems[i])
-		var allCoins = dropData[ObjectType.GOLD];
+		const allCoins = dropData[ObjectType.GOLD];
         dropData[ObjectType.GOLD] -= value
         self._owner.model.addGold(value)
-		var visualCoins = Math.floor(Math.max(1, value / allCoins * 200));
-		// console.log(visualCoins)
+		const visualCoins = Math.floor(Math.max(1, (value / allCoins) * 200));
+        // console.log(allCoins, value, value/allCoins)
         self._particles.dropCoin(i, visualCoins)
         self._goldCounter.setValue(this._owner.model.gold)
         window.GA.accumulate('gold', {stage: this._slotItems[i].stage, num: value})
@@ -240,9 +239,9 @@ export class GameScreen extends BaseScreen {
         const rewardingClick = slotItem.processDamage(damage, source)
         if (slotItem.health <= 0) {
             this.openItem(slotItem)
-        } else if (rewardingClick && typeof slotItem.drop[ObjectType.GOLD] !== "undefined") {
+        } else if (rewardingClick === true && typeof slotItem.drop[ObjectType.GOLD] !== "undefined") {
             if (this._active && !this._hiding) {
-                const intermediateGold = Math.max(1, Math.floor(slotItem.drop[ObjectType.GOLD] * 0.002))
+                const intermediateGold = Math.max(1, Math.floor(slotItem.drop[ObjectType.GOLD] * 0.03))
                 this._dropGold(slotIdx, slotItem.drop, intermediateGold)
             }
         }
