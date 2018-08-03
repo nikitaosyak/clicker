@@ -62,6 +62,7 @@ export class GameScreen extends BaseScreen {
             SlotItemHpBar(2, 260, 12)
         ]
         this._slotHealthBars.forEach(hpbar => {
+            hpbar.visual.visible = false
             this.add(hpbar)
         })
         this._generator = SlotItemGenerator(this, owner.model, this._owner.model.stageItems, this._slotHealthBars)
