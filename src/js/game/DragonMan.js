@@ -46,24 +46,46 @@ export const DragonMan = (renderer, clickDamage) => {
 
             if (!gameScreen.active) return
 
-            const autoDamageMult = 0.001;
+            const autoDamageMult = 0.001
             damageToDistribute[0] += lastDamage * autoDamageMult
             damageToDistribute[1] += lastDamage * autoDamageMult
             damageToDistribute[2] += lastDamage * autoDamageMult
 
-			// console.log("acc dmg:  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
 			
             const sumDmg = damageToDistribute[0] + damageToDistribute[1] + damageToDistribute[2]
             if (sumDmg <= 0) return
 			var spdMul = 0.3 + (lastDamage / sumDmg * 6)
 			
+            var sortedSlots = [0, 1, 2]
+            sortedSlots = sortedSlots.sort(compareDamage).reverse()
+            function compareDamage(first, second)
+            {
+                if (second !== lastFocusedSlot && first !== lastFocusedSlot) {
+                    if (damageToDistribute[first] === damageToDistribute[second])
+                        return 0
+                    if (damageToDistribute[first] < damageToDistribute[second])
+                        return -1
+                    else
+                        return 1
+                } else {
+                    if (second === lastFocusedSlot)
+                        return -1
+                    else
+                        return 1
+                }
+            }
+            
+            
+			//console.log("acc dmg:  " + sortedSlots + "  " + Math.round(damageToDistribute[0]) + '  '  + Math.round(damageToDistribute[1]) + '  '  + Math.round(damageToDistribute[2]) + '  ' )
+            
             const available = dragons.filter(d => d.canAttack(spdMul))
             if (available.length === 0) return
             for (let i = 0 ; i < available.length; i++) {
                 const singleAvailable = available[i]
                 const damage = window.GD.getSingleDragonDamage(singleAvailable.tier, singleAvailable.level)
                 let wasAttack = false
-                for (let j = 0; j < damageToDistribute.length; j++) {
+                for (let k = 0; k < damageToDistribute.length; k++) {
+                    var j = sortedSlots[k]
                     if (damageToDistribute[j] < damage) continue //dragon cant attack for half of his power
                     if (!gameScreen.isSlotLive(j)) continue //no reason to attack empty slot
 					// here is the point of assigning some damage
