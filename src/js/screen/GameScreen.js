@@ -237,7 +237,7 @@ export class GameScreen extends BaseScreen {
                 )
             }
             if (slotItem.type === ObjectType.CHEST || slotItem.type === ObjectType.PAID_CHEST) {
-                window.soundman.play('sound_sfx', 'chest', 0.45)
+                window.soundman.play('sound_sfx', 'chest', 0.65)
             }
         })
     }

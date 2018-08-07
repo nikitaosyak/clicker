@@ -15,7 +15,7 @@ export const UpgradeListItem = (_, owner) => {
         window.soundman.play(
             'sound_sfx', 
             `upgrade${Math.random() > 0.5 ? 1 : 2}`,
-             0.65 + Math.random() * 0.1
+             0.45 + Math.random() * 0.1
         )
     })
 

@@ -154,7 +154,7 @@ export class SlotItem {
 		else if (soundDamage > 0.05) soundNum = Math.random() > 0.5 ? 3 : 4
 		else if (soundDamage > 0.02) soundNum = Math.random() > 0.3 ? 6 : 5
 		else soundNum = 7
-        const volume = source === DAMAGE_SOURCE.CLICK ? 0.75 : 0.15 + Math.random() * 0.15
+        const volume = source === DAMAGE_SOURCE.CLICK ? 0.45 : 0.1 + Math.random() * 0.15
         window.soundman.play('sound_sfx', `dmg${soundNum}`, volume)
 		
         if (this._enabled) {

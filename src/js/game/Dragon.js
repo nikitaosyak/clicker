@@ -179,7 +179,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
                     window.soundman.play(
                         'sound_sfx', 
                         `dragon${Math.random() > 0.5 ? 1 : 2}`,
-                        0.45 + Math.random() * 0.1)
+                        0.05 + Math.random() * 0.2)
                 }
             }
         }
