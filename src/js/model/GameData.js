@@ -19,10 +19,10 @@ export const GameData = (model) => {
 	const stageTimeSecs = (contentTimeMins * 60) / stageMaxNum;
 	
     const stagePow = 2  //на сколько увеличивается урон каждый этап
-    const stageShift = 0.89
+    const stageShift = 0.86
     const stageShiftAB2 = 0.995
 	const stageShiftAB3 = 0.980
-	const stageScale = 2.1
+	const stageScale = 3.3
 	const stageScaleAB3 = 0.7
     const baseDamage = 10       //базовый урон
     const basePrice = 100       //базовая цена
@@ -104,7 +104,7 @@ export const GameData = (model) => {
             const packHP = packClicksNum * self.getTargetDamage(stage)
 
             //определяется порог и переключается тиер
-            const nextTierBaseDamage = getTierBaseDamage(currentTier + 1)
+            const nextTierBaseDamage = getTierBaseDamage(currentTier + 1) / (shiftKoef * shiftKoef * shiftKoef * shiftKoef * shiftKoef * shiftKoef)
             let tierJustSwitched = false
             if (currentTier < tierMax && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier) {
                 tierJustSwitched = true
@@ -174,16 +174,18 @@ export const GameData = (model) => {
 			
 			const maxBoost = maxMoneyBoost
 			const switchMult = 0.1
+            
+            const aaa = tierSwitchThresholdMultiplier * currentTier * shiftKoef * shiftKoef
 			
-            if (moneyBoostCounter < maxBoost && clearTargetDamage / nextTierBaseDamage > tierSwitchThresholdMultiplier * currentTier * switchMult) {
+            if (moneyBoostCounter < maxBoost && clearTargetDamage / nextTierBaseDamage > switchMult * aaa) {
 				moneyBoostCounter++
 				if (moneyBoostCounter === maxBoost && currentTier !== tierMax) {
-					moneyBoostCounter += 4
+					moneyBoostCounter += 1
 				}
                 chestData.push({
                     type: ObjectType.PAID_CHEST,
                     stage: stage,
-                    health: packHP * 10,
+                    health: packHP * 5 * shiftKoef,
                     slot: 1,
                     drops: {
                         [ObjectType.GOLD]: Math.round(moneyDrop) * 5
