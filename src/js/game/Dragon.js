@@ -63,6 +63,8 @@ const upgradeParticlesConfig = {
 export const Dragon = (bounds, tier, level, x, y) => {
     // tier = Math.random() > 0.5 ? 1 : 5
     // tier = Math.random() > 0.5 ? tier : 6
+    tier = 6
+    level = 1
 
     const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
@@ -91,7 +93,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
     let lastAttack = 0
     let scheduledShot = null
 
-    // const numberr = FlashAnimationVisual2('animation_dragon_level', level)
+    const numberr = FlashAnimationVisual2('animation_dragon_level', level, 124, 142)
 
     const self = {
         scheduleAttack: () => {
@@ -152,7 +154,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
             dirChange && invalidateVisual()
 
             if (currentAnimation === ANIM_IDLE) {
-                // numberr.applyFrame(self.visual.currentFrame);
+                numberr.applyFrame(self.visual.currentFrame);
             }
 
             if (scheduledShot) {
@@ -210,11 +212,11 @@ export const Dragon = (bounds, tier, level, x, y) => {
         window.resources.getTexture('spec'),
         cfg)
 
-    Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
+    // Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
     invalidateVisual()
 
     if (tier === 6) {
-        // self.visual.addChild(numberr.visual)
+        self.visual.addChild(numberr.visual)
     }
 
     return self

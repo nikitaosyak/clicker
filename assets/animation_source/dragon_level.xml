@@ -1,156 +1,126 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="TIER6_number_animation_SYMBOL" itemID="5b585293-0000001b" lastModified="1532514963" lastUniqueIdentifier="1">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="Symbol_animations/NUMBER_ANIMATION" itemID="5b5b5087-00000160" lastModified="1533805705" lastUniqueIdentifier="2">
   <timeline>
-    <DOMTimeline name="TIER6_number_animation_SYMBOL" currentFrame="9">
+    <DOMTimeline name="NUMBER_ANIMATION" currentFrame="9">
       <layers>
-        <DOMLayer name="NUMBER" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+        <DOMLayer name="NUMBER" color="#9933CC" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="135.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.55" ty="91"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="107.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="1" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.65" centerPoint3DY="93.75">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="139.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.7" ty="95"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="111.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="2" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.65" centerPoint3DY="98.6">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="145.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.7" ty="99.85"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="117.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="3" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.25" centerPoint3DY="101.5">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" selected="true" centerPoint3DX="77.95" centerPoint3DY="148.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.3" ty="102.75"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="120.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="4" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62" centerPoint3DY="102.5">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="149.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.05" ty="103.75"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="121.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="5" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.1" centerPoint3DY="98.75">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="146.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.15" ty="100"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="118.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="6" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.1" centerPoint3DY="96.3">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="144.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.15" ty="97.55"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="116.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="7" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.5" centerPoint3DY="89.75">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="77.95" centerPoint3DY="138.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.55" ty="91"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="110.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="8" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="62.75" centerPoint3DY="85.65">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" selected="true" centerPoint3DX="77.95" centerPoint3DY="133.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="66.8" ty="86.9"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="42.25" ty="105.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
             <DOMFrame index="9" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_number/number_SYMBOL" centerPoint3DX="63.5" centerPoint3DY="86.65">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="78.95" centerPoint3DY="134.1">
                   <matrix>
-                    <Matrix a="0.370025634765625" b="0.0871429443359375" d="0.28955078125" tx="67.55" ty="87.9"/>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="43.25" ty="106.85"/>
                   </matrix>
                   <transformationPoint>
                     <Point y="-3.8"/>
                   </transformationPoint>
-                  <filters>
-                    <AdjustColorFilter brightness="70" contrast="35"/>
-                  </filters>
                 </DOMSymbolInstance>
               </elements>
             </DOMFrame>
@@ -159,4 +129,5 @@
       </layers>
     </DOMTimeline>
   </timeline>
-</DOMSymbolItem>
+</DOMSymbolItem
+>
