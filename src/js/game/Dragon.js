@@ -3,6 +3,7 @@ import {RENDER_LAYER} from "../Renderer";
 import {MathUtil} from "../utils/MathUtil";
 import {DragonMoveComponent} from "./DragonMoveComponent";
 import {FlashAnimationVisual2} from "./FlashAnimationVisual2";
+import {URLParam} from "../utils/URLParam";
 
 const upgradeParticlesConfig = {
         "alpha": {
@@ -84,11 +85,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
     Object.keys(window.resources.getAnimation(ANIM_SPIT)).forEach(f => {
         ANIM_SPIT_TEXTURES.push(PIXI.Texture.fromFrame(f))
     })
+
+    const scale = parseFloat(URLParam.GET('visualUpscale')) || 1
     //                        TIER:                1,                2,                3,                4,                5,                6
     const attackCooldown =     [-1,              0.6,             0.58,             0.56,             0.54,             0.52,              0.5][tier]
     const animationFireFrame = [-1,                9,                4,                6,                6,                6,                5][tier]
     const spitOffset =         [-1,  {x: 30, y: -30},  {x: -5, y: -30},  {x: 40, y: -25},  {x: 50, y: -50},  {x: 30, y: -30},  {x: 60, y: -30}][tier]
-    const size =               [-1, {x: 120, y: 120}, {x: 120, y: 120}, {x: 120, y: 120}, {x: 145, y: 160}, {x: 150, y: 150}, {x: 180, y: 180}][tier]
+    const size =               [-1, {x: 120*scale, y: 120*scale}, {x: 120*scale, y: 120*scale}, {x: 120*scale, y: 120*scale}, {x: 145*scale, y: 160*scale}, {x: 150*scale, y: 150*scale}, {x: 180*scale, y: 180*scale}][tier]
     let currentAnimation = ANIM_IDLE
     let lastAttack = 0
     let scheduledShot = null
