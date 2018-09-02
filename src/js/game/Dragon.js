@@ -63,8 +63,8 @@ const upgradeParticlesConfig = {
 export const Dragon = (bounds, tier, level, x, y) => {
     // tier = Math.random() > 0.5 ? 1 : 5
     // tier = Math.random() > 0.5 ? tier : 6
-    tier = 6
-    level = 1
+    // tier = 6
+    // level = 1
 
     const movement = DragonMoveComponent(tier, level)
     const invalidateVisual = () => {
@@ -93,7 +93,13 @@ export const Dragon = (bounds, tier, level, x, y) => {
     let lastAttack = 0
     let scheduledShot = null
 
-    const numberr = FlashAnimationVisual2('animation_dragon_level', level, 124, 142)
+    let numberIdle
+    let numberSpit
+    if (tier === 1 || tier === 2) {
+        numberIdle = FlashAnimationVisual2(`animation_belly_level_tier${tier}_idle`, level, tier)
+        numberSpit = FlashAnimationVisual2(`animation_belly_level_tier${tier}_spit`, level, tier)
+    }
+
 
     const self = {
         scheduleAttack: () => {
@@ -137,7 +143,10 @@ export const Dragon = (bounds, tier, level, x, y) => {
         },
         levelUp: () => {
             level += 1
-            self.levelVisualRefresh()
+            if (tier === 1 || tier === 2) {
+                numberSpit.updateLevel(level)
+                numberIdle.updateLevel(level)
+            }
 
             self.visual.parent.addChild(self.visual)
 
@@ -153,8 +162,17 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
-            if (currentAnimation === ANIM_IDLE) {
-                numberr.applyFrame(self.visual.currentFrame);
+            if (tier === 1 || tier === 2) {
+                if (currentAnimation === ANIM_IDLE) {
+                    self.visual.addChild(numberIdle.visual)
+                    self.visual.removeChild(numberSpit.visual)
+                    numberIdle.applyFrame(self.visual.currentFrame);
+                }
+                if (currentAnimation === ANIM_SPIT) {
+                    self.visual.removeChild(numberIdle.visual)
+                    self.visual.addChild(numberSpit.visual)
+                    numberSpit.applyFrame(self.visual.currentFrame);
+                }
             }
 
             if (scheduledShot) {
@@ -214,10 +232,6 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     // Object.assign(self, IVisualNumericRep(self, 'level', 0.13, 0.15, 0xABABAB, 0.22))
     invalidateVisual()
-
-    if (tier === 6) {
-        self.visual.addChild(numberr.visual)
-    }
 
     return self
 }

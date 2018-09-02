@@ -41,6 +41,7 @@ export const IVisual = texture => {
         setPivot: (x, y) => { s.pivot.x = x; s.pivot.y = y; return self },
         setTint: v => { s.tint = v; return self },
         setAlpha: v => { s.alpha = v; return self },
+        setTexture: v => { s.texture = window.resources.getTexture(v); return self; },
         get layer() { return layer || RENDER_LAYER.GAME },
         get visual() { return s }
     }

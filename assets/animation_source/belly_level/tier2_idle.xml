@@ -1,0 +1,96 @@
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="Symbol_animations/NUMBER_ANIMATION" itemID="5b5b5087-00000160" lastModified="1533914061" lastUniqueIdentifier="2">
+  <timeline>
+    <DOMTimeline name="NUMBER_ANIMATION">
+      <layers>
+        <DOMLayer name="NUMBER" color="#9933CC" current="true" isSelected="true" autoNamed="false">
+          <frames>
+            <DOMFrame index="0" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="54.7" centerPoint3DY="72.05">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="19" ty="44.8"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="1" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="52.2" centerPoint3DY="75.05">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="16.5" ty="47.8"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="2" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="53.2" centerPoint3DY="78.55">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="17.5" ty="51.3"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="3" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="58.65" centerPoint3DY="81.55">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="22.95" ty="54.3"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="4" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="60.15" centerPoint3DY="77.55">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="24.45" ty="50.3"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="5" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="62.15" centerPoint3DY="74.55">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="26.45" ty="47.3"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+            <DOMFrame index="6" keyMode="9728">
+              <elements>
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="60.65" centerPoint3DY="74.05">
+                  <matrix>
+                    <Matrix a="0.357223510742188" b="-0.130020141601563" d="0.28955078125" tx="24.95" ty="46.8"/>
+                  </matrix>
+                  <transformationPoint>
+                    <Point y="-3.8"/>
+                  </transformationPoint>
+                </DOMSymbolInstance>
+              </elements>
+            </DOMFrame>
+          </frames>
+        </DOMLayer>
+      </layers>
+    </DOMTimeline>
+  </timeline>
+</DOMSymbolItem>

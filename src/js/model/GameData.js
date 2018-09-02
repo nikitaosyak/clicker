@@ -81,7 +81,6 @@ export const GameData = (model) => {
                     damage += getTierDamage(d.tier, d.level)
                 })
             })
-            console.log(parseInt(URLParam.GET('dmgMult')) || 1)
             return (baseDamage + damage) * (parseInt(URLParam.GET('dmgMult')) || 1)// * 10
         },
         getClickDamage2: flatDragons => {
