@@ -3,25 +3,25 @@ export const Mockup = () => {
 
     return {
         init: () => {
-            console.log('Initialize mockup platform')
+            console.log('%cPlatform:Mockup: initialize platform', 'color: #CC22CC')
             return new Promise(resolve => {
-                console.log('--will resolve init')
+                console.log('%c    initialize successfull', 'color: #CC22CC')
                 resolve()
             })
         },
 
         wallpost: () => {
-            console.log('Shitpost mockup platform')
+            console.log('%cPlaftorm:Mockup: will wallpost', 'color: #CC22CC')
             return new Promise(resolve => {
-                console.log('--will resolve shitpost')
+                console.log('%c    wallpost successfull', 'color: #CC22CC')
                 resolve()
             })  
         },
 
         invite: () => {
-            console.log('Shitvite mockup platform')
+            console.log('%cPlatfrom:Mockup: will invite', 'color: #CC22CC')
             return new Promise(resolve => {
-                console.log('--will resolve shitvite')
+                console.log('%c    invite successfull', 'color: #CC22CC')
                 resolve()
             })
         }

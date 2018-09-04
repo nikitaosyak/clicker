@@ -6,11 +6,47 @@
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no">
     <title>dragon clicker</title>
-    <script src="libraries.js"></script>
-    <script src="bundle.js"></script>
-    <%platform_sdk%>
 </head>
 <body style="margin: 0; overflow: hidden">
 <canvas id="gameCanvas"></canvas>
+
+<!-- splash image -->
+<img
+        id="loader"
+        src="assets/splash_screen.png"
+        style="width: 100%; height:100%; object-fit: cover; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;"
+/>
+
+<progress
+        id="progress"
+        value="0" max="100"
+        style="height: 4%; width: 70%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; margin-top: 10%"
+></progress>
+
+<!-- bundle dynamic loading -->
+<script>
+    var head = document.getElementsByTagName('head')[0]
+    var scripts = ['%platform_sdk%', 'libraries.js', 'bundle.js']
+    var loadedScripts = 0
+    var totalScripts = scripts.length
+
+    var loadSingleScript = function(atPath) {
+        var scriptDOM = document.createElement('script')
+        scriptDOM.type = 'text/javascript'
+        scriptDOM.onreadystatechange = function () {
+            console.info(`    ${atPath} state change: ${this.readyState}`)
+        }
+        scriptDOM.onload = function() {
+            loadedScripts += 1
+            console.log(`%cBundle loading: bundle ${loadedScripts}/${totalScripts} : ${atPath}`, 'color: #2222CC')
+            if (scripts.length > 0) {
+                loadSingleScript(scripts.shift())
+            }
+        }
+        scriptDOM.src = atPath
+        head.appendChild(scriptDOM)
+    }
+    loadSingleScript(scripts.shift())
+</script>
 </body>
 </html>

@@ -10,9 +10,12 @@ export const Resources = () => {
             loader.add(alias, path)
             return self
         },
-        load: (onComplete) => {
-            loader.load(onComplete)
-            return self
+        load: (onComplete, onProgress) => {
+            const binding = loader.onProgress.add(onProgress)
+            loader.load((loader, resources) => {
+                loader.onProgress.detach(binding)
+                onComplete(loader, resources)
+            })
         },
         hasResource: alias => alias in res,
         getTexture: (alias) => {

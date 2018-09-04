@@ -15,6 +15,7 @@ import {Platform} from './platform/Platform'
 import {SoundMan} from './SoundMan'
 import {DialogMan} from "./screen/modal/DialogMan";
 import {Localization} from "./Localization";
+import {DivVanisher} from "./utils/DivVanisher";
 
 window.onload = () => {
     debugManager.init()
@@ -43,6 +44,8 @@ window.onload = () => {
             screens.instantTransit(SCREEN_TYPE.GAME)
             // screens.instantTransit(SCREEN_TYPE.UPGRADE)
 
+            const vanisher = DivVanisher()
+
             let time = Date.now()
             const gameLoop = () => {
                 debugManager.frameStarted()
@@ -50,6 +53,8 @@ window.onload = () => {
                 let dt = (Date.now() - time)/1000
                 dt = Math.min(dt, 0.02) // cap delta time for inactivity period
                 time = Date.now()
+
+                vanisher.running && vanisher.update(dt)
 
                 dragons.update(dt)
                 screens.update(dt)
@@ -72,27 +77,53 @@ window.onload = () => {
         .then(() => {
             resources
             .add('digest', 'assets/digest.json')
-            .load(() => {
-                const digest = resources.getJSON('digest')
-                digest.images.forEach(i => {
-                    resources.add(i.alias, i.path)
-                })
-                resources.load(() => {
-                    window.soundman = SoundMan(digest.audio)
-                    window.localization = Localization(URLParam.GET('locale')||'en')
-                    if (URLParam.GET('stage')) {
-                        model.connect().then(() => {
-                            model.reset()
-                            SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
-                            model.close()
-                            window.location.href = window.location.origin
-                            // startGame(false)
-                        })
+            .load(
+                () => {
+                    const digest = resources.getJSON('digest')
+                    digest.images.forEach(i => {
+                        resources.add(i.alias, i.path)
+                    })
+                    let currentLoaded = 0
+                    const totalToLoad = digest.images.length
+                    console.log(`%cAsset loading: will load image assets (${totalToLoad} items)`, 'color: #2222CC')
+
+                    const progressBar = document.getElementById('progress')
+                    resources.load(
+                        () => {
+                            console.log(`%c    success!`, 'color: #2222CC')
+                            window.soundman = SoundMan(digest.audio)
+                            window.localization = Localization(URLParam.GET('locale')||'en')
+                            if (URLParam.GET('stage')) {
+                                model.connect().then(() => {
+                                    model.reset()
+                                    SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
+                                    model.close()
+                                    window.location.href = window.location.origin
+                                    // startGame(false)
+                                })
+                            } else {
+                                startGame(true)
+                            }
+                        },
+                        (loader, resource) => {
+                            currentLoaded += 1
+                            if (resource.error) {
+                                console.error(`    failed to load ${resource.url}`)
+                            } else {
+                                // console.log(`%c    progress: ${loader.progress}: ${resource.url}`, 'color: #2222CC')
+                                progressBar.value = Math.floor(loader.progress)
+                            }
+                        }
+                    )
+                },
+                (loader, resource) => {
+                    if (resource.error) {
+                        console.error(`Asset loading: failed to load ${resource.url}, impossible to proceed`)
                     } else {
-                        startGame(true)
+                        console.log('%cAsset loading: finished loading digest', 'color: #2222CC')
                     }
-                })
-            })
+                }
+            )
         })
         .catch(e => {
             console.error(e)

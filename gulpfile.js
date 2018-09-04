@@ -188,13 +188,13 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
 
     const fs = require('fs')
     let indexFile = fs.readFileSync('src/index.html', {encoding: 'utf-8'})
-    const regEx = /^.*<%platform_sdk%>.*$/gm
-    const pl = process.env.PLATFORM
-    if (pl === 'standalone') {
+    const regEx = /'%platform_sdk%',/gm
+    const platform = process.env.PLATFORM
+    if (platform === 'standalone') {
         indexFile = indexFile.replace(regEx, '')
     } else {
-        indexFile = indexFile.replace(regEx, `<script src="${pl}.js"></script>`)
-        fs.copyFileSync(`src/platform/${pl}.js`, `build/${pl}.js`)
+        indexFile = indexFile.replace(regEx, `'${platform}.js',`)
+        fs.copyFileSync(`src/platform/${platform}.js`, `build/${platform}.js`)
     }
     fs.writeFileSync('build/index.html', indexFile)
 
@@ -238,7 +238,7 @@ gulp.task('reload', () => {
 })
 
 gulp.task('watch', () => {
-    gulp.watch(['src/js/**/*', 'assets/**/*'], e => {
+    gulp.watch(['src/js/**/*', 'assets/**/*', 'src/platform/**/*', 'src/index.html'], e => {
         sequence('finish-deploy', 'reload')(e => {
             if (e) console.error(e)
         })
