@@ -4,7 +4,7 @@ export const FlashAnimationVisual2 = (descriptor, level, tier) => {
 
     const animation = window.resources.getJSON(descriptor)
 
-    const scaleFix = [-1, 0.5, 0.4, ][tier]
+    const scaleFix = [-1, 0.5, 0.4, 0.4, 0.4, 0.4, 0.33][tier]
 
     const self = IVisual(`numbers_roman_${level}`).setAnchor(0, 0)//.setScale(0.5, 0.5)//.setAnchor(0.555, 0.503)
 

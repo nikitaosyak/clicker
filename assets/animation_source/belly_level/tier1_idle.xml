@@ -1,14 +1,14 @@
-<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="Symbol_animations/NUMBER_ANIMATION" itemID="5b5b5087-00000160" lastModified="1533912967" lastUniqueIdentifier="3">
+<DOMSymbolItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ns.adobe.com/xfl/2008/" name="Symbol_animations/NUMBER_ANIMATION" itemID="5b5b5087-00000160" lastModified="1536050022" lastUniqueIdentifier="3">
   <timeline>
-    <DOMTimeline name="NUMBER_ANIMATION" currentFrame="9">
+    <DOMTimeline name="NUMBER_ANIMATION">
       <layers>
         <DOMLayer name="NUMBER" color="#9933CC" current="true" isSelected="true" autoNamed="false">
           <frames>
             <DOMFrame index="0" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="48.95" centerPoint3DY="57.5">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="47.2" centerPoint3DY="59">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="19.55" ty="40.25"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="17.8" ty="41.75"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.75"/>
@@ -18,9 +18,9 @@
             </DOMFrame>
             <DOMFrame index="1" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="47.35" centerPoint3DY="57.25">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="45.8" centerPoint3DY="58.1">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="17.95" ty="39.95"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="16.4" ty="40.8"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -30,9 +30,9 @@
             </DOMFrame>
             <DOMFrame index="2" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="45.75" centerPoint3DY="57.85">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" selected="true" centerPoint3DX="44.6" centerPoint3DY="56.65">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="16.35" ty="40.55"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="15.2" ty="39.35"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -42,9 +42,9 @@
             </DOMFrame>
             <DOMFrame index="3" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="44.95" centerPoint3DY="58.95">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="43.45" centerPoint3DY="57.25">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="15.55" ty="41.65"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="14.05" ty="39.95"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -54,9 +54,9 @@
             </DOMFrame>
             <DOMFrame index="4" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="44.55" centerPoint3DY="59.95">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="43" centerPoint3DY="58.35">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="15.15" ty="42.7"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="13.6" ty="41.1"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -66,9 +66,9 @@
             </DOMFrame>
             <DOMFrame index="5" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="45.35" centerPoint3DY="62.45">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="44.85" centerPoint3DY="62.2">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="15.95" ty="45.2"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="15.45" ty="44.95"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -90,9 +90,9 @@
             </DOMFrame>
             <DOMFrame index="7" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="49.35" centerPoint3DY="66.35">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="48.9" centerPoint3DY="67.4">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="19.95" ty="49.1"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="19.5" ty="50.15"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.75"/>
@@ -102,9 +102,9 @@
             </DOMFrame>
             <DOMFrame index="8" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="50.15" centerPoint3DY="64.8">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="49.7" centerPoint3DY="65.6">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="20.75" ty="47.5"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="20.3" ty="48.3"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -114,9 +114,9 @@
             </DOMFrame>
             <DOMFrame index="9" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="48.95" centerPoint3DY="63.45">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="48.65" centerPoint3DY="64.05">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="19.55" ty="46.15"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="19.25" ty="46.75"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>
@@ -126,9 +126,9 @@
             </DOMFrame>
             <DOMFrame index="10" keyMode="9728">
               <elements>
-                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="47.8" centerPoint3DY="60.45">
+                <DOMSymbolInstance libraryItemName="Symbol_animations/NUMBER" centerPoint3DX="47.15" centerPoint3DY="60.7">
                   <matrix>
-                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="18.35" ty="43.2"/>
+                    <Matrix a="0.294143676757813" b="-0.082244873046875" d="0.183181762695313" tx="17.7" ty="43.45"/>
                   </matrix>
                   <transformationPoint>
                     <Point x="0.15" y="-3.45"/>

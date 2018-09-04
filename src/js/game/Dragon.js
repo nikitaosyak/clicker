@@ -98,10 +98,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
 
     let numberIdle
     let numberSpit
-    if (tier === 1 || tier === 2) {
         numberIdle = FlashAnimationVisual2(`animation_belly_level_tier${tier}_idle`, level, tier)
         numberSpit = FlashAnimationVisual2(`animation_belly_level_tier${tier}_spit`, level, tier)
-    }
 
 
     const self = {
@@ -146,10 +144,8 @@ export const Dragon = (bounds, tier, level, x, y) => {
         },
         levelUp: () => {
             level += 1
-            if (tier === 1 || tier === 2) {
-                numberSpit.updateLevel(level)
-                numberIdle.updateLevel(level)
-            }
+            numberSpit.updateLevel(level)
+            numberIdle.updateLevel(level)
 
             self.visual.parent.addChild(self.visual)
 
@@ -165,17 +161,15 @@ export const Dragon = (bounds, tier, level, x, y) => {
             const dirChange = movement.update(self.visual, bounds, localBounds, dt)
             dirChange && invalidateVisual()
 
-            if (tier === 1 || tier === 2) {
-                if (currentAnimation === ANIM_IDLE) {
-                    self.visual.addChild(numberIdle.visual)
-                    self.visual.removeChild(numberSpit.visual)
-                    numberIdle.applyFrame(self.visual.currentFrame);
-                }
-                if (currentAnimation === ANIM_SPIT) {
-                    self.visual.removeChild(numberIdle.visual)
-                    self.visual.addChild(numberSpit.visual)
-                    numberSpit.applyFrame(self.visual.currentFrame);
-                }
+            if (currentAnimation === ANIM_IDLE) {
+                self.visual.addChild(numberIdle.visual)
+                self.visual.removeChild(numberSpit.visual)
+                numberIdle.applyFrame(self.visual.currentFrame);
+            }
+            if (currentAnimation === ANIM_SPIT) {
+                self.visual.removeChild(numberIdle.visual)
+                self.visual.addChild(numberSpit.visual)
+                numberSpit.applyFrame(self.visual.currentFrame);
             }
 
             if (scheduledShot) {
