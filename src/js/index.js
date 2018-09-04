@@ -98,7 +98,7 @@ window.onload = () => {
                                     model.reset()
                                     SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
                                     model.close()
-                                    window.location.href = window.location.origin
+                                    window.location.href = window.location.origin + window.location.search.replace(/stage=\d{1,3}&?/, '')
                                     // startGame(false)
                                 })
                             } else {
