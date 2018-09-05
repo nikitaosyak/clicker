@@ -2,12 +2,13 @@
 export const DivVanisher = () => {
 
     const preloaderImage = document.getElementById('loader')
-    const progressBar = document.getElementById('progress')
-    const WAIT_INSTANTIATE = 0.5
-    const VANISH_SPEED = 1.3
+    const WAIT_INSTANTIATE = 2
+    const VANISH_SPEED = 1
     let currentTimer = 0
     let currentOpacity = 1
     let done = false
+
+    document.body.removeChild(document.getElementById('progress'))
 
     return {
         get running() { return !done },
@@ -21,15 +22,10 @@ export const DivVanisher = () => {
             if (currentOpacity <= 0) {
                 done = true
                 document.body.removeChild(preloaderImage)
-                document.body.removeChild(progressBar)
                 return
             }
 
             preloaderImage.style.opacity = currentOpacity
-            preloaderImage.style.filter = currentOpacity
-
-            progressBar.style.opacity = currentOpacity
-            progressBar.style.filter = currentOpacity
         }
     }
 }
