@@ -26,5 +26,11 @@ export const Slice3Stupid = (basePath, width, height) => {
     reSize()
     parent.add(left).add(center).add(right)
 
+    parent.setTint = v => {
+        left.setTint(v)
+        center.setTint(v)
+        right.setTint(v)
+    }
+
     return parent
 }

@@ -124,9 +124,9 @@ export const UIFactory = {
                 root.setInteractive = v => {
                     root.visual.interactive = v
                     if (v) {
-                        // btn.visual.tint = 0xFFFFFF
+                        root.setTint(0xFFFFFF)
                     } else {
-                        // btn.visual.tint = 0xAAAAAA
+                        root.setTint(0xAAAAAA)
                     }
                 }
 
