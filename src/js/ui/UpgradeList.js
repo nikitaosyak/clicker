@@ -7,6 +7,7 @@ import {IAdoptable} from "../behaviours/IAdoptable";
 import {RENDER_LAYER} from "../Renderer";
 import {MAX_DRAGON_LEVEL} from "../model/GameModel";
 import {URLParam} from "../utils/URLParam";
+import {MathUtil} from "../utils/MathUtil";
 
 export const UpgradeList = (model, renderer) => {
 
@@ -20,8 +21,6 @@ export const UpgradeList = (model, renderer) => {
     let bottomBoundY = NaN
 
     let dropAnimation
-
-    const listScrollMult = parseFloat(URLParam.GET('listScrollMult')) || 0.85
 
     const isListShort = () => {
         return self.visual.height - (lastVP.y - 270) < 0
@@ -151,9 +150,10 @@ export const UpgradeList = (model, renderer) => {
             eventMovement /= 3
         }
 
+        const absMove = Math.abs(eventMovement)
+        const mult = Math.max(Math.min(absMove/30, 0.85), 0.2)
         dragonMan.dragons.forEach(d => {
-            if (d.boundsDifference > 50) return
-            d.visual.y += eventMovement * listScrollMult
+            d.visual.y += eventMovement * mult
         })
         lastEventAnchorY = pointerPosition.y
         self.visual.y = visualAnchorY + movement
