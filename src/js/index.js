@@ -92,7 +92,7 @@ window.onload = () => {
                         () => {
                             console.log(`%c    success!`, 'color: #2222CC')
                             window.soundman = SoundMan(digest.audio)
-                            window.localization = Localization(URLParam.GET('locale')||'en')
+                            window.localization = Localization(URLParam.GET('locale')||'ru')
                             if (URLParam.GET('stage')) {
                                 model.connect().then(() => {
                                     model.reset()
