@@ -51,7 +51,7 @@ export const UpgradeListItem = (_, owner) => {
             dragonManager.setBatchLocalBounds(currentDragon.tier, currentDragon.level,
                 170, viewportSize.x-300,
                 owner.visual.y + self.visual.y - 20, owner.visual.y + self.visual.y + 20)
-            damageWidget.visual.x = viewportSize.x - 270
+            damageWidget.visual.x = viewportSize.x - 120
             backdrop.visual.x = viewportSize.x/2 - 80
             backdrop.setSize(viewportSize.x-20, 150)
         } else {

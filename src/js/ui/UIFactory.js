@@ -136,15 +136,15 @@ export const UIFactory = {
             getDamagePercentWidget: () => {
 
                 const icon = IVisual('ui_attack').setSize(80, 80).setAnchor(1, 0.5).setLayer(RENDER_LAYER.UI)
-                icon.visual.x = -5
+                icon.visual.x = -145
                 const damage = UIFactory.forParent('info_widget').getText('', 0, 0, {
                     fontSize: 45, fill: '#11cccc'
-                }, {x: 0, y: 0.5})
+                }, {x: 1, y: 0.5})
 
                 const w = {
                     set damage(v) {
                         damage.visual.text = `${v}%`
-                        damage.visual.x = 60
+                        damage.visual.x = 0
                     },
                 }
 

@@ -151,7 +151,7 @@ export const UpgradeList = (model, renderer) => {
         }
 
         const absMove = Math.abs(eventMovement)
-        const mult = Math.max(Math.min(absMove/30, 0.85), 0.2)
+        const mult = Math.max(Math.min(absMove/20, 0.8), 0.4)
         dragonMan.dragons.forEach(d => {
             d.visual.y += eventMovement * mult
         })
