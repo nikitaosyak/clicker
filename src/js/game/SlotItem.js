@@ -19,7 +19,6 @@ export class SlotItem {
         this._targetSlot = targetSlot
         this._opener = opener
         this._healthbar = healthbar
-        console.log(healthbar)
         healthbar.visual.visible = false
 
         this._animIdx = 0
