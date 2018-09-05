@@ -1,6 +1,7 @@
 import {DialogBase} from "./DialogBase";
 import {IButton, IVisual} from "../../behaviours/Base";
 import {UIFactory} from "../../ui/UIFactory";
+import {Slice9Stupid} from "../../ui/components/Slice9Stupid";
 
 export class DialogSettings extends DialogBase {
 
@@ -11,10 +12,10 @@ export class DialogSettings extends DialogBase {
         this._settings = null
         const size = {x: 500, y: 400}
 
-        this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        this.visual.addChild(Slice9Stupid('ui_sliced_dialog', size.x, size.y).visual)
 
         this._musicCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -size.x/2 * 0.4, y: -100}, 'ui_unmute', 'ui_mute', state => {
+            {x: -8, y: -60}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.music = !state
                 window.soundman.applySettings(this._settings)
             },
@@ -27,7 +28,7 @@ export class DialogSettings extends DialogBase {
         this.visual.addChild(this._musicCheck.visual)
 
         this._sfxCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -size.x/2 * 0.4, y: 50}, 'ui_unmute', 'ui_mute', state => {
+            {x: -8, y: 60}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.sfx = !state
                 window.soundman.applySettings(this._settings)
             },
