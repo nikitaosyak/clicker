@@ -6,6 +6,7 @@ import {IEmitter} from "../behaviours/IEmitter";
 import {IAdoptable} from "../behaviours/IAdoptable";
 import {RENDER_LAYER} from "../Renderer";
 import {MAX_DRAGON_LEVEL} from "../model/GameModel";
+import {URLParam} from "../utils/URLParam";
 
 export const UpgradeList = (model, renderer) => {
 
@@ -19,6 +20,8 @@ export const UpgradeList = (model, renderer) => {
     let bottomBoundY = NaN
 
     let dropAnimation
+
+    const listScrollMult = parseFloat(URLParam.GET('listScrollMult')) || 0.85
 
     const isListShort = () => {
         return self.visual.height - (lastVP.y - 270) < 0
@@ -107,7 +110,7 @@ export const UpgradeList = (model, renderer) => {
     poolArgs.push(self)
 
     Object.assign(self, INamedUIElement('upgrade', 'list'))
-    Object.assign(self, IContainer().setLayer(RENDER_LAYER.UI))
+    Object.assign(self, IContainer().setLayer(RENDER_LAYER.BACKGROUND))
     self.visual.interactive = true
     Object.assign(self, IAdoptable(self.visual, {x: 'left', y: 'bottom', yOffset: 170}))
     Object.assign(self, IEmitter({}))
@@ -150,7 +153,7 @@ export const UpgradeList = (model, renderer) => {
 
         dragonMan.dragons.forEach(d => {
             if (d.boundsDifference > 50) return
-            d.visual.y += eventMovement * 0.95
+            d.visual.y += eventMovement * listScrollMult
         })
         lastEventAnchorY = pointerPosition.y
         self.visual.y = visualAnchorY + movement

@@ -19,6 +19,7 @@ export const IContainer = () => {
         },
         add: (obj) => {
             c.addChild(obj.visual)
+            return self
         },
         get layer() { return layer },
         get visual() { return c }
@@ -49,19 +50,19 @@ export const IVisual = texture => {
     return self
 }
 
-export const IButton = (texture, onClick) => {
-    const button = IVisual(texture)
+export const IButton = (texture, onClick) => IButton2(IVisual(texture), onClick)
 
-    button.visual.interactive = true
-    button.visual.on('click', onClick)
-    button.visual.on('tap', onClick)
+export const IButton2 = (visual, onClick) => {
+    visual.visual.interactive = true
+    visual.visual.on('click', onClick)
+    visual.visual.on('tap', onClick)
 
-    Object.assign(button, {
-        get interactive() { return button.visual.interactive },
-        set interactive(v) { button.visual.interactive = v },
+    Object.assign(visual, {
+        get interactive() { return visual.visual.interactive },
+        set interactive(v) { visual.visual.interactive = v },
     })
 
-    return button
+    return visual
 }
 
 const TOGGLE_STATE = {NORMAL: 'NORMAL', TOGGLED: 'TOGGLED'}

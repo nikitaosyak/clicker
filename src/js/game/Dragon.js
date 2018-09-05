@@ -206,7 +206,7 @@ export const Dragon = (bounds, tier, level, x, y) => {
         IAnimated(ANIM_IDLE)
             .setSize(size.x, size.y)
             .setPosition(x, y)
-            .setLayer(RENDER_LAYER.BACKGROUND)
+            .setLayer(RENDER_LAYER.GAME)
             .setAnimationSpeed(0.35))
 
     const cfg = Object.assign({}, upgradeParticlesConfig)

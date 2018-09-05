@@ -1,8 +1,9 @@
-import {INamedUIElement} from "../behaviours/Base";
+import {IButton2, INamedUIElement} from "../behaviours/Base";
 import {IAnimated, IButton, IContainer, IText, IToggleButton, IVisual} from "../behaviours/Base";
 import {RENDER_LAYER} from "../Renderer";
 import {IAdoptable} from "../behaviours/IAdoptable";
 import {MathUtil} from "../utils/MathUtil";
+import {Slice3Stupid} from "./components/Slice3Stupid";
 
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
@@ -89,9 +90,9 @@ export const UIFactory = {
             },
 
             getLevelIndicatorWidget: () => {
-                const background = IVisual('ui_white_circle').setSize(80, 80)
-                const levelVis = UIFactory.forParent('level_indicator').getText('', 0, 0, {
-                    fontSize: 30, fill: '#000000'
+                const background = IVisual('ui_upgrade_level_backdrop').setSize(80, 80)
+                const levelVis = UIFactory.forParent('level_indicator').getText('', 0, -2, {
+                    fontSize: 80, fill: '#000000'
                 }, {x: 0.5, y: 0.5})
 
                 background.setLevel = v => {
@@ -103,32 +104,29 @@ export const UIFactory = {
             },
 
             getUpgradeButton: (onClick) => {
-                const root = IContainer()
-                const btn = self.getButton('ui_long_button_bg', 0, 0, onClick, 300, 120)
-                const icon = IVisual('ui_upgrade_dragon').setPosition(0, 4).setSize(80, 80).setAnchor(0, 0.5)
+                const root = Slice3Stupid('ui_sliced_wide_button', 360, 120)//IContainer()
+                IButton2(root, onClick)
+                const icon = IVisual('ui_upgrade_arrow_decor').setPosition(-160, 0).setSize(80, 80).setAnchor(0, 0.5)
                 icon.interactive = false
-                root.visual.addChild(btn.visual)
                 root.visual.addChild(icon.visual)
 
                 const price = UIFactory.forParent('upgrade_button').getText('', 0, 0, {
-                    fontSize: 30, fill: '#000000'
+                    fontSize: 45, fill: '#000000'
                 }, {x: 0, y: 0.5})
                 price.interactive = false
                 root.visual.addChild(price.visual)
 
                 root.setPrice = v => {
                     price.visual.text =  MathUtil.convert(v)
-                    const totalW = icon.visual.width + price.visual.width + 20
-                    icon.visual.x = -totalW/2
-                    price.visual.x = icon.visual.x + icon.visual.width + 20
+                    price.visual.x = -price.visual.width/2+15//icon.visual.x + icon.visual.width + 20
                 }
 
                 root.setInteractive = v => {
-                    btn.visual.interactive = v
+                    root.visual.interactive = v
                     if (v) {
-                        btn.visual.tint = 0xFFFFFF
+                        // btn.visual.tint = 0xFFFFFF
                     } else {
-                        btn.visual.tint = 0xAAAAAA
+                        // btn.visual.tint = 0xAAAAAA
                     }
                 }
 
