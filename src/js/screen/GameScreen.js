@@ -50,7 +50,7 @@ export class GameScreen extends BaseScreen {
         //     }, {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 280}))
         // }
 
-        this._goldCounter = GoldCounter({x: 'center', xOffset: 10, y: 'bottom', yOffset: 400}, this._owner.model.gold)
+        this._goldCounter = GoldCounter({x: 'center', xOffset: 10, y: 'bottom', yOffset: 420}, this._owner.model.gold)
         this.add(this._goldCounter)
 
         this._particles = CoinParticlesManager(this, this._goldCounter.visual)

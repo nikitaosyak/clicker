@@ -50,6 +50,7 @@ export const GoldCounter = (pivotRules, initialValue) => {
     Object.assign(self, INamedUIElement('game', 'gold_counter'))
     Object.assign(self, IContainer().setLayer(RENDER_LAYER.UI))
     Object.assign(self, IAdoptable(self.visual, pivotRules, null))
+    self.add(IVisual('ui_gold_counter_backdrop').setAnchor(0.5, 0.5).setSize(420, 120).setPosition(-5, 0))
     self.add(counter)
     self.add(icon)
 
