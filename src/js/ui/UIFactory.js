@@ -8,6 +8,8 @@ import {Slice3Stupid} from "./components/Slice3Stupid";
 const BUTTON_WIDTH = 90
 const BUTTON_HEIGHT = 90
 
+export const NUMERIC_FONT = 'Neucha'
+
 export const UIFactory = {
     forParent: parent => {
         const self = {
@@ -92,7 +94,7 @@ export const UIFactory = {
             getLevelIndicatorWidget: () => {
                 const background = IVisual('ui_upgrade_level_backdrop').setSize(80, 80)
                 const levelVis = UIFactory.forParent('level_indicator').getText('', 0, -2, {
-                    fontSize: 80, fill: '#000000'
+                    fontFamily: NUMERIC_FONT, fontSize: 90, fill: '#000000'
                 }, {x: 0.5, y: 0.5})
 
                 background.setLevel = v => {
@@ -111,7 +113,7 @@ export const UIFactory = {
                 root.visual.addChild(icon.visual)
 
                 const price = UIFactory.forParent('upgrade_button').getText('', 0, 0, {
-                    fontSize: 45, fill: '#000000'
+                    fontFamily: NUMERIC_FONT, fontSize: 45, fill: '#000000'
                 }, {x: 0, y: 0.5})
                 price.interactive = false
                 root.visual.addChild(price.visual)
@@ -138,7 +140,7 @@ export const UIFactory = {
                 const icon = IVisual('ui_attack').setSize(80, 80).setAnchor(1, 0.5).setLayer(RENDER_LAYER.UI)
                 icon.visual.x = -145
                 const damage = UIFactory.forParent('info_widget').getText('', 0, 0, {
-                    fontSize: 45, fill: '#11cccc'
+                    fontFamily: NUMERIC_FONT, fontSize: 45, fill: '#11cccc'
                 }, {x: 1, y: 0.5})
 
                 const w = {

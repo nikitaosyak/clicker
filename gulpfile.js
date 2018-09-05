@@ -211,7 +211,8 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
             'src/lib/pixi-sound.js',
             'src/lib/tweenlite-gen.lib.js',
             'src/lib/plotly.lib.js',
-            'src/lib/lz-string.js'
+            'src/lib/lz-string.js',
+            'src/lib/webfont.js'
         ])
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(concat('libraries.js'))
@@ -225,7 +226,8 @@ gulp.task('finish-deploy', ['step5-process-tweenlite'], () => {
             'src/lib/pixi-particles.lib.min.js',
             'src/lib/pixi-sound.js',
             'src/lib/tweenlite-gen.lib.min.js',
-            'src/lib/lz-string.min.js'
+            'src/lib/lz-string.min.js',
+            'src/lib/webfont.js'
         ])
             .pipe(concat('libraries.js'))
             .pipe(gulp.dest('build'))

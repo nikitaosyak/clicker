@@ -1,6 +1,6 @@
 import {DialogBase} from "./DialogBase";
 import {IButton, IVisual} from "../../behaviours/Base";
-import {UIFactory} from "../../ui/UIFactory";
+import {NUMERIC_FONT, UIFactory} from "../../ui/UIFactory";
 import {Slice9Stupid} from "../../ui/components/Slice9Stupid";
 
 export class DialogSettings extends DialogBase {
