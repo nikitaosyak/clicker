@@ -1,6 +1,7 @@
 import {DialogBase} from "./DialogBase";
 import {IButton, IText, IVisual} from "../../behaviours/Base";
 import {UIFactory} from "../../ui/UIFactory";
+import {Slice9Stupid} from "../../ui/components/Slice9Stupid";
 
 
 export class DialogRestartGame extends DialogBase {
@@ -9,9 +10,10 @@ export class DialogRestartGame extends DialogBase {
         super(owner)
         this.__result = null
 
-        const size = {x: 700, y: 1000}
+        const size = {x: 740, y: 1000}
 
-        this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        // this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        this.visual.addChild(Slice9Stupid('ui_sliced_dialog', size.x, size.y).visual)
 
         // this._title = IText(window.localization.get(`restart_dialog_title`), 0, -400, {
         //     fontSize: 80, fill: '#BF5F2F',
@@ -21,11 +23,11 @@ export class DialogRestartGame extends DialogBase {
         // }, 0.5, 0.5)
         // this.visual.addChild(this._title.visual)
 
-        this._body = IText(window.localization.get(`restart_dialog_body`), 0, -200, {
+        this._body = IText(window.localization.get(`restart_dialog_body`), 0, -180, {
             fontSize: 60, fill: '#BF5F2F',
             align: 'center',
             dropShadow: true, dropShadowBlur: 1, dropShadowAlpha: 0.6, dropShadowDistance: 2,
-            wordWrap: true, wordWrapWidth: size.x-100
+            wordWrap: true, wordWrapWidth: size.x-140
         }, 0.5, 0.5)
         this.visual.addChild(this._body.visual)
 
@@ -54,11 +56,11 @@ export class DialogRestartGame extends DialogBase {
         this.visual.addChild(IButton('ui_restart2', () => {
             this.hide().then(this.__result({allowRestart: true}))
             this.__result = null
-        }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 40, size.y/2 - 40).visual)
+        }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 75, size.y/2 - 75).visual)
 
         this.visual.addChild(IText(
             window.localization.get('restart_dialog_ok'),
-            135, size.y/2-120,
+            135, size.y/2-155,
             {fontSize: 40, fill: '#E9E9E9', dropShadow: true, dropShadowBlur: 1, dropShadowDistance: 2},
             1, 0.5
         ).visual)

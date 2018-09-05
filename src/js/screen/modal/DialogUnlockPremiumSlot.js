@@ -1,6 +1,7 @@
 import {DialogBase} from "./DialogBase";
 import {IButton, IText, IVisual} from "../../behaviours/Base";
 import {UIFactory} from "../../ui/UIFactory";
+import {Slice9Stupid} from "../../ui/components/Slice9Stupid";
 
 
 export class DialogUnlockPremiumSlot extends DialogBase {
@@ -9,9 +10,11 @@ export class DialogUnlockPremiumSlot extends DialogBase {
         super(owner)
         this.__result = null
 
-        const size = {x: 700, y: 800}
+        const size = {x: 700, y: 900}
 
-        this.visual.addChild(IVisual('ui_dialog_background2').setSize(size.x, size.y).setAnchor(0.5, 0.5).setTint(0xEEEEEE).visual)
+        this.visual.addChild(Slice9Stupid('ui_sliced_dialog', size.x, size.y).visual)
+
+        // this.visual.addChild(IVisual('ui_dialog_towel').setSize(size.x*0.78, size.y*0.15).setAnchor(0.5, 0).setPosition(0, -400).visual)
 
         this._body = IText('something', 0, -190, {
             fontSize: 80, fill: '#BF5F2F',
@@ -39,7 +42,7 @@ export class DialogUnlockPremiumSlot extends DialogBase {
         this.visual.addChild(IButton('ui_agree', () => {
             this.hide().then(this.__result({watchAd: true}))
             this.__result = null
-        }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 40, size.y/2 - 40).visual)
+        }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 72, size.y/2 - 72).visual)
     }
 
     show(isFirstReminder, suffix) {
