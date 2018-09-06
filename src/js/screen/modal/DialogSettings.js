@@ -40,7 +40,7 @@ export class DialogSettings extends DialogBase {
         this._sfxCheck.text.visual.text = window.localization.get('settings_sfx')
         this.visual.addChild(this._sfxCheck.visual)
 
-        this.visual.addChild(IButton('ui_agree', () => {
+        this.visual.addChild(IButton('ui_button_ok_flat', () => {
             this.hide().then(this.__result(this._settings))
             this.__result = null
             this._settings = null

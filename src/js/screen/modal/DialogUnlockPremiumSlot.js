@@ -34,15 +34,15 @@ export class DialogUnlockPremiumSlot extends DialogBase {
         this._reminder.text.visual.text = window.localization.get("common_reminder_checkbox_text")
         this.visual.addChild(this._reminder.visual)
 
-        this.visual.addChild(IButton('ui_cancel', () => {
+        this.visual.addChild(IButton('ui_button_close_flat', () => {
             this.hide().then(this.__result({watchAd: false, remind: !this._reminder.button.toggleState}))
             this.__result = null
-        }).setSize(80, 80).setAnchor(0, 1).setPosition(-size.x/2 + 75, size.y/2 - 75).visual)
+        }).setSize(110, 110).setAnchor(0, 1).setPosition(-size.x/2 + 75, size.y/2 - 75).visual)
 
-        this.visual.addChild(IButton('ui_agree', () => {
+        this.visual.addChild(IButton('ui_button_ok_flat', () => {
             this.hide().then(this.__result({watchAd: true}))
             this.__result = null
-        }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 72, size.y/2 - 72).visual)
+        }).setSize(110, 110).setAnchor(1, 1).setPosition(size.x/2 - 72, size.y/2 - 72).visual)
     }
 
     show(isFirstReminder, suffix) {

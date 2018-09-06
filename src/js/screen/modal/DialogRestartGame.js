@@ -41,7 +41,7 @@ export class DialogRestartGame extends DialogBase {
         this._reminder.text.visual.text = window.localization.get("common_reminder_checkbox_text")
         this.visual.addChild(this._reminder.visual)
 
-        this.visual.addChild(IButton('ui_cancel', () => {
+        this.visual.addChild(IButton('ui_button_close_flat', () => {
             this.hide().then(this.__result({allowRestart: false, remind: !this._reminder.button.toggleState}))
             this.__result = null
         }).setSize(80, 80).setAnchor(0, 1).setPosition(-size.x/2 + 75, size.y/2 - 210).visual)
@@ -53,7 +53,7 @@ export class DialogRestartGame extends DialogBase {
             0, 0.5
         ).visual)
 
-        this.visual.addChild(IButton('ui_restart2', () => {
+        this.visual.addChild(IButton('ui_button_restart_flat', () => {
             this.hide().then(this.__result({allowRestart: true}))
             this.__result = null
         }).setSize(150, 150).setAnchor(1, 1).setPosition(size.x/2 - 75, size.y/2 - 75).visual)
