@@ -19,7 +19,7 @@ export class PaidSlotItem extends SlotItem {
         if (this._hideDialog) return
 
         this._fingerClick += 1
-        if (this._fingerClick === 1 || this._fingerClick % 2 === 0) {
+        if (this._fingerClick === 1 || this._fingerClick % 30 === 0) {
             const suffix = this.type === ObjectType.PAID_CHEST ? 'chest' : 'egg'
             window.dialogs.showPremiumUnlock(this._firstReminder, suffix).then(result => {
                 this._firstReminder = false
