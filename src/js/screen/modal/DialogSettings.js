@@ -14,25 +14,23 @@ export class DialogSettings extends DialogBase {
 
         this.visual.addChild(Slice9Stupid('ui_sliced_dialog', size.x, size.y).visual)
 
-        this._musicCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -60, y: -120}, 'ui_unmute', 'ui_mute', state => {
+        this._musicCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget2(
+            {x: -160, y: -120}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.music = !state
                 window.soundman.applySettings(this._settings)
-            }, window.localization.get('settings_music'),
-            {x: 100, y: 100}, {
-                fontSize: 40, fill: '#7F7F7F',
+            }, {x: 100, y: 100}, window.localization.get('settings_music'), {
+                fontSize: 40, fill: '#DDDDDD',
                 dropShadow: true, dropShadowBlur: 1, dropShadowAlpha: 0.5, dropShadowDistance: 2
             }
         )
         this.visual.addChild(this._musicCheck.visual)
 
-        this._sfxCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -60, y: 0}, 'ui_unmute', 'ui_mute', state => {
+        this._sfxCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget2(
+            {x: -160, y: 0}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.sfx = !state
                 window.soundman.applySettings(this._settings)
-            }, window.localization.get('settings_sfx'),
-            {x: 100, y: 100}, {
-                fontSize: 40, fill: '#7F7F7F',
+            }, {x: 100, y: 100}, window.localization.get('settings_sfx'), {
+                fontSize: 40, fill: '#DDDDDD',
                 dropShadow: true, dropShadowBlur: 1, dropShadowAlpha: 0.5, dropShadowDistance: 2
             }
         )
