@@ -10,12 +10,12 @@ export class DialogSettings extends DialogBase {
         this.__result = null
 
         this._settings = null
-        const size = {x: 500, y: 400}
+        const size = {x: 500, y: 600}
 
         this.visual.addChild(Slice9Stupid('ui_sliced_dialog', size.x, size.y).visual)
 
         this._musicCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -60, y: -60}, 'ui_unmute', 'ui_mute', state => {
+            {x: -60, y: -120}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.music = !state
                 window.soundman.applySettings(this._settings)
             },
@@ -28,7 +28,7 @@ export class DialogSettings extends DialogBase {
         this.visual.addChild(this._musicCheck.visual)
 
         this._sfxCheck = UIFactory.forParent('settingsDialog').getCheckboxTextWidget(
-            {x: -60, y: 60}, 'ui_unmute', 'ui_mute', state => {
+            {x: -60, y: 0}, 'ui_unmute', 'ui_mute', state => {
                 this._settings.sfx = !state
                 window.soundman.applySettings(this._settings)
             },
@@ -44,7 +44,7 @@ export class DialogSettings extends DialogBase {
             this.hide().then(this.__result(this._settings))
             this.__result = null
             this._settings = null
-        }).setSize(120, 120).setAnchor(0.5, 0.5).setPosition(0, size.y/2).visual)
+        }).setSize(120, 120).setAnchor(0.5, 1).setPosition(0, size.y/2-80).visual)
     }
 
     show(currentSettings) {
