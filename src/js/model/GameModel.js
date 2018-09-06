@@ -29,6 +29,7 @@ export const GameModel = () => {
     window.GA = ga
     let connected = false
     let data = {}
+    let settings = null
 
     const initData = () => {
         data.userid = makeid()
@@ -37,14 +38,26 @@ export const GameModel = () => {
         data.currentDragons = {}
         data.currentSlotItems = []
         data.currentStageItems = []
-        data.settings = DEFAULT_SETTINGS
         data.restarts = 0
+
+        settings = settings || DEFAULT_SETTINGS
 
         if (typeof URLParam.GET('ab') !== 'undefined' && URLParam.GET('ab') !== null) {
             data.ab = Number.parseInt(URLParam.GET('ab'))
         } else {
             data.ab = AB.selectAB()
         }
+    }
+
+    const synchronize = () => {
+        return new Promise((resolve, reject) => {
+                if (!connected) {
+                reject("not connected")
+            }
+            window.localStorage.dragon_clicker = self.printCurrentState()
+            window.localStorage.dragon_clicker_local_settings = JSON.stringify(settings)
+            resolve()
+        })
     }
     initData()
 
@@ -54,7 +67,7 @@ export const GameModel = () => {
         },
         loadState: compressedData => {
             data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData))
-            self.synchronize().then(() => {
+            synchronize().then(() => {
                 window.location.href = window.location.origin
             })
         },
@@ -71,6 +84,8 @@ export const GameModel = () => {
                 }
                 connected = true
                 const anyData = window.localStorage.dragon_clicker || null
+                const anySettings = window.localStorage.dragon_clicker_local_settings || null
+                settings = anySettings ? JSON.parse(anySettings) : DEFAULT_SETTINGS
                 if (anyData === null) {
                     initData()
                 } else {
@@ -81,8 +96,7 @@ export const GameModel = () => {
                     data.currentDragons = loadData.currentDragons
                     data.currentSlotItems = loadData.currentSlotItems
                     data.currentStageItems = loadData.currentStageItems
-                    data.settings = loadData.settings || DEFAULT_SETTINGS
-                    data.restarts = loadData.restarts || 0
+                    data.restarts = loadData.restarts || 0 // older versions compatibility
                 }
                 console.log('user', data.userid, 'monetizing with: ', AB.strValue(data.ab))
                 console.log(data)
@@ -90,36 +104,27 @@ export const GameModel = () => {
                 resolve()
             })
         },
-        synchronize: () => {
-            return new Promise((resolve, reject) => {
-                if (!connected) {
-                    reject("not connected")
-                }
-                window.localStorage.dragon_clicker = self.printCurrentState()
-                resolve()
-            })
-        },
         restart: () => {
             const restarts = data.restarts
             self.reset()
             data.restarts = restarts + 1
-            self.synchronize().then(() => {
+            synchronize().then(() => {
                 window.location.reload(true)
             })
         },
         reset: () => {
             initData()
-            self.synchronize()
+            synchronize()
         },
         close: () => {
-            self.synchronize()
+            synchronize()
             connected = false
         },
 
         get stage() { return data.currentStage },
         increaseStage: () => {
             data.currentStage = Math.min(data.currentStage+1, MAX_STAGE)
-            self.synchronize()
+            synchronize()
             ga.accumulate('stage', 1)
         },
 
@@ -127,12 +132,12 @@ export const GameModel = () => {
         addGold: (v) => {
             // v *= 20
             data.currentGold += v
-            self.synchronize()
+            synchronize()
             ga.diff('gold', data.currentGold)
         },
         subtractGold: (v) => {
             data.currentGold -= v
-            self.synchronize()
+            synchronize()
             ga.diff('gold', data.currentGold)
         },
 
@@ -155,7 +160,7 @@ export const GameModel = () => {
                 data.currentDragons[tier] = []
                 data.currentDragons[tier].push(newDragon)
             }
-            self.synchronize()
+            synchronize()
             ga.diff('dragons', data.currentDragons)
             ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
         },
@@ -168,7 +173,7 @@ export const GameModel = () => {
             for (let i = 0; i < dragonsOnTier.length; i++) {
                 if (dragonsOnTier[i].level !== level) continue
                 dragonsOnTier[i].level += 1
-                self.synchronize()
+                synchronize()
                 ga.diff('dragons', data.currentDragons)
                 ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
                 return
@@ -180,19 +185,19 @@ export const GameModel = () => {
         get stageItems() { return data.currentStageItems },
         updateStageItems : items => {
             data.currentStageItems = items
-            self.synchronize()
+            synchronize()
         },
         updateSlotItem : (i, item) => {
             data.currentSlotItems[i] = item
-            self.synchronize()
+            synchronize()
         },
 
         get ab() { return data.ab },
 
-        get settings() { return data.settings },
+        get settings() { return settings },
         updateSettings : (v) => {
-            data.settings = v
-            self.synchronize()
+            settings = v
+            synchronize()
         }
     }
 
