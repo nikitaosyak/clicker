@@ -4,13 +4,21 @@
     "en": "Don't remind me"
   },
 
+  "unlock_premium_item_title": {
+    "ru": "Эпичность!",
+    "en": "Epic!"
+  },
+  "unlock_premium_item_question": {
+    "ru": "посмотреть рекламу?",
+    "en": "watch ad?"
+  },
   "unlock_premium_item_text_chest": {
-    "ru": "Посмотреть рекламу чтобы открыть сундук?",
-    "en": "Watch ad to quickly unlock chest?"
+    "ru": "Этот сундук по зубам не каждому! Но ты можешь воспользоваться отмычкой:",
+    "en": "Not everyone is able to break a chest like that! If you want help:"
   },
   "unlock_premium_item_text_egg": {
-    "ru": "Посмотреть рекламу, чтобы разбить яйцо?",
-    "en": "Watch ad to quickly break egg?"
+    "ru": "Это яйцо разбить не так то просто! Но ты можешь ускорить процесс:",
+    "en": "This egg is not quite that simple! You can quicken the process:"
   },
 
   "settings_music": {

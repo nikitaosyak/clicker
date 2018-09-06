@@ -33,12 +33,11 @@ export class DialogRestartGame extends DialogBase {
 
         this._reminder = UIFactory.forParent('restartGameDialog').getCheckboxTextWidget(
             {x: -size.x/2 * 0.35, y: 110}, 'ui_checkbox_unchecked', 'ui_checkbox_checked', null,
-            {x: 100, y: 100}, {
+            {x: 100, y: 100}, window.localization.get("common_reminder_checkbox_text"), {
                 fontSize: 40, fill: '#7F7F7F',
                 dropShadow: true, dropShadowBlur: 1, dropShadowAlpha: 0.5, dropShadowDistance: 2
             }
         )
-        this._reminder.text.visual.text = window.localization.get("common_reminder_checkbox_text")
         this.visual.addChild(this._reminder.visual)
 
         this.visual.addChild(IButton('ui_button_close_flat', () => {

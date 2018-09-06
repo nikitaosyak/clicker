@@ -157,14 +157,18 @@ export const UIFactory = {
                 return w
             },
 
-            getCheckboxTextWidget: (pos, tex1, tex2, onClick, buttonSize, textStyle) => {
+            getCheckboxTextWidget: (pos, tex1, tex2, onClick, buttonSize, textContent, textStyle) => {
                 const container = IContainer().setPosition(pos.x, pos.y)
                 const button = IToggleButton(tex1, tex2, onClick)
-                    .setAnchor(1, 0.5)
+                    .setAnchor(0, 0.5)
                     .setSize(buttonSize.x, buttonSize.y)
-                const text = IText('something', 10, 0, textStyle, 0, 0.5)
+                const text = IText(textContent, 10, 0, textStyle, 0, 0.5)
                 container.visual.addChild(button.visual)
                 container.visual.addChild(text.visual)
+
+                const commonWidth = button.visual.width + text.visual.width
+                button.visual.x = -commonWidth/2
+                text.visual.x = button.visual.x + button.visual.width + 10
 
                 return {
                     visual: container.visual,
