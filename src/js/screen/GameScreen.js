@@ -27,14 +27,14 @@ export class GameScreen extends BaseScreen {
         if (this._owner.model.slotItems.length === 3) {
             this.addControl(this.uiCreator.getNavButton(
                 owner, SCREEN_TYPE.UPGRADE,
-                'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
+                'ui_button_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
 
             // this.addControl(this.uiCreator.getNavButton(
             //     owner, SCREEN_TYPE.LEADERBOARD,
             //     'ui_leaderboard', {x: 1, y: 0}, {x: 'right', xOffset: 40, y: 'top', yOffset: 40}))
         }
 
-        const settingsBtn = IButton('ui_settings', () =>
+        const settingsBtn = IButton('ui_button_settings', () =>
             window.dialogs.showSettings(owner.model.settings).then(changedSettings => {
                 owner.model.updateSettings(changedSettings)
             })
@@ -217,7 +217,7 @@ export class GameScreen extends BaseScreen {
                 if (this._owner.model.dragonsCount === 0) {
                     this.addControl(this.uiCreator.getNavButton(
                         this._owner, SCREEN_TYPE.UPGRADE,
-                        'ui_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
+                        'ui_button_upgrade', {x: 0, y: 0}, {x: 'left', xOffset: 40, y: 'top', yOffset: 40}))
                     TweenLite.from(this._controls[this._controls.length-1].visual, 1, {x: -80})
                 }
                 const dragonData = drop[ObjectType.DRAGON]

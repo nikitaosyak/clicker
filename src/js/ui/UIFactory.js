@@ -19,8 +19,8 @@ export const UIFactory = {
                     const button = {}
                     Object.assign(button, INamedUIElement(parent, 'full_screen'))
                     Object.assign(button, IToggleButton(
-                        'ui_fullscreen_to',
-                        'ui_fullscreen_from',
+                        'ui_button_fullscreen_to',
+                        'ui_button_fullscreen_from',
                             check => {
                                 if (check) {
                                     fsElement.requestFullscreen()
