@@ -2,7 +2,11 @@ import {URLParam} from '../utils/URLParam'
 
 export const OK = () => {
 
+    let userId = null
+
     return {
+        getUserId() { return userId },
+
         init: () => {
             console.log('will initialize OK platform')
             return new Promise((resolve, reject) => {

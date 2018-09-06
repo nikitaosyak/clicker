@@ -1,38 +1,30 @@
 import {AB} from "../tools/AB";
 import {URLParam} from "../utils/URLParam";
 import {GA} from "../tools/GA";
+import {Platform} from "../platform/Platform";
 
 export const MIN_STAGE = 0
 export const MAX_STAGE = 42
 export const MIN_GOLD = 0
 export const MAX_DRAGON_LEVEL = 10
-export const DEFAULT_SETTINGS = {
+
+const DEFAULT_SETTINGS = {
     music: true,
     musicVolume: 0.5,
     sfx: true,
     sfxVolume: 0.5
 }
 
-export function makeid(len = 12) {
-    let text = "";
-    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (let i = 0; i < len; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-}
-
 export const GameModel = () => {
 
-    const ga = GA()
-    window.GA = ga
+    const ga = window.GA = GA()
+    const platform = window.platform = Platform()
+
     let connected = false
     let data = {}
     let settings = null
 
     const initData = () => {
-        data.userid = makeid()
         data.currentStage = MIN_STAGE
         data.currentGold = MIN_GOLD
         data.currentDragons = {}
@@ -71,37 +63,38 @@ export const GameModel = () => {
                 window.location.href = window.location.origin
             })
         },
-        connect: () => { // TODO: init connection here
+        connect: () => {
             return new Promise((resolve, reject) => {
-                if (URLParam.GET('loadState')) {
-                    connected = true
-                    self.loadState(URLParam.GET('loadState'))
-                    reject()
-                }
+                platform.init().then(() => {
+                    if (URLParam.GET('loadState')) {
+                        connected = true
+                        self.loadState(URLParam.GET('loadState'))
+                        reject()
+                    }
 
-                if (connected) {
-                    reject("already connected")
-                }
-                connected = true
-                const anyData = window.localStorage.dragon_clicker || null
-                const anySettings = window.localStorage.dragon_clicker_local_settings || null
-                settings = anySettings ? JSON.parse(anySettings) : DEFAULT_SETTINGS
-                if (anyData === null) {
-                    initData()
-                } else {
-                    const loadData = JSON.parse(LZString.decompressFromEncodedURIComponent(anyData))
-                    data.userid = loadData.userid
-                    data.currentStage = loadData.currentStage
-                    data.currentGold = loadData.currentGold
-                    data.currentDragons = loadData.currentDragons
-                    data.currentSlotItems = loadData.currentSlotItems
-                    data.currentStageItems = loadData.currentStageItems
-                    data.restarts = loadData.restarts || 0 // older versions compatibility
-                }
-                console.log('user', data.userid, 'monetizing with: ', AB.strValue(data.ab))
-                console.log(data)
-                ga.startSession(data)
-                resolve()
+                    if (connected) {
+                        reject("already connected")
+                    }
+                    connected = true
+                    const anyData = window.localStorage.dragon_clicker || null
+                    const anySettings = window.localStorage.dragon_clicker_local_settings || null
+                    settings = anySettings ? JSON.parse(anySettings) : DEFAULT_SETTINGS
+                    if (anyData === null) {
+                        initData()
+                    } else {
+                        const loadData = JSON.parse(LZString.decompressFromEncodedURIComponent(anyData))
+                        data.currentStage = loadData.currentStage
+                        data.currentGold = loadData.currentGold
+                        data.currentDragons = loadData.currentDragons
+                        data.currentSlotItems = loadData.currentSlotItems
+                        data.currentStageItems = loadData.currentStageItems
+                        data.restarts = loadData.restarts || 0 // older versions compatibility
+                    }
+                    console.log('user', platform.getUserId(), 'monetizing with: ', AB.strValue(data.ab))
+                    console.log(data)
+                    ga.startSession(data)
+                    resolve()
+                }).catch(reject)
             })
         },
         restart: () => {

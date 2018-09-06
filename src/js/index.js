@@ -11,7 +11,6 @@ import {VirtualPlayThrough} from "./tools/VirtualPlayThrough";
 import {DragonMan} from "./game/DragonMan";
 import {SkipForwardPlayThrough} from "./tools/SkipForwardPlayThrough";
 import {Config} from './Config'
-import {Platform} from './platform/Platform'
 import {SoundMan} from './SoundMan'
 import {DialogMan} from "./screen/modal/DialogMan";
 import {Localization} from "./Localization";
@@ -66,6 +65,9 @@ window.onload = () => {
                 debugManager.frameEnded()
             }
             requestAnimationFrame(gameLoop)
+        }).catch(e => {
+            console.error('Model.connect start game: could not connect!')
+            console.error(e)
         })
     }
 
@@ -78,73 +80,70 @@ window.onload = () => {
         window.config.MODE === 'development') {
         Plot(window.GD)
     } else {
-        window.platform = Platform()
-        window.platform.init()
-        .then(() => {
-            resources
-            .add('digest', 'assets/digest.json')
-            .load(() => {
-                const digest = resources.getJSON('digest')
+        resources
+        .add('digest', 'assets/digest.json')
+        .load(() => {
+            const digest = resources.getJSON('digest')
 
-                digest.images.forEach(i => {
-                    resources.add(i.alias, i.path)
-                })
-                let currentLoaded = 0
-                const totalToLoad = digest.images.length
-                console.log(`%cAsset loading: will load image assets (${totalToLoad} items)`, 'color: #2222CC')
+            digest.images.forEach(i => {
+                resources.add(i.alias, i.path)
+            })
+            let currentLoaded = 0
+            const totalToLoad = digest.images.length
+            console.log(`%cAsset loading: will load image assets (${totalToLoad} items)`, 'color: #2222CC')
 
-                const progressBar = document.getElementById('progress')
-                resources.load(() => {
-                    console.log(`%c    success!`, 'color: #2222CC')
+            const progressBar = document.getElementById('progress')
+            resources.load(() => {
+                console.log(`%c    success!`, 'color: #2222CC')
 
-                    window.soundman = SoundMan(digest.audio) // sounds will load in background eventually
-                    window.localization = Localization(URLParam.GET('locale')||'ru')
-                    console.log(`%c    localization initialized!`, 'color: #2222CC')
+                window.soundman = SoundMan(digest.audio) // sounds will load in background eventually
+                window.localization = Localization(URLParam.GET('locale')||'ru')
+                console.log(`%c    localization initialized!`, 'color: #2222CC')
 
-                    const continueOrSkip = () => {
-                        if (URLParam.GET('stage')) {
-                            model.connect().then(() => {
-                                model.reset()
-                                SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
-                                model.close()
-                                window.location.href = window.location.origin + window.location.search.replace(/stage=\d{1,3}&?/, '')
-                                // startGame(false)
-                            })
-                        } else {
-                            startGame(true)
-                        }
+                const continueOrSkip = () => {
+                    if (URLParam.GET('stage')) {
+                        model.connect().then(() => {
+                            model.reset()
+                            SkipForwardPlayThrough(model, window.GD, Number.parseInt(URLParam.GET('stage')))
+                            model.close()
+                            window.location.href = window.location.origin + window.location.search.replace(/stage=\d{1,3}&?/, '')
+                        }).catch(e => {
+                            console.error('Model.connect from stage skip: could not connect!')
+                            console.error(e)
+                        })
+                    } else {
+                        startGame(true)
                     }
-
-                    WebFont.load({
-                        google: {
-                            families: [NUMERIC_FONT]
-                        },
-                        loading: () => console.log(`%cNow loading: ${NUMERIC_FONT} font`, 'color: #2222CC'),
-                        active: () => {
-                            console.log(`%c    ${NUMERIC_FONT} font loaded successfully`, 'color: #2222CC')
-                            continueOrSkip()
-                        },
-                        inactive: () => {
-                            console.error(`    ${NUMERIC_FONT} font failed to load`)
-                            continueOrSkip()
-                        }
-                    })
-                },
-                (loader, resource) => {
-                    currentLoaded += 1
-                    resource.error ?
-                        handleError(resource.error, `    failed to load ${resource.url}`) :
-                        (progressBar.value = Math.floor(loader.progress))
                 }
-                )
+
+                WebFont.load({
+                    google: {
+                        families: [NUMERIC_FONT]
+                    },
+                    loading: () => console.log(`%cNow loading: ${NUMERIC_FONT} font`, 'color: #2222CC'),
+                    active: () => {
+                        console.log(`%c    ${NUMERIC_FONT} font loaded successfully`, 'color: #2222CC')
+                        continueOrSkip()
+                    },
+                    inactive: () => {
+                        console.error(`    ${NUMERIC_FONT} font failed to load`)
+                        continueOrSkip()
+                    }
+                })
             },
-            (loader, resource) =>
+            (loader, resource) => {
+                currentLoaded += 1
                 resource.error ?
-                    handleError(resource.error, 'Asset loading: impossible to proceed') :
-                    console.log('%cAsset loading: finished loading digest', 'color: #2222CC')
+                    handleError(resource.error, `    failed to load ${resource.url}`) :
+                    (progressBar.value = Math.floor(loader.progress))
+            }
             )
-        })
-        .catch(e => handleError(e, 'Failed to init platform'))
+        },
+        (loader, resource) =>
+            resource.error ?
+                handleError(resource.error, 'Asset loading: impossible to proceed') :
+                console.log('%cAsset loading: finished loading digest', 'color: #2222CC')
+        )
     }
 }
 
