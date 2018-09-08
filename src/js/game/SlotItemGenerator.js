@@ -50,7 +50,6 @@ export const SlotItemGenerator = (owner, model, savedStageItems, healthbars) => 
             for (let i = 0; i < slots.length; i++) {
                 if (slots[i] === null) {
                     self.populateConcrete(slots, i, getChestForSlot(i))
-                    model.updateStageItems(currentStageItems)
                 }
             }
         }

@@ -24,6 +24,8 @@ export const GameModel = () => {
     let data = {}
     let settings = null
 
+    let totalDataLen = 0
+
     const initData = () => {
         data.currentStage = MIN_STAGE
         data.currentGold = MIN_GOLD
@@ -41,16 +43,20 @@ export const GameModel = () => {
         }
     }
 
-    const synchronize = () => {
+    const synchronize = (reason) => {
         return new Promise((resolve, reject) => {
                 if (!connected) {
                 reject("not connected")
             }
-            window.localStorage.dragon_clicker = self.printCurrentState()
-            window.localStorage.dragon_clicker_local_settings = JSON.stringify(settings)
+            const currentState = self.printCurrentState()
+            const currentLen = self.printCurrentState().length
+            totalDataLen += currentLen
+            window.localStorage.dragon_clicker = currentState
+            console.log(`during ${reason}: save is ${currentLen / 1024}k; total data during this session: ${totalDataLen / 1024}k`)
             resolve()
         })
     }
+
     initData()
 
     const self = {
@@ -59,7 +65,7 @@ export const GameModel = () => {
         },
         loadState: compressedData => {
             data = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData))
-            synchronize().then(() => {
+            synchronize('loadState').then(() => {
                 window.location.href = window.location.origin
             })
         },
@@ -101,23 +107,23 @@ export const GameModel = () => {
             const restarts = data.restarts
             self.reset()
             data.restarts = restarts + 1
-            synchronize().then(() => {
+            synchronize('restart').then(() => {
                 window.location.reload(true)
             })
         },
         reset: () => {
             initData()
-            synchronize()
+            synchronize('reset')
         },
         close: () => {
-            synchronize()
+            synchronize('close')
             connected = false
         },
 
         get stage() { return data.currentStage },
         increaseStage: () => {
             data.currentStage = Math.min(data.currentStage+1, MAX_STAGE)
-            synchronize()
+            synchronize('increaseStage')
             ga.accumulate('stage', 1)
         },
 
@@ -125,12 +131,10 @@ export const GameModel = () => {
         addGold: (v) => {
             // v *= 20
             data.currentGold += v
-            synchronize()
             ga.diff('gold', data.currentGold)
         },
         subtractGold: (v) => {
             data.currentGold -= v
-            synchronize()
             ga.diff('gold', data.currentGold)
         },
 
@@ -153,7 +157,7 @@ export const GameModel = () => {
                 data.currentDragons[tier] = []
                 data.currentDragons[tier].push(newDragon)
             }
-            synchronize()
+            synchronize('addDragon')
             ga.diff('dragons', data.currentDragons)
             ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
         },
@@ -166,7 +170,7 @@ export const GameModel = () => {
             for (let i = 0; i < dragonsOnTier.length; i++) {
                 if (dragonsOnTier[i].level !== level) continue
                 dragonsOnTier[i].level += 1
-                synchronize()
+                synchronize('upgradeDragon')
                 ga.diff('dragons', data.currentDragons)
                 ga.diff('clickDamage', window.GD.getClickDamage(data.currentDragons))
                 return
@@ -178,11 +182,11 @@ export const GameModel = () => {
         get stageItems() { return data.currentStageItems },
         updateStageItems : items => {
             data.currentStageItems = items
-            synchronize()
+            synchronize('updateStageItem')
         },
         updateSlotItem : (i, item) => {
             data.currentSlotItems[i] = item
-            synchronize()
+            synchronize('updateSlotItem')
         },
 
         get ab() { return data.ab },
@@ -190,7 +194,7 @@ export const GameModel = () => {
         get settings() { return settings },
         updateSettings : (v) => {
             settings = v
-            synchronize()
+            window.localStorage.dragon_clicker_local_settings = JSON.stringify(settings)
         }
     }
 
