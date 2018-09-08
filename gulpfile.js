@@ -135,6 +135,7 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
                 if (/(idle|spit|fireball)\.png/.test(relativePath)) return
                 if (/.*anim.*\.png/.test(relativePath)) return
                 if (/.*animation_source.*/.test(relativePath)) return
+                if (/.*static.*/.test(relativePath)) return
 
                 if (relativePath.indexOf('sound') > -1 && relativePath.indexOf('csv') === -1) {
                     const alias = relativePath.replace(/\//g, '_').replace(/(\.mp3$|\.ogg$)/, '')
@@ -164,7 +165,15 @@ gulp.task('step4-process-images', ['step3-webpack-lib'], () => {
     fs.mkdirSync('build/assets')
     fs.writeFileSync('build/assets/digest.json', JSON.stringify({images: imageDigest, audio: audioDigest}, null, 2))
 
-    return gulp.src(['assets/**/*', '!assets/animation_source', '!assets/animation_source/**/*']).pipe(gulp.dest('build/assets'))
+    fs.mkdirSync('build/static')
+    gulp.src(['assets/static/**/*']).pipe(gulp.dest('build/static'))
+
+    return gulp.src([
+        'assets/**/*',
+        '!assets/animation_source',
+        '!assets/animation_source/**/*',
+        '!assets/static/**/*'
+    ]).pipe(gulp.dest('build/assets'))
 })
 
 gulp.task('step5-process-tweenlite', ['step4-process-images'], () => {
